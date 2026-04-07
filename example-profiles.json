@@ -1,0 +1,60 @@
+﻿{
+  "exampleProfiles": [
+    {
+      "name": "Personal",
+      "data": {
+        "profileName": "Personal",
+        "fullName": "Hardik Khatri",
+        "firstName": "Hardik",
+        "lastName": "Khatri",
+        "gender": "Male",
+        "qualification": "B.Tech",
+        "currentYear": "3rd Year",
+        "collegeName": "UPES",
+        "internshipProgram": "Web Development Internship",
+        "duration": "6 Weeks / 3 Months",
+        "country": "India",
+        "skillLevel": "Intermediate",
+        "email": "khatrihardik148@gmail.com",
+        "collegeEmail": "Hardik.124294@stu.upes.ac.in",
+        "phone": "8209992983",
+        "whatsappNumber": "8209992983",
+        "githubLink": "https://github.com/hardik0670",
+        "linkedinLink": "https://www.linkedin.com/in/hardikkhatri067",
+        "sapId": "500124294",
+        "specialization": "Cyber Security & Forensics",
+        "branch": "Computer Science",
+        "education": "B.Tech in CSE",
+        "company": "",
+        "experience": "",
+        "address": "115, Kana Vihar, Kamla Nehru Nagar, Ajmer Road",
+        "city": "Jaipur",
+        "state": "Rajasthan",
+        "zip": ""
+      }
+    },
+    {
+      "name": "Certificate Profile",
+      "data": {
+        "profileName": "Certificate Profile",
+        "fullName": "Priya Mehta",
+        "firstName": "Priya",
+        "lastName": "Mehta",
+        "gender": "Female",
+        "qualification": "MCA",
+        "currentYear": "Final Year",
+        "collegeName": "State University of Technology",
+        "skillLevel": "Advanced",
+        "email": "priya.mehta@example.com",
+        "collegeEmail": "priya.mehta@sut.edu",
+        "phone": "9123456780",
+        "githubLink": "NA",
+        "linkedinLink": "",
+        "sapId": "MCA2026123",
+        "specialization": "Data Science",
+        "branch": "Computer Applications",
+        "education": "Master of Computer Applications"
+      }
+    }
+  ]
+}

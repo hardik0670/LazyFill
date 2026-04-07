@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>LazyFill</title>
+    <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+    <div class="shell">
+        <header class="top-bar">
+            <div class="brand-group">
+                <span class="brand">LazyFill</span>
+                <p class="brand-subtitle">Profile-based smart form filling</p>
+            </div>
+            <div class="header-actions">
+                <button id="themeToggle" class="icon-btn" title="Toggle Theme" type="button">
+                    <svg viewBox="0 0 24 24" fill="none" class="sun-icon" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+                    </svg>
+                    <svg viewBox="0 0 24 24" fill="none" class="moon-icon" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+                    </svg>
+                </button>
+                <span class="version-tag">v1.2</span>
+            </div>
+        </header>
+
+        <div class="view" id="mainView">
+            <section class="hero-area">
+                <p class="hero-label">Active on this page</p>
+                <div id="fieldCountBadge" class="field-badge">
+                    <span id="fieldCountNum">-</span>
+                    <span class="field-badge-unit">fields</span>
+                </div>
+            </section>
+
+            <section class="profile-panel">
+                <div class="panel-header">
+                    <div>
+                        <p class="panel-title">Saved Profiles</p>
+                        <p id="profileSummary" class="panel-copy">Select the profile you want to use for this page.</p>
+                    </div>
+                    <button id="newProfileBtn" class="mini-btn" type="button">New</button>
+                </div>
+
+                <div class="profile-picker-row">
+                    <label class="field-group">
+                        <span class="field-label">Active Profile</span>
+                        <select id="profileSelect" name="profileSelect"></select>
+                    </label>
+                </div>
+
+                <div class="profile-meta">
+                    <div class="stat-card">
+                        <span class="stat-label">Complete</span>
+                        <strong id="completionStat">0%</strong>
+                    </div>
+                    <div class="stat-card">
+                        <span class="stat-label">Fields Ready</span>
+                        <strong id="fieldReadyStat">0</strong>
+                    </div>
+                </div>
+            </section>
+
+            <div class="action-grid">
+                <button id="fillFormBtn" class="action-btn primary" type="button">
+                    <svg viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M4 6h12M4 10h8M4 14h10" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" />
+                        <path d="M15 13l1.5 1.5L19 12" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" />
+                    </svg>
+                    Fill Form
+                </button>
+
+                <button id="scanBtn" class="action-btn secondary" type="button">
+                    <svg viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <rect x="3" y="3" width="6" height="6" rx="1.5" stroke="currentColor" stroke-width="1.6" />
+                        <rect x="11" y="3" width="6" height="6" rx="1.5" stroke="currentColor" stroke-width="1.6" />
+                        <rect x="3" y="11" width="6" height="6" rx="1.5" stroke="currentColor" stroke-width="1.6" />
+                        <path d="M11 14h6M14 11v6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" />
+                    </svg>
+                    Scan Fields
+                </button>
+
+                <button id="editProfileBtn" class="action-btn secondary" type="button">
+                    <svg viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="10" cy="7" r="3.5" stroke="currentColor" stroke-width="1.6" />
+                        <path d="M3 17c0-3.314 3.134-6 7-6s7 2.686 7 6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" />
+                    </svg>
+                    Edit Profile
+                </button>
+            </div>
+
+            <div id="statusBanner" class="status-banner hidden" role="status" aria-live="polite"></div>
+        </div>
+
+        <div class="view hidden" id="editorView">
+            <div class="editor-header">
+                <button id="backBtn" class="back-btn" type="button" aria-label="Back">
+                    <svg viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M12 5L7 10l5 5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" />
+                    </svg>
+                </button>
+                <div class="editor-title-block">
+                    <h2 class="editor-title">Profile Editor</h2>
+                    <p id="editorSubtitle" class="editor-copy">Create accurate saved profiles for certificates and internship forms.</p>
+                </div>
+            </div>
+
+            <div class="editor-toolbar">
+                <label class="field-group">
+                    <span class="field-label">Profile Name</span>
+                    <input type="text" id="profileName" name="profileName" placeholder="Campus Internship Profile" maxlength="40" />
+                </label>
+                <div class="toolbar-actions">
+                    <button id="duplicateProfileBtn" class="mini-btn" type="button">Duplicate</button>
+                    <button id="deleteProfileBtn" class="mini-btn danger" type="button">Delete</button>
+                </div>
+            </div>
+
+            <div class="form-scroll">
+                <div class="form-section">
+                    <span class="section-label">Personal Information</span>
+                    <div class="field-group">
+                        <label for="fullName">Full Name for Certificates</label>
+                        <input type="text" id="fullName" name="fullName" placeholder="Enter full legal name" autocomplete="name" />
+                    </div>
+                    <div class="field-row">
+                        <div class="field-group">
+                            <label for="firstName">First Name</label>
+                            <input type="text" id="firstName" name="firstName" placeholder="John" autocomplete="given-name" />
+                        </div>
+                        <div class="field-group">
+                            <label for="lastName">Last Name</label>
+                            <input type="text" id="lastName" name="lastName" placeholder="Doe" autocomplete="family-name" />
+                        </div>
+                    </div>
+                    <div class="field-row">
+                        <div class="field-group">
+                            <label for="gender">Gender</label>
+                            <select id="gender" name="gender">
+                                <option value="">Select gender</option>
+                                <option>Male</option>
+                                <option>Female</option>
+                                <option>Non-Binary</option>
+                                <option>Prefer not to say</option>
+                            </select>
+                        </div>
+                        <div class="field-group">
+                            <label for="skillLevel">Skill Level</label>
+                            <select id="skillLevel" name="skillLevel">
+                                <option value="">Select skill level</option>
+                                <option>Beginner</option>
+                                <option>Intermediate</option>
+                                <option>Advanced</option>
+                                <option>Expert</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-section">
+                    <span class="section-label">Academic Information</span>
+                    <div class="field-row">
+                        <div class="field-group">
+                            <label for="qualification">Qualification</label>
+                            <input type="text" id="qualification" name="qualification" placeholder="B.Tech / MCA / MBA" />
+                        </div>
+                        <div class="field-group">
+                            <label for="currentYear">Current Year</label>
+                            <input type="text" id="currentYear" name="currentYear" placeholder="3rd Year / Final Year" />
+                        </div>
+                    </div>
+                    <div class="field-group">
+                        <label for="collegeName">College / University</label>
+                        <input type="text" id="collegeName" name="collegeName" placeholder="Current or last attended institution" autocomplete="organization" />
+                    </div>
+                    <div class="field-row">
+                        <div class="field-group">
+                            <label for="specialization">Specialization</label>
+                            <input type="text" id="specialization" name="specialization" placeholder="Artificial Intelligence" />
+                        </div>
+                        <div class="field-group">
+                            <label for="branch">Branch</label>
+                            <input type="text" id="branch" name="branch" placeholder="Computer Science" />
+                        </div>
+                    </div>
+                    <div class="field-row">
+                        <div class="field-group">
+                            <label for="collegeEmail">College Email ID</label>
+                            <input type="email" id="collegeEmail" name="collegeEmail" placeholder="student@college.edu" autocomplete="email" />
+                        </div>
+                        <div class="field-group">
+                            <label for="sapId">SAP ID</label>
+                            <input type="text" id="sapId" name="sapId" placeholder="Campus registration ID" />
+                        </div>
+                    </div>
+                    <div class="field-group">
+                        <label for="education">Education</label>
+                        <input type="text" id="education" name="education" placeholder="Bachelor of Technology in Computer Science" />
+                    </div>
+                </div>
+
+                <div class="form-section">
+                    <span class="section-label">Internship Details</span>
+                    <div class="field-row">
+                        <div class="field-group">
+                            <label for="internshipProgram">Internship Program</label>
+                            <input type="text" id="internshipProgram" name="internshipProgram" placeholder="Web Development Internship" />
+                        </div>
+                        <div class="field-group">
+                            <label for="duration">Duration</label>
+                            <input type="text" id="duration" name="duration" placeholder="6 Weeks / 3 Months" />
+                        </div>
+                    </div>
+                    <div class="field-row">
+                        <div class="field-group">
+                            <label for="country">Country</label>
+                            <input type="text" id="country" name="country" placeholder="India" autocomplete="country-name" />
+                        </div>
+                        <div class="field-group">
+                            <label for="experience">Experience</label>
+                            <input type="text" id="experience" name="experience" placeholder="Prior project or internship experience" />
+                        </div>
+                    </div>
+                    <div class="field-group">
+                        <label for="company">Company / Organization</label>
+                        <input type="text" id="company" name="company" placeholder="Training or internship provider" autocomplete="organization" />
+                    </div>
+                </div>
+
+                <div class="form-section">
+                    <span class="section-label">Contact Information</span>
+                    <div class="field-row">
+                        <div class="field-group">
+                            <label for="email">Primary Email</label>
+                            <input type="email" id="email" name="email" placeholder="you@example.com" autocomplete="email" />
+                        </div>
+                        <div class="field-group">
+                            <label for="phone">10-Digit Contact Number</label>
+                            <input type="tel" id="phone" name="phone" placeholder="9876543210" inputmode="numeric" autocomplete="tel" />
+                            <small class="field-hint">Enter a valid 10-digit contact number.</small>
+                        </div>
+                    </div>
+                    <div class="field-row">
+                        <div class="field-group">
+                            <label for="whatsappNumber">WhatsApp Number</label>
+                            <input type="tel" id="whatsappNumber" name="whatsappNumber" placeholder="Same as contact number or different" inputmode="numeric" autocomplete="tel-national" />
+                        </div>
+                        <div class="field-group">
+                            <label for="githubLink">GitHub Link</label>
+                            <input type="text" id="githubLink" name="githubLink" placeholder="https://github.com/username or NA" />
+                            <small class="field-hint">Use any one link, or write NA.</small>
+                        </div>
+                    </div>
+                    <div class="field-group">
+                        <label for="linkedinLink">LinkedIn Link</label>
+                        <input type="text" id="linkedinLink" name="linkedinLink" placeholder="https://www.linkedin.com/in/username" />
+                    </div>
+                </div>
+
+                <div class="form-section">
+                    <span class="section-label">Address</span>
+                    <div class="field-group">
+                        <label for="address">Street Address</label>
+                        <input type="text" id="address" name="address" placeholder="123 Main Street" autocomplete="street-address" />
+                    </div>
+                    <div class="field-row">
+                        <div class="field-group">
+                            <label for="city">City</label>
+                            <input type="text" id="city" name="city" placeholder="Pune" autocomplete="address-level2" />
+                        </div>
+                        <div class="field-group">
+                            <label for="state">State</label>
+                            <input type="text" id="state" name="state" placeholder="Maharashtra" autocomplete="address-level1" />
+                        </div>
+                    </div>
+                    <div class="field-row">
+                        <div class="field-group field-group--short">
+                            <label for="zip">ZIP / Postal Code</label>
+                            <input type="text" id="zip" name="zip" placeholder="411001" autocomplete="postal-code" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="editorStatusBanner" class="status-banner hidden" role="status" aria-live="polite"></div>
+
+            <div class="editor-footer">
+                <button id="cancelEditBtn" class="action-btn secondary" type="button">Cancel</button>
+                <button id="saveProfileBtn" class="action-btn primary" type="button">
+                    <svg viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M5 10l3.5 3.5L15 7" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" />
+                    </svg>
+                    Save Profile
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script src="popup.js"></script>
+</body>
+</html>
