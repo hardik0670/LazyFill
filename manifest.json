@@ -1,12 +1,12 @@
 {
     "manifest_version": 3,
     "name": "LazyFill",
-    "version": "1.2.0",
+    "version": "1.3.0",
     "description": "Instantly detect and fill web forms using one of your saved student or internship profiles.",
     "icons": {
-        "16": "images/icon-16.png",
-        "48": "images/icon-48.png",
-        "128": "images/icon-128.png"
+        "16": "images/icon_16.png",
+        "48": "images/icon_48.png",
+        "128": "images/icon_128.png"
     },
     "permissions": [
         "storage",
@@ -24,9 +24,9 @@
         "default_popup": "popup.html",
         "default_title": "LazyFill",
         "default_icon": {
-            "16": "images/icon-16.png",
-            "48": "images/icon-48.png",
-            "128": "images/icon-128.png"
+            "16": "images/icon_16.png",
+            "48": "images/icon_48.png",
+            "128": "images/icon_128.png"
         }
     },
     "content_scripts": [

@@ -9,24 +9,28 @@ const backBtn = document.getElementById('backBtn');
 const newProfileBtn = document.getElementById('newProfileBtn');
 const duplicateProfileBtn = document.getElementById('duplicateProfileBtn');
 const deleteProfileBtn = document.getElementById('deleteProfileBtn');
-const statusBanners = Array.from(document.querySelectorAll('.status-banner'));
 const fieldCountNum = document.getElementById('fieldCountNum');
 const fieldCountBadge = document.getElementById('fieldCountBadge');
 const profileSelect = document.getElementById('profileSelect');
 const profileSummary = document.getElementById('profileSummary');
 const completionStat = document.getElementById('completionStat');
+const completionBar = document.getElementById('completionBar');
 const fieldReadyStat = document.getElementById('fieldReadyStat');
 const profileNameInput = document.getElementById('profileName');
 const editorSubtitle = document.getElementById('editorSubtitle');
 const themeToggle = document.getElementById('themeToggle');
 const htmlEl = document.documentElement;
 
+// All banner elements (both views) - fixed: use class query not ID-only
+const statusBanners = Array.from(document.querySelectorAll('.status-banner'));
+
 const PROFILE_FIELDS = [
     'profileName',
-    'fullName', 'firstName', 'lastName', 'gender', 'skillLevel',
-    'qualification', 'currentYear', 'collegeName', 'specialization', 'branch', 'collegeEmail', 'sapId', 'education',
-    'internshipProgram', 'duration', 'country', 'experience', 'company',
-    'email', 'phone', 'whatsappNumber', 'githubLink', 'linkedinLink',
+    'fullName', 'firstName', 'middleName', 'lastName', 'gender', 'dateOfBirth', 'age', 'nationality', 'bloodGroup', 'skillLevel',
+    'qualification', 'course', 'currentYear', 'currentCgpa', 'currentBacklogs', 'passiveBacklogs', 'collegeName', 'specialization', 'branch', 'collegeEmail', 'sapId', 'education', 'subject', 'interestedDomain', 'researchInterestArea',
+    'internshipProgram', 'duration', 'country', 'locationPreference1', 'locationPreference2', 'experience', 'company', 'referralSource', 'aboutMe',
+    'email', 'phone', 'whatsappNumber',
+    'githubLink', 'linkedinLink', 'websiteLink', 'twitterLink',
     'address', 'city', 'state', 'zip'
 ];
 
@@ -37,21 +41,33 @@ let currentProfiles = [];
 let activeProfileId = null;
 let editingProfileId = null;
 
+// ─── Status Banner ────────────────────────────────────────────────
 function showStatus(message, type = 'info', duration = 3200) {
     clearTimeout(statusTimer);
 
-    statusBanners.forEach((banner) => {
-        banner.textContent = message;
-        banner.className = `status-banner ${type}`;
-    });
+    // Show the banner in whichever view is active
+    const activeBanner = editorView.classList.contains('hidden')
+        ? document.getElementById('statusBanner')
+        : document.getElementById('editorStatusBanner');
+
+    if (!activeBanner) return;
+
+    activeBanner.textContent = message;
+    activeBanner.className = `status-banner ${type}`;
+    activeBanner.classList.add('slide-in');
 
     statusTimer = setTimeout(() => {
-        statusBanners.forEach((banner) => {
-            banner.className = 'status-banner hidden';
-        });
+        activeBanner.style.opacity = '0';
+        activeBanner.style.transform = 'translateY(-4px)';
+        setTimeout(() => {
+            activeBanner.className = 'status-banner hidden';
+            activeBanner.style.opacity = '';
+            activeBanner.style.transform = '';
+        }, 200);
     }, duration);
 }
 
+// ─── View switching ───────────────────────────────────────────────
 function showView(show, hide) {
     hide.classList.add('hidden');
     show.classList.remove('hidden');
@@ -61,6 +77,7 @@ function showView(show, hide) {
     });
 }
 
+// ─── Tab helpers ──────────────────────────────────────────────────
 function getActiveTab() {
     return new Promise((resolve) => {
         chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
@@ -72,10 +89,7 @@ function getActiveTab() {
 function sendToContent(tabId, message) {
     return new Promise((resolve) => {
         chrome.tabs.sendMessage(tabId, message, (response) => {
-            if (chrome.runtime.lastError) {
-                resolve(null);
-                return;
-            }
+            if (chrome.runtime.lastError) { resolve(null); return; }
             resolve(response);
         });
     });
@@ -89,38 +103,11 @@ function sendRuntime(message) {
     });
 }
 
+// ─── Profile helpers ──────────────────────────────────────────────
 function createEmptyProfile(name = 'New Profile') {
-    return {
-        id: crypto.randomUUID(),
-        profileName: name,
-        fullName: '',
-        firstName: '',
-        lastName: '',
-        gender: '',
-        skillLevel: '',
-        qualification: '',
-        currentYear: '',
-        collegeName: '',
-        specialization: '',
-        branch: '',
-        collegeEmail: '',
-        sapId: '',
-        education: '',
-        internshipProgram: '',
-        duration: '',
-        country: '',
-        experience: '',
-        company: '',
-        email: '',
-        phone: '',
-        whatsappNumber: '',
-        githubLink: '',
-        linkedinLink: '',
-        address: '',
-        city: '',
-        state: '',
-        zip: ''
-    };
+    const profile = { id: crypto.randomUUID(), profileName: name };
+    PROFILE_FIELDS.forEach(key => { if (key !== 'profileName') profile[key] = ''; });
+    return profile;
 }
 
 function getFilledFieldCount(profile) {
@@ -140,18 +127,22 @@ function refreshProfileSummary(profile) {
     if (!profile) {
         profileSummary.textContent = 'Create your first profile to start filling forms.';
         completionStat.textContent = '0%';
+        completionBar.style.width = '0%';
         fieldReadyStat.textContent = '0';
         return;
     }
 
-    completionStat.textContent = `${getCompletion(profile)}%`;
+    const pct = getCompletion(profile);
+    completionStat.textContent = `${pct}%`;
+    completionBar.style.width = `${pct}%`;
+    completionBar.className = 'stat-bar-fill' + (pct === 100 ? ' full' : pct >= 50 ? ' good' : '');
     fieldReadyStat.textContent = String(getFilledFieldCount(profile));
 
     const missingImportant = REQUIRED_HINT_FIELDS.filter((key) => !String(profile[key] || '').trim());
     if (missingImportant.length === 0) {
         profileSummary.textContent = `${getProfileLabel(profile, 0)} is ready for most student and internship forms.`;
     } else {
-        profileSummary.textContent = `Missing ${missingImportant.length} recommended field${missingImportant.length > 1 ? 's' : ''} for stronger autofill accuracy.`;
+        profileSummary.textContent = `Missing ${missingImportant.length} recommended field${missingImportant.length > 1 ? 's' : ''} for stronger autofill.`;
     }
 }
 
@@ -177,10 +168,8 @@ function renderProfileOptions() {
         profileSelect.appendChild(option);
     });
 
-    const activeProfile = currentProfiles.find((profile) => profile.id === activeProfileId) || currentProfiles[0];
-    if (activeProfile && activeProfile.id !== activeProfileId) {
-        activeProfileId = activeProfile.id;
-    }
+    const activeProfile = currentProfiles.find((p) => p.id === activeProfileId) || currentProfiles[0];
+    if (activeProfile && activeProfile.id !== activeProfileId) activeProfileId = activeProfile.id;
     refreshProfileSummary(activeProfile || null);
 }
 
@@ -190,9 +179,10 @@ function loadProfileIntoForm(profile, isDraft = false) {
         const el = document.getElementById(key);
         if (el) el.value = safeProfile[key] || '';
     });
-
     profileNameInput.value = safeProfile.profileName || '';
-    editorSubtitle.textContent = isDraft ? 'Create accurate saved profiles for certificates and internship forms.' : 'Update this saved profile and keep your internship data organized.';
+    editorSubtitle.textContent = isDraft
+        ? 'Create accurate saved profiles for certificates and internship forms.'
+        : 'Update this saved profile and keep your data organized.';
     editingProfileId = isDraft ? null : (safeProfile.id || null);
 }
 
@@ -207,7 +197,8 @@ function getProfileFromForm() {
     });
 
     if (!profile.fullName && (profile.firstName || profile.lastName)) {
-        profile.fullName = `${profile.firstName} ${profile.lastName}`.trim();
+        const parts = [profile.firstName, profile.middleName, profile.lastName].filter(Boolean);
+        profile.fullName = parts.join(' ').trim();
     }
 
     if (!profile.profileName) {
@@ -217,21 +208,24 @@ function getProfileFromForm() {
     return profile;
 }
 
+// ─── Validation ───────────────────────────────────────────────────
 function validateProfile(profile) {
-    if (!profile.profileName) {
-        return 'Profile name is required.';
+    if (!profile.profileName) return 'Profile name is required.';
+    if (!profile.fullName) return 'Full name is required so certificate forms can be filled accurately.';
+
+    if (profile.phone) {
+        // Accept 10-digit (India) or E.164 international formats
+        const stripped = profile.phone.replace(/[\s\-\(\)\+]/g, '');
+        if (!/^\d{7,15}$/.test(stripped)) {
+            return 'Contact number must be 7–15 digits (10 digits for Indian numbers).';
+        }
     }
 
-    if (!profile.fullName) {
-        return 'Full name is required so certificate forms can be filled accurately.';
-    }
-
-    if (profile.phone && !/^\d{10}$/.test(profile.phone)) {
-        return 'Contact number must be exactly 10 digits.';
-    }
-
-    if (profile.whatsappNumber && !/^\d{10}$/.test(profile.whatsappNumber)) {
-        return 'WhatsApp number must be exactly 10 digits.';
+    if (profile.whatsappNumber) {
+        const stripped = profile.whatsappNumber.replace(/[\s\-\(\)\+]/g, '');
+        if (!/^\d{7,15}$/.test(stripped)) {
+            return 'WhatsApp number must be 7–15 digits.';
+        }
     }
 
     if (profile.email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(profile.email)) {
@@ -243,23 +237,30 @@ function validateProfile(profile) {
     }
 
     if (profile.githubLink) {
-        const normalized = profile.githubLink.toLowerCase();
-        const isAllowed = normalized === 'na' || /^https?:\/\/(www\.)?github\.com\/.+/.test(normalized);
-        if (!isAllowed) {
-            return 'GitHub link must be a GitHub URL or NA.';
+        const n = profile.githubLink.toLowerCase();
+        if (n !== 'na' && !/^https?:\/\/(www\.)?github\.com\/.+/.test(n)) {
+            return 'GitHub link must be a GitHub URL or "NA".';
         }
     }
 
     if (profile.linkedinLink) {
-        const normalized = profile.linkedinLink.toLowerCase();
-        if (!/^https?:\/\/(www\.)?linkedin\.com\/.+/.test(normalized)) {
-            return 'LinkedIn link must be a valid LinkedIn URL.';
+        const n = profile.linkedinLink.toLowerCase();
+        if (n !== 'na' && !/^https?:\/\/(www\.)?linkedin\.com\/.+/.test(n)) {
+            return 'LinkedIn link must be a valid LinkedIn URL or "NA".';
+        }
+    }
+
+    if (profile.websiteLink) {
+        const n = profile.websiteLink.toLowerCase();
+        if (n !== 'na' && !/^https?:\/\/.+/.test(n)) {
+            return 'Portfolio / Website must be a valid URL or "NA".';
         }
     }
 
     return null;
 }
 
+// ─── Data fetching ────────────────────────────────────────────────
 async function refreshProfiles() {
     const response = await sendRuntime({ action: 'getProfiles' });
     currentProfiles = response && Array.isArray(response.profiles) ? response.profiles : [];
@@ -296,51 +297,68 @@ async function refreshFieldCount() {
         return;
     }
 
-    fieldCountNum.textContent = response.count;
+    animateCounter(fieldCountNum, response.count);
     fieldCountBadge.dataset.state = response.count > 0 ? 'ok' : 'none';
 }
 
+// Animate a number counter for the field count badge
+function animateCounter(el, target) {
+    const start = parseInt(el.textContent) || 0;
+    if (start === target) { el.textContent = target; return; }
+    const diff = target - start;
+    const steps = Math.min(Math.abs(diff), 12);
+    let step = 0;
+    const interval = setInterval(() => {
+        step++;
+        el.textContent = Math.round(start + (diff * step / steps));
+        if (step >= steps) clearInterval(interval);
+    }, 30);
+}
+
+// ─── Button loading state ─────────────────────────────────────────
+function setLoading(btn, loading) {
+    if (loading) {
+        btn.classList.add('loading');
+        btn.disabled = true;
+    } else {
+        btn.classList.remove('loading');
+        btn.disabled = false;
+    }
+}
+
+// ─── Event listeners ──────────────────────────────────────────────
 fillFormBtn.addEventListener('click', async () => {
     const tab = await getActiveTab();
-    if (!tab) {
-        showStatus('No active tab found.', 'error');
-        return;
-    }
+    if (!tab) { showStatus('No active tab found.', 'error'); return; }
 
-    const activeProfile = currentProfiles.find((profile) => profile.id === activeProfileId);
-    if (!activeProfile) {
-        showStatus('No profile saved yet. Create one first.', 'info', 4000);
-        return;
-    }
+    const activeProfile = currentProfiles.find((p) => p.id === activeProfileId);
+    if (!activeProfile) { showStatus('No profile saved yet. Create one first.', 'info', 4000); return; }
 
+    setLoading(fillFormBtn, true);
     const response = await sendToContent(tab.id, { action: 'autoFill', userProfile: activeProfile });
-    if (!response) {
-        showStatus('Could not reach the page. Try reloading it.', 'error');
-        return;
-    }
+    setLoading(fillFormBtn, false);
+
+    if (!response) { showStatus('Could not reach the page. Try reloading it.', 'error'); return; }
 
     if (response.filledCount > 0) {
-        showStatus(`Filled ${response.filledCount} field${response.filledCount > 1 ? 's' : ''}.`, 'success');
+        showStatus(`✓ Filled ${response.filledCount} field${response.filledCount > 1 ? 's' : ''} on this page.`, 'success');
         refreshFieldCount();
     } else {
-        showStatus('No matching fields were found for this profile on the current page.', 'info', 4200);
+        showStatus('No matching fields found for this profile on the current page.', 'info', 4200);
     }
 });
 
 scanBtn.addEventListener('click', async () => {
     const tab = await getActiveTab();
-    if (!tab) {
-        showStatus('No active tab found.', 'error');
-        return;
-    }
+    if (!tab) { showStatus('No active tab found.', 'error'); return; }
 
+    setLoading(scanBtn, true);
     const response = await sendToContent(tab.id, { action: 'getFormFields' });
-    if (!response) {
-        showStatus('Could not reach the page. Try reloading it.', 'error');
-        return;
-    }
+    setLoading(scanBtn, false);
 
-    fieldCountNum.textContent = response.count;
+    if (!response) { showStatus('Could not reach the page. Try reloading it.', 'error'); return; }
+
+    animateCounter(fieldCountNum, response.count);
     fieldCountBadge.dataset.state = response.count > 0 ? 'ok' : 'none';
     showStatus(
         response.count > 0
@@ -351,7 +369,7 @@ scanBtn.addEventListener('click', async () => {
 });
 
 editProfileBtn.addEventListener('click', () => {
-    const activeProfile = currentProfiles.find((profile) => profile.id === activeProfileId) || createEmptyProfile();
+    const activeProfile = currentProfiles.find((p) => p.id === activeProfileId) || createEmptyProfile();
     loadProfileIntoForm(activeProfile, false);
     showView(editorView, mainView);
 });
@@ -366,36 +384,27 @@ newProfileBtn.addEventListener('click', () => {
 profileSelect.addEventListener('change', async (event) => {
     const nextId = event.target.value;
     activeProfileId = nextId;
-    const activeProfile = currentProfiles.find((profile) => profile.id === activeProfileId) || null;
+    const activeProfile = currentProfiles.find((p) => p.id === activeProfileId) || null;
     refreshProfileSummary(activeProfile);
     await sendRuntime({ action: 'setActiveProfile', activeProfileId: nextId });
 });
 
-backBtn.addEventListener('click', () => {
-    showView(mainView, editorView);
-});
-
-cancelEditBtn.addEventListener('click', () => {
-    showView(mainView, editorView);
-});
+backBtn.addEventListener('click', () => showView(mainView, editorView));
+cancelEditBtn.addEventListener('click', () => showView(mainView, editorView));
 
 saveProfileBtn.addEventListener('click', async () => {
     const profile = getProfileFromForm();
     const validationError = validateProfile(profile);
-    if (validationError) {
-        showStatus(validationError, 'error', 4200);
-        return;
-    }
+    if (validationError) { showStatus(validationError, 'error', 4200); return; }
 
+    setLoading(saveProfileBtn, true);
     const existingIndex = currentProfiles.findIndex((item) => item.id === profile.id);
     const nextProfiles = [...currentProfiles];
-    if (existingIndex >= 0) {
-        nextProfiles[existingIndex] = profile;
-    } else {
-        nextProfiles.unshift(profile);
-    }
+    if (existingIndex >= 0) { nextProfiles[existingIndex] = profile; }
+    else { nextProfiles.unshift(profile); }
 
     const saved = await saveProfiles(nextProfiles, profile.id);
+    setLoading(saveProfileBtn, false);
     if (!saved) return;
 
     showView(mainView, editorView);
@@ -412,12 +421,9 @@ duplicateProfileBtn.addEventListener('click', () => {
 });
 
 deleteProfileBtn.addEventListener('click', async () => {
-    if (!editingProfileId) {
-        showStatus('This draft has not been saved yet.', 'info');
-        return;
-    }
+    if (!editingProfileId) { showStatus('This draft has not been saved yet.', 'info'); return; }
 
-    const remainingProfiles = currentProfiles.filter((profile) => profile.id !== editingProfileId);
+    const remainingProfiles = currentProfiles.filter((p) => p.id !== editingProfileId);
     const nextActive = remainingProfiles[0]?.id || null;
     const saved = await saveProfiles(remainingProfiles, nextActive);
     if (!saved) return;
@@ -433,10 +439,10 @@ themeToggle.addEventListener('click', () => {
     chrome.storage.local.set({ theme: nextTheme });
 });
 
+// ─── Init ─────────────────────────────────────────────────────────
 async function initTheme() {
     const result = await new Promise(r => chrome.storage.local.get('theme', r));
-    const theme = result.theme || 'dark';
-    htmlEl.setAttribute('data-theme', theme);
+    htmlEl.setAttribute('data-theme', result.theme || 'dark');
 }
 
 document.addEventListener('DOMContentLoaded', async () => {
@@ -447,4 +453,16 @@ document.addEventListener('DOMContentLoaded', async () => {
     if (currentProfiles.length === 0) {
         showStatus('No profile yet. Create one to start filling forms faster.', 'info', 5000);
     }
+
+    // Animate sections on editor load (intersection-based fade in)
+    const sections = document.querySelectorAll('.form-section');
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('section-visible');
+                observer.unobserve(entry.target);
+            }
+        });
+    }, { threshold: 0.1 });
+    sections.forEach(sec => observer.observe(sec));
 });
