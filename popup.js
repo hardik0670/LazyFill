@@ -32,6 +32,20 @@ document.querySelectorAll('.action-btn').forEach(btn => {
     });
 });
 
+/* ─── Cursor Glow: Dynamic background glow following mouse ─── */
+const cursorGlow = document.getElementById('cursorGlow');
+if (cursorGlow) {
+    document.addEventListener('mousemove', (e) => {
+        requestAnimationFrame(() => {
+            cursorGlow.style.transform = `translate(${e.clientX}px, ${e.clientY}px) translate(-50%, -50%)`;
+            cursorGlow.style.opacity = '1';
+        });
+    });
+    document.addEventListener('mouseleave', () => {
+        cursorGlow.style.opacity = '0';
+    });
+}
+
 
 const PROFILE_FIELDS = [
     'profileName',

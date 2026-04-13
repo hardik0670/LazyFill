@@ -1778,6 +1778,22 @@ function matchField(meta, profile) {
         .join(' ')
         .toLowerCase();
 
+    // ── FAST PATH: explicit LinkedIn-only field ─────────────────────────────
+    // If the label/context specifically calls out LinkedIn (and not GitHub as primary signal),
+    // fill linkedinLink — even if the label also says "url" or "link".
+    if (/linkedin/i.test(academicContext) && !/github/i.test(academicContext) &&
+        !/phone|mobile|contact|number|num\b|whatsapp|email|mail|name\b|college|university/i.test(academicContext)) {
+        const li = String(getProfileValue(profile, 'linkedinLink') || '').trim();
+        if (li && li.toLowerCase() !== 'na') return 'linkedinLink';
+    }
+
+    // ── FAST PATH: explicit GitHub-only field ────────────────────────────────
+    if (/github/i.test(academicContext) && !/linkedin/i.test(academicContext) &&
+        !/phone|mobile|contact|number|num\b|whatsapp|email|mail|name\b|college|university/i.test(academicContext)) {
+        const gh = String(getProfileValue(profile, 'githubLink') || '').trim();
+        if (gh && gh.toLowerCase() !== 'na') return 'githubLink';
+    }
+
     // ── FAST PATH: combined link fields (Resume/LinkedIn/GitHub/Portfolio) ─
     // These appear on many internship forms as a single "any link" field.
     // Prefer githubLink > linkedinLink > websiteLink depending on what's filled.
@@ -1810,6 +1826,20 @@ function matchField(meta, profile) {
     if (
         /\b(college|university|institution|institute|school)\b/.test(academicContext) &&
         /\bname\b/.test(academicContext)
+    ) {
+        return String(getProfileValue(profile, 'collegeName') || '').trim() ? 'collegeName' : null;
+    }
+
+    // ── FAST PATH: standalone "College" / "University" field (no "email"/"mail" in label) ──
+    // When a form has a field labeled just "College" or "University" it means the institution
+    // name — not the college email. Guard: must NOT have email/mail context in primary sources.
+    const primaryOnlyContext = [meta.label, meta.placeholder, meta.name, meta.id, meta.ariaLabel]
+        .filter(Boolean)
+        .join(' ')
+        .toLowerCase();
+    if (
+        /\b(college|university|institution|institute)\b/.test(primaryOnlyContext) &&
+        !/\bemail\b|\bmail\b/.test(primaryOnlyContext)
     ) {
         return String(getProfileValue(profile, 'collegeName') || '').trim() ? 'collegeName' : null;
     }

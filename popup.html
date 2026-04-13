@@ -12,6 +12,7 @@
 
 <body>
     <div class="shell">
+        <div class="cursor-glow" id="cursorGlow"></div>
         <header class="top-bar">
             <div class="brand-group">
                 <div class="brand-logo">
@@ -291,7 +292,25 @@
                             placeholder="Cybersecurity &amp; Forensics / AI-ML / IoT" />
                     </div>
 
-                    <!-- 3. Year + Semester + CGPA -->
+                    <!-- College email + SAP ID (moved here, below Specialization) -->
+                    <div class="field-row">
+                        <div class="field-group">
+                            <label for="collegeEmail">
+                                College / Institutional Email
+                                <span class="email-type-badge badge-college">&#127891; .edu / .ac.in</span>
+                            </label>
+                            <input type="email" id="collegeEmail" name="collegeEmail" placeholder="roll@college.ac.in"
+                                autocomplete="off" data-email-type="college" />
+                            <small class="field-hint">Used on official forms, certificates &amp; university
+                                portals.</small>
+                        </div>
+                        <div class="field-group">
+                            <label for="sapId">SAP / Roll No</label>
+                            <input type="text" id="sapId" name="sapId" placeholder="500124294" />
+                        </div>
+                    </div>
+
+                    <!-- 3. Year + Semester + Graduation Year -->
                     <div class="field-row three-col">
                         <div class="field-group">
                             <label for="currentYear">Current Year</label>
@@ -334,8 +353,26 @@
                             </div>
                         </div>
                         <div class="field-group">
-                            <label for="currentCgpa">CGPA</label>
-                            <input type="text" id="currentCgpa" name="currentCgpa" placeholder="8.42" />
+                            <label for="graduationYear">Grad Year</label>
+                            <div class="select-wrapper">
+                                <select id="graduationYear" name="graduationYear">
+                                    <option value="">Select year</option>
+                                    <option value="2025">2025</option>
+                                    <option value="2026">2026</option>
+                                    <option value="2027">2027</option>
+                                    <option value="2028">2028</option>
+                                    <option value="2029">2029</option>
+                                    <option value="2030">2030</option>
+                                    <option value="2031">2031</option>
+                                    <option value="2032">2032</option>
+                                    <option value="2033">2033</option>
+                                    <option value="2034">2034</option>
+                                </select>
+                                <svg class="select-arrow" viewBox="0 0 12 12" fill="none">
+                                    <path d="M3 4.5l3 3 3-3" stroke="currentColor" stroke-width="1.5"
+                                        stroke-linecap="round" stroke-linejoin="round" />
+                                </svg>
+                            </div>
                         </div>
                     </div>
 
@@ -371,30 +408,8 @@
                         </div>
                     </div>
 
-                    <!-- 5. Graduation Year + 10th % + 12th % -->
+                    <!-- 5. 10th % + 12th % + CGPA -->
                     <div class="field-row three-col">
-                        <div class="field-group">
-                            <label for="graduationYear">Graduation Year</label>
-                            <div class="select-wrapper">
-                                <select id="graduationYear" name="graduationYear">
-                                    <option value="">Select year</option>
-                                    <option value="2025">2025</option>
-                                    <option value="2026">2026</option>
-                                    <option value="2027">2027</option>
-                                    <option value="2028">2028</option>
-                                    <option value="2029">2029</option>
-                                    <option value="2030">2030</option>
-                                    <option value="2031">2031</option>
-                                    <option value="2032">2032</option>
-                                    <option value="2033">2033</option>
-                                    <option value="2034">2034</option>
-                                </select>
-                                <svg class="select-arrow" viewBox="0 0 12 12" fill="none">
-                                    <path d="M3 4.5l3 3 3-3" stroke="currentColor" stroke-width="1.5"
-                                        stroke-linecap="round" stroke-linejoin="round" />
-                                </svg>
-                            </div>
-                        </div>
                         <div class="field-group">
                             <label for="tenthPercent">10th %</label>
                             <input type="text" id="tenthPercent" name="tenthPercent" placeholder="e.g. 85.4" />
@@ -403,23 +418,9 @@
                             <label for="twelfthPercent">12th %</label>
                             <input type="text" id="twelfthPercent" name="twelfthPercent" placeholder="e.g. 78.6" />
                         </div>
-                    </div>
-
-                    <!-- College email + SAP ID -->
-                    <div class="field-row">
                         <div class="field-group">
-                            <label for="collegeEmail">
-                                College / Institutional Email
-                                <span class="email-type-badge badge-college">&#127891; .edu / .ac.in</span>
-                            </label>
-                            <input type="email" id="collegeEmail" name="collegeEmail" placeholder="roll@college.ac.in"
-                                autocomplete="off" data-email-type="college" />
-                            <small class="field-hint">Used on official forms, certificates &amp; university
-                                portals.</small>
-                        </div>
-                        <div class="field-group">
-                            <label for="sapId">SAP / Roll No</label>
-                            <input type="text" id="sapId" name="sapId" placeholder="500124294" />
+                            <label for="currentCgpa">Current CGPA</label>
+                            <input type="text" id="currentCgpa" name="currentCgpa" placeholder="8.42" />
                         </div>
                     </div>
 
