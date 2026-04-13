@@ -81,14 +81,65 @@ const FIELD_MAPPING = {
     ],
 
     currentYear: [
-        'current year', 'year of study', 'academic year', 'semester', 'year',
+        'current year', 'year of study', 'academic year', 'year',
         'your year', 'study year', 'year of course', 'course year', 'year of degree',
-        'which year', 'select year', 'current semester', 'semester no', 'which semester',
-        'year/semester', 'current year of study', 'academic semester', 'term',
-        'academic term', 'year of college', 'year in college', 'study level',
+        'which year', 'select year', 'year/semester', 'current year of study',
+        'year of college', 'year in college', 'study level',
         'year (1st/2nd/3rd/4th)', 'first year', 'second year', 'third year', 'fourth year',
-        'final year', 'pass out year', 'graduation year', 'expected graduation year',
-        'passing year', 'year of passing', 'year of graduation', 'batch', 'batch year'
+        'final year'
+    ],
+
+    graduationYear: [
+        'graduation year', 'graduating year', 'year of graduation', 'expected graduation year',
+        'expected year of graduation', 'expected passing year', 'pass out year',
+        'passing year', 'year of passing', 'batch', 'batch year',
+        'graduating in', 'graduation/graduating in year', 'graduating in year',
+        'expected year of passing', 'year of completion', 'completion year',
+        'course completion year', 'degree completion year', 'programme completion year',
+        'year of passout', 'passout year', 'pass-out year', 'year of pass out',
+        'academic batch', 'graduating batch', 'batch (year)', 'year of degree completion',
+        'expected year of degree', 'tentative graduation year', 'projected graduation year',
+        'expected convocation year', 'convocation year', 'year of convocation'
+    ],
+
+    tenthPercent: [
+        '10th percentage', '10th %', '10th marks', '10th score', '10th grade percentage',
+        'class 10 percentage', 'class x percentage', 'ssc percentage', 'ssc marks',
+        'ssc score', 'matriculation percentage', 'matric percentage', 'matric marks',
+        'matric score', '10th board percentage', '10th board marks', '10th board score',
+        'secondary percentage', 'secondary marks', 'secondary board percentage',
+        'class 10th marks', 'class 10th percentage', 'class 10th score',
+        'xth percentage', 'xth marks', 'xth score', '10 percentage', '10 marks',
+        '10th result', 'class x marks', 'class x score', 'hsc marks (10th)',
+        'secondary school percentage', 'secondary school marks',
+        '10th cgpa', '10th grade marks', '10th std percentage', '10th std marks',
+        'std 10 percentage', 'std x percentage', '10th standard percentage',
+        '10th standard marks', 'tenth percentage', 'tenth marks', 'tenth score'
+    ],
+
+    twelfthPercent: [
+        '12th percentage', '12th %', '12th marks', '12th score', '12th grade percentage',
+        'class 12 percentage', 'class xii percentage', 'hsc percentage', 'hsc marks',
+        'hsc score', 'intermediate percentage', 'intermediate marks', 'intermediate score',
+        '12th board percentage', '12th board marks', '12th board score',
+        'senior secondary percentage', 'senior secondary marks', 'senior secondary board percentage',
+        'class 12th marks', 'class 12th percentage', 'class 12th score',
+        'xiith percentage', 'xiith marks', 'xii percentage', 'xii marks',
+        '12 percentage', '12 marks', '12th result', 'class xii marks', 'class xii score',
+        'higher secondary percentage', 'higher secondary marks',
+        '12th std percentage', '12th std marks', 'std 12 percentage', 'std xii percentage',
+        '12th standard percentage', '12th standard marks',
+        'twelfth percentage', 'twelfth marks', 'twelfth score',
+        'plus two percentage', 'plus two marks', '+2 percentage', '+2 marks',
+        'puc percentage', 'puc marks', 'pre-university percentage', 'pre-university marks'
+    ],
+
+    currentSemester: [
+        'current semester', 'semester', 'sem', 'semester no', 'semester number',
+        'which semester', 'select semester', 'academic semester', 'current sem',
+        'semester (1-8)', 'semester (1-6)', 'odd semester', 'even semester',
+        'running semester', 'ongoing semester', 'semester of study',
+        'term', 'academic term', 'current term', 'semester/term'
     ],
 
     currentCgpa: [
@@ -141,23 +192,7 @@ const FIELD_MAPPING = {
         'select country', 'country of living', 'residence country', 'home country'
     ],
 
-    locationPreference1: [
-        'location preference 1', 'location preference 01', 'location preference one',
-        'preferred location 1', 'preferred location one', 'preferred location first',
-        'location choice 1', 'location choice one', 'location option 1',
-        'first location preference', 'first preferred location', 'first location choice',
-        'location priority 1', 'priority 1 location', '1st location preference',
-        'preference 1 location', 'choice 1 location', 'location 1'
-    ],
 
-    locationPreference2: [
-        'location preference 2', 'location preference 02', 'location preference two',
-        'preferred location 2', 'preferred location two', 'preferred location second',
-        'location choice 2', 'location choice two', 'location option 2',
-        'second location preference', 'second preferred location', 'second location choice',
-        'location priority 2', 'priority 2 location', '2nd location preference',
-        'preference 2 location', 'choice 2 location', 'location 2'
-    ],
 
     skillLevel: [
         'skill level', 'proficiency', 'experience level', 'expertise level',
@@ -179,17 +214,47 @@ const FIELD_MAPPING = {
     ],
 
     collegeEmail: [
+        // College / university / institute
         'college email', 'college mail', 'college e-mail', 'college email id',
-        'college email address', 'institutional email', 'university email',
-        'university mail', 'institute email', 'institute mail', 'edu email',
-        'edu mail', 'academic email', 'college id email', 'student email',
-        'student mail', 'student email id', 'student email address',
+        'college email address', 'college email id (required)',
+        'college official email', 'college registered email',
+        'your college email', 'your college mail id',
+        'college/university email', 'email id (college)', 'email (college)',
+        // Institutional
+        'institutional email', 'institutional mail', 'your institutional email',
+        'email id (institutional)', 'institute email', 'institute mail',
+        // University
+        'university email', 'university mail', 'university email id',
+        'university email address', 'university official email',
+        'university registered email', 'your university email',
+        // Student / STU
+        'student email', 'student mail', 'student email id', 'student email address',
+        'stu email', 'stu email id', 'stu mail', 'stu mail id',
+        'stu id', 'student e-mail', 'student e mail',
+        'your student email', 'your student mail',
+        // Academic / official
+        'academic email', 'academic mail', 'academic email id',
         'official email', 'official mail', 'official email id',
-        'college official email', 'university official email',
-        'college registered email', 'institutional mail', 'your college email',
-        'your institutional email', 'college/university email',
-        'email id (college)', 'email (college)', 'email id (institutional)',
-        'your college mail id', 'college email id (required)'
+        'college id email',
+        // Generic edu
+        'edu email', 'edu mail',
+        // Explicit label variants seen in forms
+        'student email id', 'student email address',
+        'university email id', 'university email address',
+        'college email id', 'college email address',
+        // All-caps / Title-case variants (normalized, so these cover them too)
+        'student email id (upes)', 'upes email', 'upes email id', 'upes mail',
+        'upes student email', 'upes student mail',
+        // Other wordings
+        'college email (required)', 'university email (required)',
+        'student email (required)', 'institutional email id',
+        'institute email id', 'institute email address',
+        // Additional label patterns seen in registration forms
+        'college email id (required)', 'email id (student)', 'email (student)',
+        'email id (university)', 'email (university)', 'email id (institute)',
+        'email (institute)', 'email id (institutional)',
+        'registered email (college)', 'registered email (university)',
+        'registered email (institute)',
     ],
 
     phone: [
@@ -220,7 +285,15 @@ const FIELD_MAPPING = {
         'github username', 'github page', 'github profile link', 'github profile url',
         'your github', 'enter github', 'github id', 'github profile (url)',
         'github (optional)', 'github link (if any)', 'github link (optional)',
-        'github repo', 'code repository', 'github (if any)'
+        'github repo', 'code repository', 'github (if any)',
+        // Combined link fields (e.g. "Resume / LinkedIn / Portfolio / GitHub Link")
+        'resume / linkedin / portfolio / github link',
+        'linkedin / github / portfolio',
+        'github / linkedin / portfolio',
+        'resume link', 'resume url', 'resume / cv link', 'cv link', 'cv url',
+        'any link', 'any one link', 'provide a link', 'share a link',
+        'link (github/linkedin/portfolio)', 'link (linkedin/github)',
+        'social / portfolio link', 'social or portfolio link'
     ],
 
     linkedinLink: [
@@ -281,15 +354,9 @@ const FIELD_MAPPING = {
         'branch (cs/it/ec/me/ce/etc)', 'engineering stream'
     ],
 
-    subject: [
-        'subject', 'topic', 'course topic', 'training topic', 'module', 'domain',
-        'your subject', 'preferred subject', 'area of interest', 'subject of interest',
-        'interested subject', 'subject choice', 'topic of interest',
-        'technical domain', 'domain choice', 'learning domain',
-        'what domain', 'which domain', 'select domain', 'select topic'
-    ],
-
-    interestedDomain: [
+    // domainOfInterest covers the merged field (was: interestedDomain + researchInterestArea + subject)
+    domainOfInterest: [
+        // Domain / interest
         'interested in domain', 'preferred domain', 'domain of interest', 'interested domain',
         'area of interest', 'your area of interest', 'domain preference', 'domain interested',
         'interest area', 'which domain are you interested', 'what domain interests you',
@@ -297,10 +364,14 @@ const FIELD_MAPPING = {
         'field of interest', 'technical field of interest', 'preferred field',
         'what are you interested in', 'your interest', 'area of expertise preferred',
         'career interest', 'technical interest', 'professional interest',
-        'apply for domain', 'domain to work in', 'desired domain'
-    ],
-
-    researchInterestArea: [
+        'apply for domain', 'domain to work in', 'desired domain',
+        // Subject / domain
+        'subject', 'topic', 'course topic', 'training topic', 'module', 'domain',
+        'your subject', 'preferred subject', 'subject of interest',
+        'interested subject', 'subject choice', 'topic of interest',
+        'technical domain', 'domain choice', 'learning domain',
+        'what domain', 'which domain', 'select domain', 'select topic',
+        // Research interest
         'research interest area', 'research interest', 'research interests', 'area of research interest',
         'research area', 'research areas', 'research domain', 'research domains',
         'area of interest in research', 'research focus', 'research focus area',
@@ -309,6 +380,14 @@ const FIELD_MAPPING = {
         'research field', 'fields of research', 'field of research', 'area of research',
         'research concentration', 'research preference', 'research line', 'research direction',
         'statement of research interest', 'research intent', 'interested research area'
+    ],
+
+    // Legacy aliases still resolved by getProfileValue; kept for old profiles in storage
+    interestedDomain: [
+        'interested in domain (legacy)', '__lazyfill_legacy_interestedDomain__'
+    ],
+    researchInterestArea: [
+        'research interest area (legacy)', '__lazyfill_legacy_researchInterestArea__'
     ],
 
     address: [
@@ -431,7 +510,8 @@ const FIELD_MAPPING = {
     ],
 
     referralSource: [
-        'how did you hear', 'referral', 'referred by', 'source', 'how did you find us',
+        'how did you hear', 'where did you learn about us', 'where did you hear about us',
+        'referral', 'referred by', 'source', 'how did you find us',
         'how you heard', 'how did you know', 'how did you come to know',
         'where did you hear', 'from where did you hear', 'source of information',
         'how you came to know', 'reference', 'reference source', 'referral source',
@@ -484,18 +564,23 @@ const CHOICE_SYNONYMS = {
         phd: ['phd', 'ph.d', 'doctorate']
     },
     specialization: {
-        ccvt: ['ccvt'],
-        csf: ['csf', 'cybersecurityandforensics', 'cybersecurity and forensics', 'cyber security and forensics', 'cyber security & forensics', 'cybersecurity forensics'],
-        aiml: ['aiml', 'ai/ml', 'ai & ml', 'artificialintelligenceandmachinelearning', 'artificial intelligence and machine learning', 'ai and ml', 'artificial intelligence & machine learning'],
-        iot: ['iot', 'internetofthings', 'internet of things', 'internet of thing'],
-        fullstack: ['fullstack', 'full stack', 'full-stack', 'full stack development'],
-        bigdata: ['bigdata', 'big data', 'big data analytics'],
-        graphicsgaming: ['graphicsgaming', 'graphics & gaming', 'graphics and gaming', 'graphics gaming'],
-        datascience: ['datascience', 'data science', 'ds'],
-        cloudcomputing: ['cloudcomputing', 'cloud computing', 'cloud'],
+        ccvt:          ['ccvt', 'cloud computing and virtualization technology', 'cloud computing virtualization technology', 'cloud and virtualization'],
+        csf:           ['csf', 'cybersecurityandforensics', 'cybersecurity and forensics', 'cyber security and forensics', 'cyber security & forensics', 'cybersecurity forensics', 'cyber forensics', 'cybersecurity & forensics'],
+        aiml:          ['aiml', 'ai/ml', 'ai & ml', 'artificialintelligenceandmachinelearning', 'artificial intelligence and machine learning', 'ai and ml', 'artificial intelligence & machine learning', 'ai ml', 'ai and machine learning'],
+        iot:           ['iot', 'internetofthings', 'internet of things', 'internet of thing'],
+        fullstack:     ['fullstack', 'full stack', 'full-stack', 'full stack development'],
+        bigdata:       ['bigdata', 'big data', 'big data analytics'],
+        graphicsgaming:['graphicsgaming', 'graphics & gaming', 'graphics and gaming', 'graphics gaming'],
+        datascience:   ['datascience', 'data science', 'ds'],
+        cloudcomputing:['cloudcomputing', 'cloud computing', 'cloud'],
         cybersecurity: ['cybersecurity', 'cyber security', 'information security'],
-        blockchain: ['blockchain', 'block chain'],
-        arvr: ['arvr', 'ar/vr', 'ar & vr', 'augmented reality', 'virtual reality']
+        blockchain:    ['blockchain', 'block chain'],
+        arvr:          ['arvr', 'ar/vr', 'ar & vr', 'augmented reality', 'virtual reality', 'augmented reality and virtual reality', 'ar and vr'],
+        devops:        ['devops', 'dev ops', 'development operations'],
+        uiux:          ['uiux', 'ui/ux', 'ui ux', 'user interface user experience', 'ui and ux design'],
+        machinelearning:['machinelearning', 'machine learning', 'ml', 'deep learning'],
+        nlp:           ['nlp', 'natural language processing'],
+        computervision:['computervision', 'computer vision', 'cv'],
     },
     branch: {
         cse: ['cse', 'cs', 'computer science', 'computer science and engineering', 'computer science & engineering'],
@@ -507,24 +592,6 @@ const CHOICE_SYNONYMS = {
         ae: ['ae', 'aerospace', 'aeronautical', 'aerospace engineering'],
         che: ['che', 'chemical', 'chemical engineering'],
         bio: ['bio', 'biotech', 'biotechnology', 'bioinformatics']
-    },
-    interestedDomain: {
-        frontenddevelopment: ['frontenddevelopment', 'frontend development', 'front end development', 'frontend', 'front-end development', 'front-end', 'web frontend', 'ui development'],
-        backenddevelopment: ['backenddevelopment', 'backend development', 'back end development', 'backend', 'back-end development', 'back-end', 'server side', 'server-side'],
-        fullstackdevelopment: ['fullstackdevelopment', 'full stack development', 'fullstack', 'full-stack', 'full stack'],
-        devops: ['devops', 'dev ops', 'devsecops', 'sre', 'site reliability'],
-        uiuxdesigning: ['uiuxdesigning', 'ui/ux designing', 'ui ux designing', 'uiux', 'ui/ux', 'ui ux', 'ux design', 'ui design', 'user experience', 'user interface'],
-        graphicdesigning: ['graphicdesigning', 'graphic designing', 'graphics designing', 'graphic design', 'graphics design'],
-        videoediting: ['videoediting', 'video editing', 'video production'],
-        datascience: ['datascience', 'data science', 'data analysis', 'data analytics', 'analytics'],
-        machinelearning: ['machinelearning', 'machine learning', 'ml', 'deep learning', 'ai ml'],
-        mobiledevelopment: ['mobiledevelopment', 'mobile development', 'android development', 'ios development', 'app development'],
-        cybersecurity: ['cybersecurity', 'cyber security', 'information security', 'security'],
-        cloudcomputing: ['cloudcomputing', 'cloud computing', 'cloud', 'aws', 'azure', 'gcp'],
-        contentwriting: ['contentwriting', 'content writing', 'content creation', 'copywriting', 'blogging'],
-        digitalmarketing: ['digitalmarketing', 'digital marketing', 'seo', 'social media marketing', 'marketing'],
-        blockchain: ['blockchain', 'block chain', 'web3', 'crypto'],
-        testing: ['testing', 'qa', 'quality assurance', 'software testing', 'manual testing', 'automation testing']
     },
     experience: {
         fresher: ['fresher', 'no experience', 'none', '0', 'zero', 'nil', 'no prior experience', 'no work experience', 'freshers', '0 years', 'no exp', 'na', 'n/a'],
@@ -545,20 +612,63 @@ const CHOICE_SYNONYMS = {
     skillLevel: {
         beginner: ['beginner', 'basic', 'novice', 'elementary', 'learning', 'starter', 'level 1', 'beginner level'],
         intermediate: ['intermediate', 'medium', 'moderate', 'average', 'level 2', 'mid level'],
-        advanced: ['advanced', 'expert', 'proficient', 'senior', 'high', 'professional', 'level 3', 'expert level'],
+        advanced: ['advanced', 'advance', 'expert', 'proficient', 'senior', 'high', 'professional', 'level 3', 'expert level'],
         fresher: ['fresher', 'fresher/beginner', 'no experience']
     },
     currentYear: {
-        first: ['1st year', 'first year', '1', 'year 1', 'sem 1', 'sem 2', 'semester 1', 'semester 2', '1st'],
-        second: ['2nd year', 'second year', '2', 'year 2', 'sem 3', 'sem 4', 'semester 3', 'semester 4', '2nd'],
-        third: ['3rd year', 'third year', '3', 'year 3', 'sem 5', 'sem 6', 'semester 5', 'semester 6', '3rd'],
-        fourth: ['4th year', 'fourth year', 'final year', '4', 'year 4', 'sem 7', 'sem 8', 'semester 7', 'semester 8', '4th', 'last year']
+        first: ['1st year', 'first year', '1', 'year 1', '1st'],
+        second: ['2nd year', 'second year', '2', 'year 2', '2nd'],
+        third: ['3rd year', 'third year', '3', 'year 3', '3rd'],
+        fourth: ['4th year', 'fourth year', 'final year', '4', 'year 4', '4th', 'last year'],
+        lateral2nd: ['lateral entry 2nd year', 'lateral 2nd', 'le 2nd'],
+        lateral3rd: ['lateral entry 3rd year', 'lateral 3rd', 'le 3rd'],
+        fifth: ['5th year', 'fifth year', '5', 'year 5', '5th', 'integrated 5th']
+    },
+    graduationYear: (() => {
+        // Build synonyms for years 2020–2035 so any dropdown with a 4-digit year
+        // value can be matched against the profile's stored graduationYear.
+        const syns = {};
+        for (let y = 2020; y <= 2035; y++) {
+            syns[String(y)] = [String(y), `batch ${y}`, `${y} batch`, `class of ${y}`];
+        }
+        return syns;
+    })(),
+    currentSemester: {
+        sem1: ['1', 'semester 1', 'sem 1', 'sem i', 'first semester', '1st semester', 'i'],
+        sem2: ['2', 'semester 2', 'sem 2', 'sem ii', 'second semester', '2nd semester', 'ii'],
+        sem3: ['3', 'semester 3', 'sem 3', 'sem iii', 'third semester', '3rd semester', 'iii'],
+        sem4: ['4', 'semester 4', 'sem 4', 'sem iv', 'fourth semester', '4th semester', 'iv'],
+        sem5: ['5', 'semester 5', 'sem 5', 'sem v', 'fifth semester', '5th semester', 'v'],
+        sem6: ['6', 'semester 6', 'sem 6', 'sem vi', 'sixth semester', '6th semester', 'vi'],
+        sem7: ['7', 'semester 7', 'sem 7', 'sem vii', 'seventh semester', '7th semester', 'vii'],
+        sem8: ['8', 'semester 8', 'sem 8', 'sem viii', 'eighth semester', '8th semester', 'viii', 'final semester']
     },
     country: {
-        india: ['india', 'in', 'ind', 'bharat', 'republic of india']
+        india: ['india', 'in', 'ind', 'bharat', 'republic of india', 'india (in)'],
+        usa: ['usa', 'us', 'united states', 'united states of america', 'america'],
+        uk: ['uk', 'united kingdom', 'gb', 'great britain', 'england'],
+        canada: ['canada', 'ca', 'can'],
+        australia: ['australia', 'au', 'aus'],
+        germany: ['germany', 'de', 'deu', 'deutschland'],
+        singapore: ['singapore', 'sg', 'sgp'],
+        uae: ['uae', 'united arab emirates', 'dubai', 'ae'],
     },
     nationality: {
         indian: ['indian', 'india', 'in', 'ind', 'bharat']
+    },
+    referralSource: {
+        linkedin: ['linkedin', 'linked in', 'linkedin.com'],
+        instagram: ['instagram', 'insta', 'ig'],
+        twitter: ['twitter', 'twitter(x)', 'twitter x', 'x', 'x (twitter)', 'x/twitter'],
+        facebook: ['facebook', 'fb', 'fb.com', 'meta'],
+        youtube: ['youtube', 'yt'],
+        college: ['college', 'college notice board', 'college website', 'college group', 'campus'],
+        friend: ['friend', 'friends', 'word of mouth', 'friend referral', 'known person'],
+        google: ['google', 'google search', 'web search', 'internet search'],
+        other: ['other', 'others', 'any other', 'other source'],
+        whatsapp: ['whatsapp', 'whatsapp group'],
+        telegram: ['telegram', 'telegram group'],
+        email: ['email', 'e-mail', 'newsletter', 'mail'],
     },
     bloodGroup: {
         apos: ['a+', 'a positive', 'a+ve', 'a pos'],
@@ -571,6 +681,187 @@ const CHOICE_SYNONYMS = {
         oneg: ['o-', 'o negative', 'o-ve', 'o neg']
     }
 };
+
+// domainOfInterest and interestedDomain share the same canonical synonym set.
+// Point both keys at the same object to avoid maintaining duplicates.
+const _DOMAIN_SYNONYMS = {
+    frontenddevelopment: ['frontenddevelopment', 'frontend development', 'front end development', 'frontend', 'front-end development', 'front-end', 'web frontend', 'ui development'],
+    backenddevelopment: ['backenddevelopment', 'backend development', 'back end development', 'backend', 'back-end development', 'back-end', 'server side', 'server-side'],
+    fullstackdevelopment: ['fullstackdevelopment', 'full stack development', 'fullstack', 'full-stack', 'full stack'],
+    devops: ['devops', 'dev ops', 'devsecops', 'sre', 'site reliability'],
+    uiuxdesigning: ['uiuxdesigning', 'ui/ux designing', 'ui ux designing', 'uiux', 'ui/ux', 'ui ux', 'ux design', 'ui design', 'user experience', 'user interface'],
+    graphicdesigning: ['graphicdesigning', 'graphic designing', 'graphics designing', 'graphic design', 'graphics design'],
+    videoediting: ['videoediting', 'video editing', 'video production'],
+    datascience: ['datascience', 'data science', 'data analysis', 'data analytics', 'analytics'],
+    machinelearning: ['machinelearning', 'machine learning', 'ml', 'deep learning', 'ai ml'],
+    mobiledevelopment: ['mobiledevelopment', 'mobile development', 'android development', 'ios development', 'app development'],
+    cybersecurity: ['cybersecurity', 'cyber security', 'information security', 'security'],
+    cloudcomputing: ['cloudcomputing', 'cloud computing', 'cloud', 'aws', 'azure', 'gcp'],
+    contentwriting: ['contentwriting', 'content writing', 'content creation', 'copywriting', 'blogging'],
+    digitalmarketing: ['digitalmarketing', 'digital marketing', 'seo', 'social media marketing', 'marketing'],
+    blockchain: ['blockchain', 'block chain', 'web3', 'crypto'],
+    testing: ['testing', 'qa', 'quality assurance', 'software testing', 'manual testing', 'automation testing']
+};
+CHOICE_SYNONYMS.domainOfInterest  = _DOMAIN_SYNONYMS;
+CHOICE_SYNONYMS.interestedDomain   = _DOMAIN_SYNONYMS;
+
+
+// ─────────────────────────────────────────────────────────────────────────────
+// SHARED FIELD-NAME ALIAS TABLE
+// Maps collapsed HTML name= attribute values to their profile key equivalents.
+// Used by both matchField() (fast path) and scoreMatch() (penalty/boost logic)
+// so there is one source of truth instead of two near-identical copies.
+// ─────────────────────────────────────────────────────────────────────────────
+const NAME_ALIASES = {
+    fullname:'fullName', full_name:'fullName', name:'fullName',
+    email:'email', emailaddress:'email', email_address:'email',
+    phone:'phone', phonenumber:'phone', phone_number:'phone',
+    mobile:'phone', mobilenumber:'phone', contactnumber:'phone',
+    contact:'phone', contactno:'phone',
+    whatsapp:'whatsappNumber', whatsappnumber:'whatsappNumber',
+    collegename:'collegeName', college:'collegeName',
+    university:'collegeName', universityname:'collegeName',
+    course:'course', program:'course', programme:'course',
+    degree:'course', qualification:'course',
+    branch:'branch', department:'branch',
+    specialization:'specialization', specialisation:'specialization',
+    currentyear:'currentYear', year:'currentYear',
+    graduationyear:'graduationYear', passingyear:'graduationYear', passoutyear:'graduationYear',
+    batchyear:'graduationYear', batch:'graduationYear', yearofgraduation:'graduationYear',
+    expectedgraduationyear:'graduationYear', graduatingyear:'graduationYear',
+    tenthpercent:'tenthPercent', tenthpercentage:'tenthPercent', tenthmarks:'tenthPercent',
+    sscpercentage:'tenthPercent', sscmarks:'tenthPercent', matricpercentage:'tenthPercent',
+    class10percentage:'tenthPercent', class10marks:'tenthPercent',
+    twelfthpercent:'twelfthPercent', twelfthpercentage:'twelfthPercent', twelfthmarks:'twelfthPercent',
+    hscpercentage:'twelfthPercent', hscmarks:'twelfthPercent', intermediatepercentage:'twelfthPercent',
+    class12percentage:'twelfthPercent', class12marks:'twelfthPercent',
+    semester:'currentSemester', currentsemester:'currentSemester',
+    cgpa:'currentCgpa', gpa:'currentCgpa', currentcgpa:'currentCgpa',
+    sapid:'sapId', rollno:'sapId', rollnumber:'sapId',
+    enrollmentno:'sapId', registrationno:'sapId',
+    collegeemail:'collegeEmail', institutionalemail:'collegeEmail',
+    studentemail:'collegeEmail',
+    firstname:'firstName', fname:'firstName', givenname:'firstName',
+    lastname:'lastName', lname:'lastName', surname:'lastName',
+    gender:'gender', dob:'dateOfBirth', dateofbirth:'dateOfBirth',
+    age:'age', bloodgroup:'bloodGroup',
+    currentbacklogs:'currentBacklogs', passivebacklogs:'passiveBacklogs',
+    backlogs:'currentBacklogs',
+    internship:'internshipProgram', internshipprogram:'internshipProgram',
+    role:'internshipProgram', position:'internshipProgram',
+    duration:'duration', skilllevel:'skillLevel', experience:'experience',
+    company:'company', organization:'company',
+    about:'aboutMe', aboutme:'aboutMe', coverletter:'aboutMe',
+    github:'githubLink', githublink:'githubLink', githuburl:'githubLink',
+    githubprofile:'githubLink', githubprofilelink:'githubLink',
+    linkedin:'linkedinLink', linkedinlink:'linkedinLink',
+    linkedinurl:'linkedinLink', linkedinprofile:'linkedinLink',
+    linkedinprofilelink:'linkedinLink',
+    website:'websiteLink', websitelink:'websiteLink', websiteurl:'websiteLink',
+    portfolio:'websiteLink', portfoliolink:'websiteLink',
+    portfoliourl:'websiteLink', portfoliowebsite:'websiteLink',
+    resumelink:'githubLink', resumeurl:'githubLink', cvlink:'githubLink',
+    anylink:'githubLink', sociallink:'linkedinLink',
+    profilelink:'linkedinLink', profileurl:'linkedinLink',
+    address:'address', city:'city', state:'state',
+    zip:'zip', pincode:'zip', postalcode:'zip', country:'country',
+    domainofinterest:'domainOfInterest', domain:'domainOfInterest',
+    researcharea:'domainOfInterest', interedomain:'domainOfInterest',
+    referralsource:'referralSource',
+};
+
+// Legacy-only keys that exist in FIELD_MAPPING purely for storage back-compat.
+// They are resolved via getProfileValue() aliases and must not participate in
+// the scored match loop — doing so creates spurious low-score candidates.
+const LEGACY_FIELD_KEYS = new Set(['interestedDomain', 'researchInterestArea']);
+
+// ─────────────────────────────────────────────────────────────────────────────
+// ABBREVIATION EXPANSION TABLE
+// Maps abbreviations to their full-form equivalents and vice-versa.
+// Both sides are expanded before comparison so e.g. "CSF" in a form option
+// matches a profile saved as "Cyber Security & Forensics", and vice-versa.
+// ─────────────────────────────────────────────────────────────────────────────
+const ABBREVIATION_MAP = {
+    // Specializations
+    'csf':   ['cyber security and forensics', 'cyber security & forensics', 'cybersecurity and forensics', 'cybersecurity forensics', 'cyber forensics'],
+    'aiml':  ['artificial intelligence and machine learning', 'ai and machine learning', 'ai & machine learning', 'artificial intelligence & machine learning', 'ai ml'],
+    'ccvt':  ['cloud computing and virtualization technology', 'cloud computing virtualization technology', 'cloud and virtualization'],
+    'iot':   ['internet of things', 'internet of thing'],
+    'arvr':  ['augmented reality and virtual reality', 'ar and vr', 'ar & vr', 'augmented and virtual reality'],
+    'ds':    ['data science'],
+    'ml':    ['machine learning'],
+    'ai':    ['artificial intelligence'],
+    'dl':    ['deep learning'],
+    'nlp':   ['natural language processing'],
+    'cv':    ['computer vision'],
+    // Branches / Departments
+    'cse':   ['computer science and engineering', 'computer science & engineering', 'computer science engineering'],
+    'csit':  ['computer science and information technology', 'computer science & information technology'],
+    'it':    ['information technology'],
+    'ece':   ['electronics and communication engineering', 'electronics & communication engineering', 'electronics and communication'],
+    'eee':   ['electrical and electronics engineering', 'electrical & electronics engineering'],
+    'ee':    ['electrical engineering'],
+    'me':    ['mechanical engineering'],
+    'ce':    ['civil engineering'],
+    'ae':    ['aerospace engineering', 'aeronautical engineering'],
+    'che':   ['chemical engineering'],
+    'bio':   ['biotechnology', 'bioinformatics', 'biological sciences'],
+    'mba':   ['master of business administration'],
+    'bba':   ['bachelor of business administration'],
+    'bca':   ['bachelor of computer applications', 'bachelor of computer application'],
+    'mca':   ['master of computer applications', 'master of computer application'],
+    'btech': ['bachelor of technology', 'bachelor of engineering'],
+    'mtech': ['master of technology', 'master of engineering'],
+    'bsc':   ['bachelor of science'],
+    'msc':   ['master of science'],
+    'bcom':  ['bachelor of commerce'],
+    'mcom':  ['master of commerce'],
+    'ba':    ['bachelor of arts'],
+    'ma':    ['master of arts'],
+    'phd':   ['doctor of philosophy', 'doctorate'],
+    // Common tech domains
+    'ui':    ['user interface'],
+    'ux':    ['user experience'],
+    'uiux':  ['user interface and user experience', 'user interface', 'user experience', 'ui and ux', 'ui & ux design'],
+    'qa':    ['quality assurance'],
+    'sre':   ['site reliability engineering'],
+    'fe':    ['front end', 'frontend'],
+    'be':    ['back end', 'backend'],
+    'fs':    ['full stack'],
+    // Blood groups
+    'a+':   ['a positive', 'a pos'],
+    'a-':   ['a negative', 'a neg'],
+    'b+':   ['b positive', 'b pos'],
+    'b-':   ['b negative', 'b neg'],
+    'ab+':  ['ab positive', 'ab pos'],
+    'ab-':  ['ab negative', 'ab neg'],
+    'o+':   ['o positive', 'o pos'],
+    'o-':   ['o negative', 'o neg'],
+    // Gender short forms
+    'm':    ['male'],
+    'f':    ['female'],
+    // Yes/No
+    'y':    ['yes'],
+    'n':    ['no'],
+};
+
+// Expand abbreviations: given any text, return all known equivalent forms.
+function expandAbbreviations(text) {
+    const key = collapse(text);
+    const expansions = new Set([normalize(text)]);
+    // Direct lookup
+    if (ABBREVIATION_MAP[key]) {
+        ABBREVIATION_MAP[key].forEach(v => expansions.add(normalize(v)));
+    }
+    // Reverse lookup: text may itself be a full form
+    for (const [abbr, fullForms] of Object.entries(ABBREVIATION_MAP)) {
+        if (fullForms.some(f => collapse(f) === key)) {
+            expansions.add(normalize(abbr));
+            fullForms.forEach(f => expansions.add(normalize(f)));
+        }
+    }
+    return Array.from(expansions);
+}
 
 function ensureHighlightStyle() {
     const STYLE_ID = 'lazyfill-highlight-style';
@@ -623,28 +914,60 @@ function choiceMatches(profileKey, optionText, value) {
     if (!optionText || !value) return false;
 
     const optionNorm = normalize(optionText);
-    const valueNorm = normalize(value);
+    const valueNorm  = normalize(value);
 
-    // Exact normalized match
+    // 1. Exact normalized match
     if (optionNorm === valueNorm) return true;
 
-    // Canonical synonym match
+    // 2. Canonical synonym match (CHOICE_SYNONYMS table)
     const optionToken = canonicalizeChoice(profileKey, optionText);
-    const valueToken = canonicalizeChoice(profileKey, value);
+    const valueToken  = canonicalizeChoice(profileKey, value);
     if (optionToken === valueToken) return true;
 
     const optionCollapsed = collapse(optionText);
-    const valueCollapsed = collapse(value);
+    const valueCollapsed  = collapse(value);
 
-    // Substring matches (require length > 2 to avoid noise)
+    // 3. Abbreviation expansion: expand both sides and cross-compare
+    const optionExpansions = expandAbbreviations(optionText);
+    const valueExpansions  = expandAbbreviations(value);
+
+    for (const oe of optionExpansions) {
+        for (const ve of valueExpansions) {
+            if (oe === ve) return true;
+            if (collapse(oe) === collapse(ve)) return true;
+        }
+    }
+
+    // 4. Substring matches (require length > 2 to avoid noise)
     if (optionCollapsed.includes(valueCollapsed) && valueCollapsed.length > 2) return true;
     if (valueCollapsed.includes(optionCollapsed) && optionCollapsed.length > 2) return true;
 
-    // Word-level overlap: if majority of words in value appear in option
-    const valueWords = valueNorm.split(' ').filter(w => w.length > 2);
-    if (valueWords.length > 0) {
+    // 5. Expanded forms of value appear in option text (and vice-versa)
+    for (const ve of valueExpansions) {
+        const veColl = collapse(ve);
+        if (veColl.length > 3 && optionCollapsed.includes(veColl)) return true;
+    }
+    for (const oe of optionExpansions) {
+        const oeColl = collapse(oe);
+        if (oeColl.length > 3 && valueCollapsed.includes(oeColl)) return true;
+    }
+
+    // 6. Word-level overlap: if majority of meaningful words in value appear in option
+    const valueWords  = valueNorm.split(' ').filter(w => w.length > 2);
+    const optionWords = optionNorm.split(' ').filter(w => w.length > 2);
+
+    if (valueWords.length > 0 && optionWords.length > 0) {
         const matchedWords = valueWords.filter(w => optionNorm.includes(w));
         if (matchedWords.length / valueWords.length >= 0.7) return true;
+
+        // Try matching expanded value words against option
+        for (const ve of valueExpansions) {
+            const veWords = normalize(ve).split(' ').filter(w => w.length > 2);
+            if (veWords.length > 0) {
+                const veMatched = veWords.filter(w => optionNorm.includes(w));
+                if (veMatched.length / veWords.length >= 0.7) return true;
+            }
+        }
     }
 
     return false;
@@ -721,7 +1044,7 @@ function getRadioGroupElements(el) {
     return [el];
 }
 
-// Extended detection for custom circular/styled radio elements (Google Forms, etc.)
+// Extended detection for custom radio elements (Google Forms, MS Forms, Typeform, SurveyMonkey, JotForm, WuFoo, etc.)
 function getCustomRadioGroupElements(el) {
     // Google Forms radio container
     const gFormContainer = el.closest(
@@ -738,6 +1061,26 @@ function getCustomRadioGroupElements(el) {
         if (items.length > 0) return items;
     }
 
+    // Microsoft Forms: radio options inside role="radiogroup"
+    const msRadioGroup = el.closest('[role="radiogroup"]');
+    if (msRadioGroup) {
+        const items = Array.from(msRadioGroup.querySelectorAll(
+            '[role="radio"], [role="option"], input[type="radio"], ' +
+            'label, [class*="radio"], [class*="choice"], [class*="option"]'
+        )).filter(isVisible);
+        if (items.length > 0) return items;
+    }
+
+    // Typeform: button-based or div-based choices
+    const typeformContainer = el.closest(
+        '[data-qa="choice"], [class*="choice-wrapper"], ' +
+        '[class*="option-wrapper"], [class*="answer-option"]'
+    );
+    if (typeformContainer && typeformContainer.parentElement) {
+        const siblings = Array.from(typeformContainer.parentElement.children).filter(isVisible);
+        if (siblings.length > 1) return siblings;
+    }
+
     // Generic role=listbox > role=option pattern
     const listbox = el.closest('[role="listbox"]');
     if (listbox) {
@@ -748,6 +1091,12 @@ function getCustomRadioGroupElements(el) {
     const tablist = el.closest('[role="tablist"]');
     if (tablist) {
         return Array.from(tablist.querySelectorAll('[role="tab"]')).filter(isVisible);
+    }
+
+    // JotForm / WuFoo / SurveyMonkey: sibling li elements in a ul
+    const liContainer = el.closest('li');
+    if (liContainer && liContainer.parentElement && liContainer.parentElement.tagName === 'UL') {
+        return Array.from(liContainer.parentElement.querySelectorAll('input[type="radio"]')).filter(isVisible);
     }
 
     return getRadioGroupElements(el);
@@ -779,15 +1128,29 @@ function getProfileValue(profile, key) {
         const parts = [profile.firstName, profile.middleName, profile.lastName].filter(Boolean);
         return parts.join(' ').trim();
     }
+
+    // qualification mirrors course
+    if (key === 'qualification') {
+        return profile.course || profile.qualification || '';
+    }
     if (key === 'course' && !profile.course) {
         return profile.qualification || '';
     }
-    if (key === 'interestedDomain' && !profile.interestedDomain) {
-        return profile.subject || '';
+
+    // domainOfInterest covers interestedDomain + researchInterestArea + subject (any direction)
+    if (key === 'domainOfInterest') {
+        return profile.domainOfInterest || profile.interestedDomain || profile.researchInterestArea || profile.subject || '';
     }
-    if (key === 'researchInterestArea' && !profile.researchInterestArea) {
-        return profile.interestedDomain || profile.subject || '';
+    if (key === 'interestedDomain') {
+        return profile.domainOfInterest || profile.interestedDomain || profile.subject || '';
     }
+    if (key === 'researchInterestArea') {
+        return profile.domainOfInterest || profile.researchInterestArea || profile.interestedDomain || profile.subject || '';
+    }
+    if (key === 'subject') {
+        return profile.domainOfInterest || profile.subject || profile.interestedDomain || '';
+    }
+
     if (key === 'whatsappNumber' && !profile.whatsappNumber) {
         return profile.phone || '';
     }
@@ -800,15 +1163,60 @@ function getProfileValue(profile, key) {
     return profile[key];
 }
 
+// Generic aria-label values that describe the widget type, not the question.
+// MS Forms sets aria-label="Single line text" / "Multi-line text" / "Date" etc.
+const GENERIC_ARIA_LABELS = new Set([
+    'single line text', 'multi-line text', 'multi line text', 'multiline text',
+    'date', 'time', 'number', 'email', 'url', 'phone', 'telephone',
+    'text input', 'text field', 'input field', 'answer', 'enter your answer',
+    'your answer', 'response', 'text box', 'textbox',
+    'dropdown', 'select', 'choice', 'rating', 'slider', 'file upload',
+    'short answer', 'long answer', 'paragraph'
+]);
+
+function isGenericAriaLabel(label) {
+    return GENERIC_ARIA_LABELS.has(label.toLowerCase().trim());
+}
+
 function getLabelText(el) {
-    if (el.id) {
-        const label = document.querySelector(`label[for="${CSS.escape(el.id)}"]`);
-        if (label) return label.textContent.trim();
+    // ── 1. name attribute direct lookup (highest confidence) ────────────
+    // React/shadcn forms set name="fullName", name="email" etc. — use it directly
+    // before trying DOM traversal which can go wrong with generated IDs.
+    // Skip generated names like "rj:-form-item" — they're React internals, not labels.
+    if (el.name && !isGeneratedName(el.name)) {
+        // Convert camelCase/snake_case name to spaced form for alias matching
+        // e.g. "fullName" → "full name", "collegeName" → "college name"
+        const spaced = el.name.replace(/([A-Z])/g, ' $1').replace(/_/g, ' ').toLowerCase().trim();
+        if (spaced && spaced !== el.name.toLowerCase()) {
+            return spaced;
+        }
     }
 
-    const ariaLabel = el.getAttribute('aria-label');
-    if (ariaLabel) return ariaLabel.trim();
+    // ── 2. label[for] lookup — handle React colon IDs safely ────────────
+    if (el.id) {
+        let label = null;
+        try {
+            label = document.querySelector(`label[for="${CSS.escape(el.id)}"]`);
+        } catch (_) {
+            // CSS.escape may throw in some environments; fall back to attribute selector
+        }
+        if (!label) {
+            // Fallback: iterate all labels (handles IDs with special chars like colons)
+            const allLabels = document.querySelectorAll('label[for]');
+            for (const lbl of allLabels) {
+                if (lbl.getAttribute('for') === el.id) { label = lbl; break; }
+            }
+        }
+        if (label) {
+            // Strip any asterisk/required markers and badge spans from the label text
+            const clone = label.cloneNode(true);
+            clone.querySelectorAll('[aria-hidden],[class*="badge"],[class*="required"],[class*="tag"]').forEach(n => n.remove());
+            const text = clone.textContent.replace(/\s*\*\s*$/, '').trim();
+            if (text) return text;
+        }
+    }
 
+    // ── 3. aria-labelledby (points to the real question title element) ──
     const ariaLabelledBy = el.getAttribute('aria-labelledby');
     if (ariaLabelledBy) {
         const ids = ariaLabelledBy.split(/\s+/);
@@ -820,8 +1228,82 @@ function getLabelText(el) {
         if (combinedText.trim()) return combinedText.trim();
     }
 
+    // ── 4. aria-label (only if not a generic widget descriptor) ─────────
+    const ariaLabel = el.getAttribute('aria-label');
+    if (ariaLabel && !isGenericAriaLabel(ariaLabel)) return ariaLabel.trim();
+
+    // ── 5. Wrapping <label> ──────────────────────────────────────────────
     const wrappingLabel = el.closest('label');
-    if (wrappingLabel) return wrappingLabel.textContent.trim();
+    if (wrappingLabel) {
+        const clone = wrappingLabel.cloneNode(true);
+        clone.querySelectorAll('input,textarea,select').forEach(n => n.remove());
+        const text = clone.textContent.replace(/\s*\*\s*$/, '').trim();
+        if (text) return text;
+    }
+
+    // ── 6. shadcn/ui form-item pattern ───────────────────────────────────
+    // shadcn wraps: <div class="...form-item"> <label> ... </label> <input .../> </div>
+    // The label is typically the immediately preceding sibling of the input wrapper,
+    // or a sibling within the same [data-slot="form-item"] container.
+    const formItem = el.closest('[data-slot="form-item"], [class*="form-item"], [class*="FormItem"], [class*="form_item"]');
+    if (formItem) {
+        const labelEl = formItem.querySelector('label');
+        if (labelEl && !labelEl.contains(el)) {
+            const clone = labelEl.cloneNode(true);
+            clone.querySelectorAll('[aria-hidden],[class*="badge"],[class*="required"]').forEach(n => n.remove());
+            const text = clone.textContent.replace(/\s*\*\s*$/, '').trim();
+            if (text) return text;
+        }
+    }
+
+    // ── 7. radiogroup aria-label/labelledby ─────────────────────────────
+    const radioGroup = el.closest('[role="radiogroup"]');
+    if (radioGroup) {
+        const groupLabelledBy = radioGroup.getAttribute('aria-labelledby');
+        if (groupLabelledBy) {
+            const ids = groupLabelledBy.split(/\s+/);
+            let text = '';
+            ids.forEach(id => {
+                const labelEl = document.getElementById(id);
+                if (labelEl) text += ' ' + labelEl.textContent.trim();
+            });
+            if (text.trim()) return text.trim();
+        }
+        const groupLabel = radioGroup.getAttribute('aria-label');
+        if (groupLabel && !isGenericAriaLabel(groupLabel)) return groupLabel.trim();
+    }
+
+    // ── 8. MS Forms / Typeform question containers ───────────────────────
+    const questionItem = el.closest('[data-automation-id="questionItem"], [data-automation-id]');
+    if (questionItem) {
+        const titleEl = questionItem.querySelector(
+            '[data-automation-id="questionTitle"], ' +
+            '[class*="title"], [class*="question-title"], ' +
+            'legend, h1, h2, h3, h4, h5'
+        );
+        if (titleEl && !titleEl.contains(el)) {
+            const text = titleEl.textContent.trim();
+            if (text && text.length < 120) return text;
+        }
+    }
+
+    const typeformQuestion = el.closest('[data-qa="question"], [class*="question-content"]');
+    if (typeformQuestion) {
+        const titleEl = typeformQuestion.querySelector('h1, h2, h3, [class*="title"], [class*="question-title"]');
+        if (titleEl && !titleEl.contains(el)) {
+            const text = titleEl.textContent.trim();
+            if (text && text.length < 150) return text;
+        }
+    }
+
+    const smQuestion = el.closest('[class*="survey-question"], [class*="question-block"]');
+    if (smQuestion) {
+        const titleEl = smQuestion.querySelector('[class*="question-title"], [class*="question-text"], legend, h2, h3');
+        if (titleEl && !titleEl.contains(el)) {
+            const text = titleEl.textContent.trim();
+            if (text && text.length < 150) return text;
+        }
+    }
 
     return '';
 }
@@ -834,11 +1316,45 @@ function getNearbyText(el) {
         if (legend) texts.push(legend.textContent.trim());
     }
 
-    // Google Forms question heading detection
+    // MS Forms: aria-labelledby on the input points to the question title element
+    const ariaLabelledBy = el.getAttribute('aria-labelledby');
+    if (ariaLabelledBy) {
+        ariaLabelledBy.split(/\s+/).forEach(id => {
+            const labelEl = document.getElementById(id);
+            if (labelEl) texts.push(labelEl.textContent.trim());
+        });
+    }
+
+    // MS Forms: question container has data-automation-id="questionItem"
+    const questionItem = el.closest('[data-automation-id="questionItem"], [data-automation-id]');
+    if (questionItem) {
+        const titleEl = questionItem.querySelector(
+            '[data-automation-id="questionTitle"], [class*="title"], legend, h1, h2, h3, h4, h5'
+        );
+        if (titleEl && !titleEl.contains(el)) {
+            const text = titleEl.textContent.trim();
+            if (text && text.length < 120) texts.push(text);
+        }
+    }
+
+    // MS Forms / Typeform: radiogroup aria-label or aria-labelledby IS the question title
+    const radioGroup = el.closest('[role="radiogroup"]');
+    if (radioGroup) {
+        const groupLabelledBy = radioGroup.getAttribute('aria-labelledby');
+        if (groupLabelledBy) {
+            groupLabelledBy.split(/\s+/).forEach(id => {
+                const labelEl = document.getElementById(id);
+                if (labelEl) texts.push(labelEl.textContent.trim());
+            });
+        }
+        const groupLabel = radioGroup.getAttribute('aria-label');
+        if (groupLabel && !isGenericAriaLabel(groupLabel)) texts.push(groupLabel.trim());
+    }
+
+    // Google Forms question heading detection — only from the immediate question container
     const gFormQuestion = el.closest(
         '.freebirdFormviewerComponentsQuestionBaseRoot, ' +
-        '.freebirdFormviewerComponentsQuestionRadioRoot, ' +
-        '[jsmodel], [data-params]'
+        '.freebirdFormviewerComponentsQuestionRadioRoot'
     );
     if (gFormQuestion) {
         const heading = gFormQuestion.querySelector(
@@ -848,17 +1364,77 @@ function getNearbyText(el) {
         if (heading) texts.push(heading.textContent.trim());
     }
 
+    // Typeform / SurveyMonkey question text
+    const typeformQuestion = el.closest('[data-qa="question"], [class*="question-content"], [class*="survey-question"], [class*="question-block"]');
+    if (typeformQuestion) {
+        const titleEl = typeformQuestion.querySelector('h1, h2, h3, [class*="title"], [class*="question-title"], [class*="question-text"], legend');
+        if (titleEl && !titleEl.contains(el)) {
+            const text = titleEl.textContent.trim();
+            if (text && text.length < 150) texts.push(text);
+        }
+    }
+
+    // For radio/checkbox inputs: the question text ("Do you have any current backlogs?")
+    // is almost always a previous sibling element of the radio group's container,
+    // NOT a descendant of the radio input's own parent.
+    // Strategy: walk up, then at each level scan PREVIOUS SIBLINGS for text.
+    const isRadioOrCheckbox = el.type === 'radio' || el.type === 'checkbox' ||
+        el.getAttribute('role') === 'radio' || el.getAttribute('role') === 'checkbox';
+
+    if (isRadioOrCheckbox) {
+        // First: try value attribute as the choice label (e.g. "Yes" / "No")
+        if (el.value && el.value.length < 40) texts.push(el.value);
+
+        // Walk up the DOM looking for the question text in previous siblings
+        let cur = el.parentElement;
+        let levels = 0;
+        const maxLevels = 10;
+
+        while (cur && levels < maxLevels) {
+            // Check previous siblings of the current container for question text
+            let sib = cur.previousElementSibling;
+            let sibChecked = 0;
+            while (sib && sibChecked < 4) {
+                const text = sib.textContent.trim();
+                if (text && text.length > 4 && text.length < 150) {
+                    texts.push(text);
+                }
+                sib = sib.previousElementSibling;
+                sibChecked++;
+            }
+
+            // Also check if the current container's parent has direct text children
+            // (some forms wrap the question in a <p> directly inside the form row)
+            const directKids = Array.from(cur.children);
+            directKids.forEach(kid => {
+                if (kid.contains(el)) return; // skip the branch containing our input
+                const text = kid.textContent.trim();
+                if (text && text.length > 4 && text.length < 150) texts.push(text);
+            });
+
+            // If we've collected enough context, stop
+            if (texts.filter(t => t.length > 5).length >= 3) break;
+
+            cur = cur.parentElement;
+            levels++;
+        }
+    }
+
+    // Only crawl 4 levels up (was 10 — too many levels pulled in page section titles)
+
     let current = el.parentElement;
     let levels = 0;
-    while (current && levels < 10) {
+    while (current && levels < 4) {
+        // Only pick up labels and small headings — NOT h1/h2/h3 which are page/section titles
         const labels = current.querySelectorAll(
-            'label, .label, .form-label, .input-label, [role="heading"], strong, b, ' +
+            'label, .label, .form-label, .input-label, legend, ' +
             '.freebirdFormviewerComponentsQuestionBaseTitle, ' +
-            '.exportItemTitle, .M7eMe, h1, h2, h3, h4, h5, h6, legend'
+            '.exportItemTitle, .M7eMe'
         );
         labels.forEach(label => {
             const text = label.textContent.trim();
-            if (text && text.length < 200) texts.push(text);
+            // Cap at 80 chars — real field labels are short; long text is a section title
+            if (text && text.length < 80) texts.push(text);
         });
 
         const placeholder = current.getAttribute('placeholder');
@@ -866,7 +1442,7 @@ function getNearbyText(el) {
 
         if (current.getAttribute('role') === 'listitem' || current.classList.contains('geS5n')) {
             const content = current.textContent.trim();
-            if (content) texts.push(content.substring(0, 100));
+            if (content) texts.push(content.substring(0, 80));
             break;
         }
 
@@ -908,21 +1484,35 @@ function shouldSkip(meta) {
 }
 
 function isVisible(el) {
-    if (el.offsetParent === null || el.disabled || el.type === 'hidden') return false;
+    if (el.disabled || el.type === 'hidden') return false;
     const style = window.getComputedStyle(el);
-    return style.display !== 'none' && style.visibility !== 'hidden' && style.opacity !== '0';
+    if (style.display === 'none' || style.visibility === 'hidden' || style.opacity === '0') return false;
+    // offsetParent is null for fixed/sticky positioned elements and in some SPA containers
+    // (MS Forms, Typeform etc.) — use getBoundingClientRect as fallback
+    if (el.offsetParent === null) {
+        const rect = el.getBoundingClientRect();
+        // If it has zero size it's truly hidden; otherwise it's just a special layout
+        if (rect.width === 0 && rect.height === 0) return false;
+    }
+    return true;
 }
 
 function detectFields() {
     const selector = [
-        'input:not([type="hidden"]):not([type="submit"]):not([type="button"]):not([type="reset"]):not([type="image"]):not([type="file"])',
+        'input:not([type="hidden"]):not([type="submit"]):not([type="button"]):not([type="reset"]):not([type="image"]):not([type="file"]):not([type="checkbox"])',
+        'input[type="radio"]',
+        'input[type="checkbox"]',
         'textarea',
         'select',
         '[role="radio"]',
         '[role="option"]',
-        // Google Forms specific selectors for circular/custom option elements
+        '[role="textbox"]',       // MS Forms / Typeform text inputs
+        '[role="combobox"]',      // MS Forms dropdowns
+        // Google Forms circular/custom option elements
         '.freebirdFormviewerComponentsQuestionRadioChoice',
-        '.docssharedWizToggleLabeledContainer'
+        '.docssharedWizToggleLabeledContainer',
+        // Typeform button-based choices
+        '[data-qa="choice"]',
     ].join(',');
 
     const seen = new Set();
@@ -942,23 +1532,46 @@ function detectFields() {
 }
 
 function scoreMatch(meta, profileKey) {
-    const sources = [meta.label, meta.placeholder, meta.name, meta.id, meta.ariaLabel, meta.autoComplete, meta.nearbyText].filter(Boolean);
+    // ── FAST PATH: direct name= attribute match ──────────────────────────
+    // React/shadcn forms set name="fullName", name="email", name="collegeName" etc.
+    // Only trust semantic names — skip React-generated ones like "rj:-form-item".
+    if (meta.name && !isGeneratedName(meta.name)) {
+        const nameCollapsed = collapse(meta.name);
+        const keyCollapsed  = collapse(profileKey);
+
+        // Exact name → key match
+        if (nameCollapsed === keyCollapsed) return 500;
+
+        // Common React form name aliases — use the shared NAME_ALIASES table
+        const mappedKey = NAME_ALIASES[nameCollapsed];
+        if (mappedKey && mappedKey === profileKey) return 480;
+        // If name maps to a *different* key, penalise this candidate heavily
+        if (mappedKey && mappedKey !== profileKey) return -200;
+    }
+
+    // Split sources into primary (high trust) and secondary (low trust)
+    // Exclude React-generated names (e.g. "rj:-form-item") from scoring — they're noise
+    const cleanName = (meta.name && !isGeneratedName(meta.name)) ? meta.name : '';
+    const primarySources = [meta.label, meta.placeholder, cleanName, meta.id, meta.ariaLabel, meta.autoComplete].filter(Boolean);
+    const secondarySources = [meta.nearbyText].filter(Boolean);
+
     const aliases = FIELD_MAPPING[profileKey] || [];
     const aliasTokensNorm = aliases.map(normalize);
     const aliasTokensColl = aliases.map(collapse);
     const keyToken = collapse(profileKey);
-    const combinedSource = sources.join(' ').toLowerCase();
-    const hasCollegeEmailContext = /college|university|institution|institute|edu\b|campus|student email|student mail|stud id|student id|institutional|academic email|official email/.test(combinedSource);
-    const hasInstitutionNameContext = /college name|university name|institution name|institute name|school name|academic institution|college\/university|university\/college|institution/.test(combinedSource);
-    const hasPersonalEmailContext = /personal|private|primary|home/.test(combinedSource);
+
+    // Combined for penalty checks only
+    const combinedSource = [...primarySources, ...secondarySources].join(' ').toLowerCase();
+    const primaryCombined = primarySources.join(' ').toLowerCase();
+
     let score = 0;
 
-    for (const source of sources) {
+    // Score primary sources at full weight
+    for (const source of primarySources) {
         const normalizedSource = normalize(source);
         const collapsedSource = collapse(source);
         if (!normalizedSource) continue;
 
-        // Key token direct match
         if (collapsedSource === keyToken) score += 120;
         else if (collapsedSource.includes(keyToken)) score += 65;
 
@@ -966,19 +1579,11 @@ function scoreMatch(meta, profileKey) {
             const aliasNorm = aliasTokensNorm[i];
             const aliasColl = aliasTokensColl[i];
 
-            // Exact collapsed match — highest reward
             if (collapsedSource === aliasColl) { score += 140; break; }
-
-            // Exact normalized match (preserves spaces)
             if (normalizedSource === aliasNorm) { score += 130; break; }
-
-            // Source contains full alias string
             if (aliasColl.length > 3 && collapsedSource.includes(aliasColl)) { score += 80; }
-
-            // Alias contains full source (source is a substring of alias)
             if (collapsedSource.length > 3 && aliasColl.includes(collapsedSource)) { score += 60; }
 
-            // Word-level overlap scoring
             const aliasWords = aliasNorm.split(' ').filter(w => w.length > 2);
             const sourceWords = normalizedSource.split(' ').filter(w => w.length > 2);
             if (aliasWords.length > 0 && sourceWords.length > 0) {
@@ -990,6 +1595,30 @@ function scoreMatch(meta, profileKey) {
             }
         }
     }
+
+    // Score nearbyText at reduced weight (max 30% of primary contribution)
+    for (const source of secondarySources) {
+        const normalizedSource = normalize(source);
+        const collapsedSource = collapse(source);
+        if (!normalizedSource) continue;
+
+        // Only count if primary sources didn't already give a strong signal (avoids double-counting)
+        // Use a fraction of the normal scoring — nearbyText is context, not identity
+        for (let i = 0; i < aliasTokensColl.length; i++) {
+            const aliasNorm = aliasTokensNorm[i];
+            const aliasColl = aliasTokensColl[i];
+
+            if (collapsedSource === aliasColl) { score += 40; break; }
+            if (normalizedSource === aliasNorm) { score += 35; break; }
+            if (aliasColl.length > 3 && collapsedSource.includes(aliasColl)) { score += 20; }
+            if (collapsedSource.length > 3 && aliasColl.includes(collapsedSource)) { score += 15; }
+        }
+    }
+
+    // Context flags based on combined (for penalty/boost logic)
+    const hasCollegeEmailContext = /college|university|institution|institute|edu\b|campus|student email|student mail|stud id|student id|institutional|academic email|official email/.test(combinedSource);
+    const hasInstitutionNameContext = /college name|university name|institution name|institute name|school name|academic institution|college\/university|university\/college|institution/.test(combinedSource);
+    const hasPersonalEmailContext = /personal|private|primary|home/.test(combinedSource);
 
     // Autocomplete attribute bonus
     const autoCompleteMap = {
@@ -1003,13 +1632,70 @@ function scoreMatch(meta, profileKey) {
         score += 60;
     }
 
-    // Email disambiguation
-    if (profileKey === 'collegeEmail' && hasCollegeEmailContext) score += 180;
-    if (profileKey === 'collegeEmail' && hasPersonalEmailContext) score -= 100;
-    if (profileKey === 'email' && hasPersonalEmailContext) score += 120;
-    if (profileKey === 'email' && hasCollegeEmailContext) score -= 180;
+    // Email disambiguation — must be based on primary sources to be reliable
+    const emailPrimaryContext = primarySources.join(' ').toLowerCase();
+    // hasCollegeEmailPrimary: MUST have both an institution keyword AND 'email'/'mail'
+    // Prevents "College/University" name field (no 'email' in label) from scoring as collegeEmail
+    const hasCollegeEmailPrimary = (
+        /college|university|institution|institute|edu\b|campus|student|institutional|upes|\bstu\b/.test(emailPrimaryContext) &&
+        /\bemail\b|\be-mail\b|\bmail\b/.test(emailPrimaryContext)
+    );
+    const hasPersonalEmailPrimary = /personal|private|primary|home/.test(emailPrimaryContext);
+
+    if (profileKey === 'collegeEmail' && hasCollegeEmailPrimary) score += 180;
+    if (profileKey === 'collegeEmail' && hasPersonalEmailPrimary) score -= 100;
+    if (profileKey === 'email' && hasPersonalEmailPrimary) score += 120;
+    if (profileKey === 'email' && hasCollegeEmailPrimary) score -= 180;
+
+    // Use full combinedSource for institution name context (it's a strong structural signal)
     if (profileKey === 'collegeName' && hasInstitutionNameContext) score += 220;
     if (profileKey === 'fullName' && hasInstitutionNameContext) score -= 220;
+
+    // CRITICAL: If the primary label/id/name clearly says "email" or "mail",
+    // heavily penalise collegeName and fullName to prevent "UPES" filling Email field
+    const primarySaysEmail = /\bemail\b|\bmail\b/i.test(primaryCombined);
+    if (primarySaysEmail && profileKey === 'collegeName') score -= 300;
+    if (primarySaysEmail && profileKey === 'fullName') score -= 200;
+    if (primarySaysEmail && profileKey === 'email') score += 80;
+
+    // If primary label clearly says "name" but NOT "college/university name",
+    // penalise collegeName to avoid name fields filling with institution name
+    const primarySaysName = /\bname\b/i.test(primaryCombined);
+    const primarySaysCollegeName = /college.*name|university.*name|institution.*name|institute.*name/i.test(primaryCombined);
+    if (primarySaysName && !primarySaysCollegeName && profileKey === 'collegeName') score -= 150;
+
+    // ── HARD GUARD: collegeName must ONLY win if label/id/name/placeholder
+    // explicitly mentions an institution. Without that signal it should never fill
+    // contact numbers, links, source dropdowns, or anything else.
+    if (profileKey === 'collegeName') {
+        const hasExplicitInstitutionSignal = /college|university|institution|institute|school/i.test(primaryCombined);
+        if (!hasExplicitInstitutionSignal) return -500;
+    }
+
+    // ── HARD GUARD: sapId must NEVER win on a phone/contact/mobile/whatsapp field ─
+    // "contact number", "mobile number", "phone" → always phone, never sapId
+    if (profileKey === 'sapId') {
+        const isPhoneContext = /phone|mobile|contact.*num|contact.*no\b|whatsapp|call|sms|isd/i.test(primaryCombined);
+        if (isPhoneContext) return -500;
+    }
+
+    // ── BOOST: phone fields with phone context ──────────────────────────
+    if (profileKey === 'phone') {
+        const isPhoneContext = /phone|mobile|contact.*num|contact.*no\b|whatsapp|call|sms|isd/i.test(primaryCombined);
+        if (isPhoneContext) score += 200;
+    }
+
+    // ── HARD GUARD: fullName should never fill phone/number/link/url fields ──
+    if (profileKey === 'fullName') {
+        const isPhoneOrLink = /phone|mobile|contact.*num|whatsapp|linkedin|github|website|portfolio|url\b|link\b/i.test(primaryCombined);
+        if (isPhoneOrLink) return -500;
+    }
+
+    // ── HARD GUARD: phone/mobile should never win if label says "name" ────
+    if (profileKey === 'phone') {
+        const labelSaysName = /\bname\b/i.test(primaryCombined) && !/number|num|no\b/i.test(primaryCombined);
+        if (labelSaysName) return -500;
+    }
 
     // Input type bonuses
     if (profileKey === 'phone' && meta.type === 'tel') score += 30;
@@ -1018,6 +1704,20 @@ function scoreMatch(meta, profileKey) {
     if (profileKey === 'gender' && (meta.type === 'radio' || meta.tagName === 'select')) score += 30;
     if (profileKey === 'aboutMe' && meta.tagName === 'textarea') score += 20;
     if (profileKey === 'experience' && meta.tagName === 'textarea') score += 10;
+    // URL-type input: strongly favour link fields, hard-penalise non-link fields
+    if (meta.type === 'url') {
+        if (['githubLink','linkedinLink','websiteLink'].includes(profileKey)) score += 80;
+        if (['collegeName','fullName','phone','email','sapId'].includes(profileKey)) return -500;
+    }
+    // tel-type input: strongly favour phone fields
+    if (meta.type === 'tel') {
+        if (['collegeName','fullName','email','githubLink','linkedinLink'].includes(profileKey)) return -500;
+    }
+    // Radio/option elements must never match link-type profile keys —
+    // choice labels like "LinkedIn" would otherwise score 140+ for linkedinLink
+    if (meta.type === 'radio' || meta.role === 'radio' || meta.role === 'option') {
+        if (['githubLink','linkedinLink','websiteLink','twitterLink'].includes(profileKey)) return -500;
+    }
 
     // Social link context boosts
     if (profileKey === 'githubLink' && /github/i.test(combinedSource)) score += 50;
@@ -1039,11 +1739,57 @@ function scoreMatch(meta, profileKey) {
     return score;
 }
 
+function isGeneratedName(name) {
+    // React/Next.js generated names like "rj:-form-item", "r1:-form-item", ":r0:", etc.
+    // These contain colons or are purely numeric/random — not semantic field names.
+    if (!name || name.length < 2) return true;
+    if (/[:\[\]{}]/.test(name)) return true;          // contains colon, brackets
+    if (/^\d+$/.test(name)) return true;              // purely numeric
+    if (/^[a-z]{1,2}\d+/.test(name)) return true;    // e.g. "r1", "rj3"
+    return false;
+}
+
 function matchField(meta, profile) {
+    // ── FAST PATH: React/shadcn direct name= attribute ───────────────────
+    // Only trust the name attribute if it looks like a real semantic field name.
+    if (meta.name && !isGeneratedName(meta.name)) {
+        const nc = collapse(meta.name);
+        // Use the shared NAME_ALIASES table (single source of truth)
+        const mappedKey = NAME_ALIASES[nc];
+        if (mappedKey) {
+            const val = getProfileValue(profile, mappedKey);
+            if (String(val || '').trim()) return mappedKey;
+            // Name maps to a key but it's empty — return null so we don't fill wrong
+            return null;
+        }
+
+        // Also check direct key collapse match
+        for (const key of Object.keys(FIELD_MAPPING)) {
+            if (collapse(key) === nc) {
+                const val = getProfileValue(profile, key);
+                if (String(val || '').trim()) return key;
+                return null;
+            }
+        }
+    }
+
     const academicContext = [meta.label, meta.placeholder, meta.name, meta.id, meta.ariaLabel, meta.nearbyText]
         .filter(Boolean)
         .join(' ')
         .toLowerCase();
+
+    // ── FAST PATH: combined link fields (Resume/LinkedIn/GitHub/Portfolio) ─
+    // These appear on many internship forms as a single "any link" field.
+    // Prefer githubLink > linkedinLink > websiteLink depending on what's filled.
+    if (/resume|linkedin|github|portfolio|cv\b|link\b|url\b/i.test(academicContext) &&
+        !/phone|mobile|contact|number|num\b|whatsapp|email|mail|name\b|college|university/i.test(academicContext)) {
+        const gh = String(getProfileValue(profile, 'githubLink') || '').trim();
+        const li = String(getProfileValue(profile, 'linkedinLink') || '').trim();
+        const ws = String(getProfileValue(profile, 'websiteLink') || '').trim();
+        if (gh && gh.toLowerCase() !== 'na') return 'githubLink';
+        if (li && li.toLowerCase() !== 'na') return 'linkedinLink';
+        if (ws && ws.toLowerCase() !== 'na') return 'websiteLink';
+    }
 
     // Skip third-party contact fields unless we later add dedicated profile data for them.
     if (
@@ -1068,6 +1814,20 @@ function matchField(meta, profile) {
         return String(getProfileValue(profile, 'collegeName') || '').trim() ? 'collegeName' : null;
     }
 
+    if (/(^|\b)(10th|tenth|ssc|matric|class\s*x\b|class\s*10\b|secondary\s+school|secondary\s+board)\b/.test(academicContext) &&
+        /percent|marks|score|cgpa|result|grade/.test(academicContext)) {
+        return String(getProfileValue(profile, 'tenthPercent') || '').trim() ? 'tenthPercent' : null;
+    }
+
+    if (/(^|\b)(12th|twelfth|hsc|intermediate|class\s*xii\b|class\s*12\b|higher\s+secondary|senior\s+secondary|plus\s*two|\+2|puc)\b/.test(academicContext) &&
+        /percent|marks|score|cgpa|result|grade/.test(academicContext)) {
+        return String(getProfileValue(profile, 'twelfthPercent') || '').trim() ? 'twelfthPercent' : null;
+    }
+
+    if (/graduation\s*year|graduating\s*(in|year)|pass\s*out\s*year|passing\s*year|year\s*of\s*(graduation|passing|completion)|batch\s*year|expected\s*(graduation|passing)|convocation\s*year/.test(academicContext)) {
+        return String(getProfileValue(profile, 'graduationYear') || '').trim() ? 'graduationYear' : null;
+    }
+
     if (/(^|\b)(cgpa|gpa)(\b|$)|grade point average|academic aggregate|cumulative grade point average/.test(academicContext)) {
         return String(getProfileValue(profile, 'currentCgpa') || '').trim() ? 'currentCgpa' : null;
     }
@@ -1079,29 +1839,38 @@ function matchField(meta, profile) {
     if (/backlog|backlogs|arrear|arrears|\bkt\b|supplementary/.test(academicContext)) {
         const hasCombinedContext = /active\s*\/\s*passive|active\s+or\s+passive/.test(academicContext);
         const hasPassiveContext = /passive|past|previous|history|ever had|cleared|formerly|earlier|prior|active\s*\/\s*passive|active\s+or\s+passive/.test(academicContext);
-        const hasCurrentContext = /current|active|pending|standing|present|ongoing/.test(academicContext);
+        const hasCurrentContext = /current|active|pending|standing|present|ongoing|any current|have any/.test(academicContext);
 
         if (hasCombinedContext && String(getProfileValue(profile, 'combinedBacklogs') || '').trim()) {
             return 'combinedBacklogs';
         }
 
-        if (hasPassiveContext && String(getProfileValue(profile, 'passiveBacklogs') || '').trim()) {
+        if (hasPassiveContext && !hasCurrentContext && String(getProfileValue(profile, 'passiveBacklogs') || '').trim()) {
             return 'passiveBacklogs';
         }
 
-        if (hasCurrentContext && String(getProfileValue(profile, 'currentBacklogs') || '').trim()) {
+        // Default to currentBacklogs for any backlog context (covers plain "backlogs?" questions)
+        if (String(getProfileValue(profile, 'currentBacklogs') || '').trim()) {
             return 'currentBacklogs';
         }
     }
+
+    // ── Primary-only email context (label + placeholder + name + id + ariaLabel, no nearbyText) ──
+    // Using only primary sources prevents college/university label text from triggering email heuristics
+    const emailPrimaryContext = [meta.label, meta.placeholder, meta.name, meta.id, meta.ariaLabel]
+        .filter(Boolean)
+        .join(' ')
+        .toLowerCase();
 
     const emailContext = [meta.label, meta.placeholder, meta.name, meta.id, meta.ariaLabel, meta.nearbyText]
         .filter(Boolean)
         .join(' ')
         .toLowerCase();
 
-    // Strong college email heuristic — detect before general scoring
-    if (/college|university|institution|institute|edu\b|campus|student email|student mail|stud id|student id|institutional|academic email|official email/.test(emailContext) &&
-        /email|mail/.test(emailContext)) {
+    // Strong college email heuristic — use PRIMARY sources only to avoid false positives
+    // e.g. College/University text field has 'college' in label but 'mail' only in a nearby filled value
+    if (/college|university|institution|institute|edu\b|campus|student\s+email|student\s+mail|stu\s+email|stu\s+mail|stu\s+id|stud\s+id|student\s+id|institutional|academic\s+email|official\s+email|upes\s+email|upes\s+mail/.test(emailPrimaryContext) &&
+        /email|mail/.test(emailPrimaryContext)) {
         return String(getProfileValue(profile, 'collegeEmail') || '').trim() ? 'collegeEmail' : null;
     }
 
@@ -1110,17 +1879,37 @@ function matchField(meta, profile) {
         return String(getProfileValue(profile, 'email') || '').trim() ? 'email' : null;
     }
 
+    // Plain email label with no institution context → personal email
+    const isPlainEmailField = /\b(email|e-mail|e mail|mail)\b/.test(emailContext) &&
+        !/college|university|institution|institute|edu\b|campus|student\s*email|student\s*mail|stu\s*email|stu\s*mail|stu\s*id|student\s*id|institutional|academic|official\s*email|official\s*mail|upes/.test(emailContext);
+    if (isPlainEmailField) {
+        return String(getProfileValue(profile, 'email') || '').trim() ? 'email' : null;
+    }
+
     let bestKey = null;
-    let bestScore = 45; // minimum threshold to avoid false positives
+    let bestScore = 60;  // raised from 45 — reduces false positives on ambiguous short labels
+    let secondScore = 0;
 
     for (const key of Object.keys(FIELD_MAPPING)) {
+        // Skip legacy back-compat keys — they are resolved via getProfileValue aliases
+        // and should never compete as independent match candidates.
+        if (LEGACY_FIELD_KEYS.has(key)) continue;
         const value = getProfileValue(profile, key);
         if (!String(value || '').trim()) continue;
         const score = scoreMatch(meta, key);
         if (score > bestScore) {
+            secondScore = bestScore;
             bestScore = score;
             bestKey = key;
+        } else if (score > secondScore) {
+            secondScore = score;
         }
+    }
+
+    // If the top two candidates are within 25 points of each other on a weak signal,
+    // don't fill — ambiguity is too high and filling wrong is worse than not filling
+    if (bestKey && bestScore < 120 && (bestScore - secondScore) < 25) {
+        return null;
     }
 
     return bestKey;
@@ -1168,6 +1957,9 @@ function fillSelect(el, profileKey, value) {
     const matchedOption = findSelectOption(el, profileKey, value);
     if (!matchedOption) return false;
     setNativeValue(el, matchedOption.value);
+    el.dispatchEvent(new Event('input',  { bubbles: true }));
+    el.dispatchEvent(new Event('change', { bubbles: true }));
+    el.dispatchEvent(new Event('blur',   { bubbles: true }));
     return true;
 }
 
@@ -1187,7 +1979,13 @@ function fillRadio(el, meta, profileKey, value) {
             radioMeta.value,
             radioMeta.ariaLabel,
             radioMeta.label,
-            radio.textContent?.trim()
+            radio.textContent?.trim(),
+            radio.getAttribute('data-value'),
+            radio.getAttribute('data-answer'),
+            radio.getAttribute('data-label'),
+            // Next sibling text (common in custom radio UIs)
+            radio.nextElementSibling?.textContent?.trim(),
+            radio.parentElement?.textContent?.trim(),
         ].filter(Boolean);
 
         return candidates.some((candidate) => choiceMatches(profileKey, candidate, value));
@@ -1208,8 +2006,21 @@ function fillRadio(el, meta, profileKey, value) {
 
     // Standard HTML radio input
     if (target.tagName && target.tagName.toLowerCase() === 'input') {
-        target.checked = true;
-        target.dispatchEvent(new Event('input', { bubbles: true }));
+        if (!target.checked) {
+            target.checked = true;
+            target.dispatchEvent(new Event('input',  { bubbles: true }));
+            target.dispatchEvent(new Event('change', { bubbles: true }));
+            target.dispatchEvent(new Event('click',  { bubbles: true }));
+        }
+        return true;
+    }
+
+    // Typeform / custom button choices (not necessarily input/role=radio)
+    if (target.tagName && ['button', 'div', 'li', 'span', 'a'].includes(target.tagName.toLowerCase())) {
+        target.dispatchEvent(new MouseEvent('mousedown', { bubbles: true, cancelable: true }));
+        target.dispatchEvent(new MouseEvent('mouseup',   { bubbles: true, cancelable: true }));
+        target.click();
+        target.dispatchEvent(new Event('input',  { bubbles: true }));
         target.dispatchEvent(new Event('change', { bubbles: true }));
         return true;
     }
@@ -1223,11 +2034,15 @@ function fillDateInput(el, value) {
     if (!value) return false;
     const str = String(value).trim();
 
+    // Already ISO — use directly.
     if (/^\d{4}-\d{2}-\d{2}$/.test(str)) {
         setNativeValue(el, str);
         return true;
     }
 
+    // Treat d/m/yyyy as dd/mm/yyyy (day-first), which is the dominant format
+    // on Indian internship and certificate forms. A value like "08/12/1999"
+    // becomes 1999-12-08 (December 8), not August 12.
     const dmyMatch = str.match(/^(\d{1,2})[\/\-](\d{1,2})[\/\-](\d{4})$/);
     if (dmyMatch) {
         const [, d, m, y] = dmyMatch;
@@ -1235,6 +2050,7 @@ function fillDateInput(el, value) {
         return true;
     }
 
+    // Fallback: let the browser parse natural-language dates ("12 Dec 1999").
     const parsed = new Date(str);
     if (!isNaN(parsed.getTime())) {
         setNativeValue(el, parsed.toISOString().split('T')[0]);
@@ -1266,15 +2082,29 @@ function fillElement(el, meta, profileKey, value) {
             if (el.checked !== truthy) { el.checked = truthy; filled = true; }
         } else if (meta.type === 'date') {
             filled = fillDateInput(el, value);
+        } else if (meta.role === 'textbox' || meta.role === 'combobox') {
+            // MS Forms / Typeform contenteditable or ARIA textboxes
+            if (el.isContentEditable) {
+                el.focus();
+                // execCommand works better with React/Vue/Angular controlled inputs
+                document.execCommand('selectAll', false, null);
+                document.execCommand('insertText', false, String(value));
+                filled = true;
+            } else {
+                setNativeValue(el, value);
+                filled = true;
+            }
         } else {
             setNativeValue(el, value);
             filled = true;
         }
 
         if (filled) {
-            el.dispatchEvent(new Event('input', { bubbles: true }));
-            el.dispatchEvent(new Event('change', { bubbles: true }));
-            el.dispatchEvent(new Event('blur', { bubbles: true }));
+            el.dispatchEvent(new Event('input',   { bubbles: true }));
+            el.dispatchEvent(new Event('change',  { bubbles: true }));
+            el.dispatchEvent(new KeyboardEvent('keyup',   { bubbles: true }));
+            el.dispatchEvent(new KeyboardEvent('keydown', { bubbles: true }));
+            el.dispatchEvent(new Event('blur',    { bubbles: true }));
             el.classList.add('qf-field-filled');
             setTimeout(() => el.classList.remove('qf-field-filled'), 700);
         }
@@ -1312,7 +2142,16 @@ function autoFill(profile) {
             if (processedChoiceGroups.has(groupKey)) return;
         }
 
-        const profileKey = matchField(meta, profile);
+        // For choice elements (radio/select options), build a synthetic meta
+        // that uses the QUESTION text as the primary signal, not the option label.
+        // The option label (e.g. "LinkedIn", "Beginner", "Male") belongs to the
+        // answer choices — using it as a field identifier causes false matches
+        // (e.g. "LinkedIn" option → linkedinLink key instead of referralSource).
+        const matchMeta = (isChoice && meta.nearbyText)
+            ? { ...meta, label: meta.nearbyText, nearbyText: '', ariaLabel: meta.ariaLabel && !isGenericAriaLabel(meta.ariaLabel) ? meta.ariaLabel : '' }
+            : meta;
+
+        const profileKey = matchField(matchMeta, profile);
         if (!profileKey) return;
 
         const value = getProfileValue(profile, profileKey);

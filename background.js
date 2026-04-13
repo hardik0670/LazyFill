@@ -1,10 +1,11 @@
-﻿chrome.runtime.onMessage.addListener((request, _sender, sendResponse) => {
+chrome.runtime.onMessage.addListener((request, _sender, sendResponse) => {
     switch (request.action) {
         case 'getProfileState':
         case 'getProfiles':
             chrome.storage.local.get(['profiles', 'activeProfileId', 'userProfile'], (result) => {
-                const migrated = migrateLegacyProfile(result);
-                sendResponse(migrated);
+                migrateLegacyProfileIfNeeded(result, (migrated) => {
+                    sendResponse(migrated);
+                });
             });
             return true;
 
@@ -29,13 +30,19 @@
     }
 });
 
-function migrateLegacyProfile(result) {
+// Migrates legacy single-profile storage to the multi-profile format.
+// Only runs when no profiles array exists yet. Deletes the legacy key after migration.
+// Accepts a callback so the response path is always async-safe.
+function migrateLegacyProfileIfNeeded(result, callback) {
     const profiles = Array.isArray(result.profiles) ? result.profiles : [];
+
+    // Already migrated — nothing to do.
     if (profiles.length > 0) {
-        return {
+        callback({
             profiles,
             activeProfileId: result.activeProfileId || profiles[0].id
-        };
+        });
+        return;
     }
 
     const legacyProfile = result.userProfile;
@@ -47,16 +54,20 @@ function migrateLegacyProfile(result) {
             fullName: legacyProfile.fullName || `${legacyProfile.firstName || ''} ${legacyProfile.lastName || ''}`.trim()
         };
 
-        chrome.storage.local.set({
-            profiles: [migratedProfile],
-            activeProfileId: migratedProfile.id
-        });
-
-        return {
-            profiles: [migratedProfile],
-            activeProfileId: migratedProfile.id
-        };
+        // Persist new format and remove legacy key in one pass.
+        chrome.storage.local.set(
+            { profiles: [migratedProfile], activeProfileId: migratedProfile.id },
+            () => {
+                chrome.storage.local.remove('userProfile');
+                callback({
+                    profiles: [migratedProfile],
+                    activeProfileId: migratedProfile.id
+                });
+            }
+        );
+        return;
     }
 
-    return { profiles: [], activeProfileId: null };
+    // No legacy data — fresh install.
+    callback({ profiles: [], activeProfileId: null });
 }

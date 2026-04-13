@@ -1,40 +1,59 @@
-const mainView = document.getElementById('mainView');
-const editorView = document.getElementById('editorView');
-const fillFormBtn = document.getElementById('fillFormBtn');
-const scanBtn = document.getElementById('scanBtn');
-const editProfileBtn = document.getElementById('editProfileBtn');
-const saveProfileBtn = document.getElementById('saveProfileBtn');
-const cancelEditBtn = document.getElementById('cancelEditBtn');
-const backBtn = document.getElementById('backBtn');
-const newProfileBtn = document.getElementById('newProfileBtn');
+// ─── Constants ────────────────────────────────────────────────────
+const MAX_PROFILES = 4;
+
+// ─── DOM references ───────────────────────────────────────────────
+const mainView         = document.getElementById('mainView');
+const editorView       = document.getElementById('editorView');
+const fillFormBtn      = document.getElementById('fillFormBtn');
+const scanBtn          = document.getElementById('scanBtn');
+const editProfileBtn   = document.getElementById('editProfileBtn');
+const saveProfileBtn   = document.getElementById('saveProfileBtn');
+const cancelEditBtn    = document.getElementById('cancelEditBtn');
+const backBtn          = document.getElementById('backBtn');
 const duplicateProfileBtn = document.getElementById('duplicateProfileBtn');
 const deleteProfileBtn = document.getElementById('deleteProfileBtn');
-const fieldCountNum = document.getElementById('fieldCountNum');
-const fieldCountBadge = document.getElementById('fieldCountBadge');
-const profileSelect = document.getElementById('profileSelect');
-const profileSummary = document.getElementById('profileSummary');
-const completionStat = document.getElementById('completionStat');
-const completionBar = document.getElementById('completionBar');
-const fieldReadyStat = document.getElementById('fieldReadyStat');
+const fieldCountNum    = document.getElementById('fieldCountNum');
+const fieldCountBadge  = document.getElementById('fieldCountBadge');
+const profileSummary   = document.getElementById('profileSummary');
+const profileTiles     = document.getElementById('profileTiles');
 const profileNameInput = document.getElementById('profileName');
-const editorSubtitle = document.getElementById('editorSubtitle');
-const themeToggle = document.getElementById('themeToggle');
-const htmlEl = document.documentElement;
+const editorSubtitle   = document.getElementById('editorSubtitle');
+const themeToggle      = document.getElementById('themeToggle');
+const htmlEl           = document.documentElement;
 
-// All banner elements (both views) - fixed: use class query not ID-only
-const statusBanners = Array.from(document.querySelectorAll('.status-banner'));
+/* ─── Ripple: track cursor position for radial-gradient origin ─── */
+document.querySelectorAll('.action-btn').forEach(btn => {
+    btn.addEventListener('mousedown', e => {
+        const r = btn.getBoundingClientRect();
+        const x = ((e.clientX - r.left) / r.width) * 100;
+        const y = ((e.clientY - r.top)  / r.height) * 100;
+        btn.style.setProperty('--ripple-x', x + '%');
+        btn.style.setProperty('--ripple-y', y + '%');
+    });
+});
+
 
 const PROFILE_FIELDS = [
     'profileName',
-    'fullName', 'firstName', 'middleName', 'lastName', 'gender', 'dateOfBirth', 'age', 'nationality', 'bloodGroup', 'skillLevel',
-    'qualification', 'course', 'currentYear', 'currentCgpa', 'currentBacklogs', 'passiveBacklogs', 'collegeName', 'specialization', 'branch', 'collegeEmail', 'sapId', 'education', 'subject', 'interestedDomain', 'researchInterestArea',
-    'internshipProgram', 'duration', 'country', 'locationPreference1', 'locationPreference2', 'experience', 'company', 'referralSource', 'aboutMe',
+    // Personal — middleName, nationality removed
+    'fullName', 'firstName', 'lastName', 'gender', 'dateOfBirth', 'age', 'bloodGroup',
+    // Academic — education, subject, interestedDomain, researchInterestArea removed; domainOfInterest added; qualification removed (mirrors course)
+    'collegeName', 'course', 'courseOther', 'branch', 'specialization',
+    'currentYear', 'currentSemester', 'currentCgpa', 'currentBacklogs', 'passiveBacklogs',
+    'graduationYear', 'tenthPercent', 'twelfthPercent',
+    'collegeEmail', 'sapId', 'domainOfInterest',
+    // Internship — country moved to address; skillLevel moved here
+    'internshipProgram', 'duration', 'skillLevel', 'experience',
+    'company', 'referralSource', 'aboutMe',
+    // Contact
     'email', 'phone', 'whatsappNumber',
-    'githubLink', 'linkedinLink', 'websiteLink', 'twitterLink',
-    'address', 'city', 'state', 'zip'
+    // Links — twitterLink removed
+    'githubLink', 'linkedinLink', 'websiteLink',
+    // Address — country added here
+    'address', 'city', 'state', 'zip', 'country'
 ];
 
-const REQUIRED_HINT_FIELDS = ['fullName', 'email', 'phone', 'qualification', 'collegeName', 'internshipProgram'];
+const REQUIRED_HINT_FIELDS = ['fullName', 'email', 'phone', 'course', 'collegeName', 'internshipProgram'];
 
 let statusTimer = null;
 let currentProfiles = [];
@@ -125,60 +144,132 @@ function getProfileLabel(profile, index) {
 
 function refreshProfileSummary(profile) {
     if (!profile) {
-        profileSummary.textContent = 'Create your first profile to start filling forms.';
-        completionStat.textContent = '0%';
-        completionBar.style.width = '0%';
-        fieldReadyStat.textContent = '0';
+        profileSummary.textContent = 'Tap + to create your first profile.';
         return;
     }
-
-    const pct = getCompletion(profile);
-    completionStat.textContent = `${pct}%`;
-    completionBar.style.width = `${pct}%`;
-    completionBar.className = 'stat-bar-fill' + (pct === 100 ? ' full' : pct >= 50 ? ' good' : '');
-    fieldReadyStat.textContent = String(getFilledFieldCount(profile));
-
     const missingImportant = REQUIRED_HINT_FIELDS.filter((key) => !String(profile[key] || '').trim());
     if (missingImportant.length === 0) {
-        profileSummary.textContent = `${getProfileLabel(profile, 0)} is ready for most student and internship forms.`;
+        profileSummary.textContent = `${getProfileLabel(profile, 0)} — ready for most forms.`;
     } else {
-        profileSummary.textContent = `Missing ${missingImportant.length} recommended field${missingImportant.length > 1 ? 's' : ''} for stronger autofill.`;
+        profileSummary.textContent = `${getProfileLabel(profile, 0)} — missing ${missingImportant.length} recommended field${missingImportant.length > 1 ? 's' : ''}.`;
     }
 }
 
-function renderProfileOptions() {
-    profileSelect.innerHTML = '';
+function renderProfileTiles() {
+    profileTiles.innerHTML = '';
 
-    if (currentProfiles.length === 0) {
-        const option = document.createElement('option');
-        option.value = '';
-        option.textContent = 'No saved profiles';
-        profileSelect.appendChild(option);
-        profileSelect.disabled = true;
-        refreshProfileSummary(null);
-        return;
+    for (let i = 0; i < MAX_PROFILES; i++) {
+        const profile = currentProfiles[i] || null;
+        const tile = document.createElement('div');
+
+        if (profile) {
+            const pct = getCompletion(profile);
+            const isActive = profile.id === activeProfileId;
+            tile.className = 'profile-tile' + (isActive ? ' active' : '');
+            tile.dataset.id = profile.id;
+
+            // Completion arc colour class
+            const barClass = pct === 100 ? 'full' : pct >= 50 ? 'good' : '';
+
+            tile.innerHTML = `
+                <div class="tile-top">
+                    <span class="tile-name">${escapeHtml(getProfileLabel(profile, i))}</span>
+                    ${isActive ? '<span class="tile-active-dot" title="Active"></span>' : ''}
+                </div>
+                <div class="tile-pct">${pct}<span class="tile-pct-unit">%</span></div>
+                <div class="tile-bar-track"><div class="tile-bar-fill ${barClass}" style="width:${pct}%"></div></div>
+                <div class="tile-actions">
+                    <button class="tile-edit-btn" data-id="${profile.id}" title="Edit profile" type="button">
+                        <svg viewBox="0 0 16 16" fill="none" width="11" height="11">
+                            <path d="M11 2l3 3-9 9H2v-3l9-9z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+                        </svg>
+                    </button>
+                </div>
+            `;
+
+            tile.addEventListener('click', async (e) => {
+                if (e.target.closest('.tile-edit-btn')) return; // handled separately
+                activeProfileId = profile.id;
+                await sendRuntime({ action: 'setActiveProfile', activeProfileId: profile.id });
+                renderProfileTiles();
+                refreshProfileSummary(profile);
+            });
+
+            tile.querySelector('.tile-edit-btn').addEventListener('click', (e) => {
+                e.stopPropagation();
+                loadProfileIntoForm(profile, false);
+                showView(editorView, mainView);
+            });
+
+        } else {
+            // Empty slot — "+ New" tile
+            tile.className = 'profile-tile empty';
+            tile.innerHTML = `
+                <div class="tile-new-icon">
+                    <svg viewBox="0 0 20 20" fill="none" width="22" height="22">
+                        <path d="M10 4v12M4 10h12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                    </svg>
+                </div>
+                <span class="tile-new-label">New Profile</span>
+            `;
+            tile.addEventListener('click', () => {
+                if (currentProfiles.length >= MAX_PROFILES) {
+                    showStatus(`Maximum ${MAX_PROFILES} profiles allowed.`, 'info', 3000);
+                    return;
+                }
+                const profile = createEmptyProfile(`Profile ${currentProfiles.length + 1}`);
+                editingProfileId = null;
+                loadProfileIntoForm(profile, true);
+                showView(editorView, mainView);
+            });
+        }
+
+        profileTiles.appendChild(tile);
     }
 
-    profileSelect.disabled = false;
-    currentProfiles.forEach((profile, index) => {
-        const option = document.createElement('option');
-        option.value = profile.id;
-        option.textContent = getProfileLabel(profile, index);
-        if (profile.id === activeProfileId) option.selected = true;
-        profileSelect.appendChild(option);
-    });
+    const activeProfile = currentProfiles.find(p => p.id === activeProfileId) || currentProfiles[0] || null;
+    refreshProfileSummary(activeProfile);
+}
 
-    const activeProfile = currentProfiles.find((p) => p.id === activeProfileId) || currentProfiles[0];
-    if (activeProfile && activeProfile.id !== activeProfileId) activeProfileId = activeProfile.id;
-    refreshProfileSummary(activeProfile || null);
+// Keep alias so other code that calls renderProfileOptions() still works
+function renderProfileOptions() { renderProfileTiles(); }
+
+function escapeHtml(str) {
+    return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
 }
 
 function loadProfileIntoForm(profile, isDraft = false) {
     const safeProfile = profile || createEmptyProfile();
+
     PROFILE_FIELDS.forEach((key) => {
+        if (key === 'courseOther') return; // handled separately
         const el = document.getElementById(key);
         if (el) el.value = safeProfile[key] || '';
     });
+
+    // Populate domainOfInterest from any of the old aliases if present
+    const domainEl = document.getElementById('domainOfInterest');
+    if (domainEl && !domainEl.value) {
+        domainEl.value = safeProfile.domainOfInterest || safeProfile.interestedDomain || safeProfile.researchInterestArea || safeProfile.subject || '';
+    }
+
+    // Handle course dropdown: if stored value isn't in the option list, select "other" and populate the text field
+    const courseEl = document.getElementById('course');
+    const courseOtherEl = document.getElementById('courseOther');
+    if (courseEl && courseOtherEl) {
+        const storedCourse = safeProfile.course || '';
+        const optionValues = Array.from(courseEl.options).map(o => o.value);
+        if (storedCourse && !optionValues.includes(storedCourse)) {
+            courseEl.value = 'other';
+            courseOtherEl.value = storedCourse;
+            courseOtherEl.classList.remove('hidden');
+        } else {
+            courseEl.value = storedCourse;
+            courseOtherEl.value = '';
+            courseOtherEl.classList.add('hidden');
+        }
+    }
+
     profileNameInput.value = safeProfile.profileName || '';
     editorSubtitle.textContent = isDraft
         ? 'Create accurate saved profiles for certificates and internship forms.'
@@ -187,17 +278,33 @@ function loadProfileIntoForm(profile, isDraft = false) {
 }
 
 function getProfileFromForm() {
-    const profile = createEmptyProfile();
-    profile.id = editingProfileId || crypto.randomUUID();
+    // Build profile object directly instead of calling createEmptyProfile()
+    // to avoid allocating a UUID that would immediately be overwritten.
+    const profile = { id: editingProfileId || crypto.randomUUID() };
+    PROFILE_FIELDS.forEach(key => { profile[key] = ''; });
 
     PROFILE_FIELDS.forEach((key) => {
+        if (key === 'courseOther') return; // handled separately below
         const el = document.getElementById(key);
         const value = el ? el.value.trim() : '';
         profile[key] = value;
     });
 
+    // If "other" course selected, use the custom text input as the course value
+    if (profile.course === 'other') {
+        profile.course = profile.courseOther || '';
+    }
+
+    // qualification mirrors course (forms may ask "qualification" for the same data)
+    profile.qualification = profile.course;
+
+    // Legacy field aliases kept for backward-compat with old profiles in storage
+    profile.interestedDomain = profile.domainOfInterest;
+    profile.researchInterestArea = profile.domainOfInterest;
+    profile.subject = profile.domainOfInterest;
+
     if (!profile.fullName && (profile.firstName || profile.lastName)) {
-        const parts = [profile.firstName, profile.middleName, profile.lastName].filter(Boolean);
+        const parts = [profile.firstName, profile.lastName].filter(Boolean);
         profile.fullName = parts.join(' ').trim();
     }
 
@@ -208,13 +315,40 @@ function getProfileFromForm() {
     return profile;
 }
 
+// ─── Email swap detection ─────────────────────────────────────────
+function detectEmailSwap(profile) {
+    const personal = (profile.email || '').toLowerCase().trim();
+    const college  = (profile.collegeEmail || '').toLowerCase().trim();
+    if (!personal && !college) return null;
+
+    const collegePattern = /\.ac\.in|\.edu\.in|\.edu$|@stu\.|@student\.|@stud\.|@college\.|@university\.|@iit|@nit|@bits|@vit|@srm|@amity|@upes|@manipal|@lpu|@kiet|@mnnit|@iiit/;
+    const personalPattern = /gmail\.com|outlook\.com|hotmail\.com|yahoo\.com|proton\.me|icloud\.com|rediffmail\.com|ymail\.com|zoho\.com/;
+
+    const personalLooksCollege = personal && collegePattern.test(personal);
+    const collegeLooksPersonal  = college  && personalPattern.test(college);
+
+    if (personal && college && personalLooksCollege && collegeLooksPersonal) return 'swap';
+    if (personalLooksCollege) return 'personal-is-college';
+    if (collegeLooksPersonal)  return 'college-is-personal';
+    return null;
+}
+
+function applyEmailSwapFix() {
+    const emailEl   = document.getElementById('email');
+    const collegeEl = document.getElementById('collegeEmail');
+    if (!emailEl || !collegeEl) return false;
+    const tmp = emailEl.value;
+    emailEl.value   = collegeEl.value;
+    collegeEl.value = tmp;
+    return true;
+}
+
 // ─── Validation ───────────────────────────────────────────────────
 function validateProfile(profile) {
     if (!profile.profileName) return 'Profile name is required.';
     if (!profile.fullName) return 'Full name is required so certificate forms can be filled accurately.';
 
     if (profile.phone) {
-        // Accept 10-digit (India) or E.164 international formats
         const stripped = profile.phone.replace(/[\s\-\(\)\+]/g, '');
         if (!/^\d{7,15}$/.test(stripped)) {
             return 'Contact number must be 7–15 digits (10 digits for Indian numbers).';
@@ -229,11 +363,23 @@ function validateProfile(profile) {
     }
 
     if (profile.email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(profile.email)) {
-        return 'Primary email looks invalid.';
+        return 'Personal email looks invalid.';
     }
 
     if (profile.collegeEmail && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(profile.collegeEmail)) {
         return 'College email looks invalid.';
+    }
+
+    // Email swap detection — warn before saving
+    const swapResult = detectEmailSwap(profile);
+    if (swapResult === 'swap') {
+        return '⚠ Emails appear swapped — your college email is in the Personal field and vice versa. Please fix or use the Swap button.';
+    }
+    if (swapResult === 'personal-is-college') {
+        return '⚠ Personal Email looks like a college/institutional address. Did you mean to put it in College Email?';
+    }
+    if (swapResult === 'college-is-personal') {
+        return '⚠ College Email looks like a personal address (Gmail/Outlook). Did you mean to put it in Personal Email?';
     }
 
     if (profile.githubLink) {
@@ -290,20 +436,34 @@ async function refreshFieldCount() {
     const tab = await getActiveTab();
     if (!tab) return;
 
+    // chrome://, extensions, and file:// pages block content scripts
+    const restricted = !tab.url || /^(chrome|chrome-extension|edge|about|file):\/\//i.test(tab.url);
+    if (restricted) {
+        fieldCountNum.textContent = '—';
+        fieldCountBadge.dataset.state = 'restricted';
+        fieldCountBadge.title = 'Cannot scan browser or extension pages.';
+        return;
+    }
+
     const response = await sendToContent(tab.id, { action: 'getFormFields' });
     if (!response || !response.success) {
         fieldCountNum.textContent = '?';
         fieldCountBadge.dataset.state = '';
+        fieldCountBadge.title = 'Could not reach this page — try reloading it.';
         return;
     }
 
+    fieldCountBadge.title = '';
     animateCounter(fieldCountNum, response.count);
     fieldCountBadge.dataset.state = response.count > 0 ? 'ok' : 'none';
 }
 
-// Animate a number counter for the field count badge
+// Animate a number counter for the field count badge.
+// Reads the previous value from data-count (not textContent) so that
+// a 5→0 transition animates correctly instead of jumping instantly.
 function animateCounter(el, target) {
-    const start = parseInt(el.textContent) || 0;
+    const start = parseInt(el.dataset.count ?? el.textContent) || 0;
+    el.dataset.count = target;
     if (start === target) { el.textContent = target; return; }
     const diff = target - start;
     const steps = Math.min(Math.abs(diff), 12);
@@ -369,24 +529,13 @@ scanBtn.addEventListener('click', async () => {
 });
 
 editProfileBtn.addEventListener('click', () => {
-    const activeProfile = currentProfiles.find((p) => p.id === activeProfileId) || createEmptyProfile();
+    const activeProfile = currentProfiles.find((p) => p.id === activeProfileId) || null;
+    if (!activeProfile) {
+        showStatus('Select a profile first by tapping one of the tiles.', 'info', 3000);
+        return;
+    }
     loadProfileIntoForm(activeProfile, false);
     showView(editorView, mainView);
-});
-
-newProfileBtn.addEventListener('click', () => {
-    const profile = createEmptyProfile(`Profile ${currentProfiles.length + 1}`);
-    editingProfileId = null;
-    loadProfileIntoForm(profile, true);
-    showView(editorView, mainView);
-});
-
-profileSelect.addEventListener('change', async (event) => {
-    const nextId = event.target.value;
-    activeProfileId = nextId;
-    const activeProfile = currentProfiles.find((p) => p.id === activeProfileId) || null;
-    refreshProfileSummary(activeProfile);
-    await sendRuntime({ action: 'setActiveProfile', activeProfileId: nextId });
 });
 
 backBtn.addEventListener('click', () => showView(mainView, editorView));
@@ -400,8 +549,16 @@ saveProfileBtn.addEventListener('click', async () => {
     setLoading(saveProfileBtn, true);
     const existingIndex = currentProfiles.findIndex((item) => item.id === profile.id);
     const nextProfiles = [...currentProfiles];
-    if (existingIndex >= 0) { nextProfiles[existingIndex] = profile; }
-    else { nextProfiles.unshift(profile); }
+    if (existingIndex >= 0) {
+        nextProfiles[existingIndex] = profile;
+    } else {
+        if (nextProfiles.length >= MAX_PROFILES) {
+            setLoading(saveProfileBtn, false);
+            showStatus(`Maximum ${MAX_PROFILES} profiles allowed. Delete one first.`, 'error', 4000);
+            return;
+        }
+        nextProfiles.unshift(profile);
+    }
 
     const saved = await saveProfiles(nextProfiles, profile.id);
     setLoading(saveProfileBtn, false);
@@ -423,6 +580,11 @@ duplicateProfileBtn.addEventListener('click', () => {
 deleteProfileBtn.addEventListener('click', async () => {
     if (!editingProfileId) { showStatus('This draft has not been saved yet.', 'info'); return; }
 
+    const profileToDelete = currentProfiles.find(p => p.id === editingProfileId);
+    const profileLabel = profileToDelete ? (profileToDelete.profileName || profileToDelete.fullName || 'this profile') : 'this profile';
+
+    if (!confirm(`Delete "${profileLabel}"? This cannot be undone.`)) return;
+
     const remainingProfiles = currentProfiles.filter((p) => p.id !== editingProfileId);
     const nextActive = remainingProfiles[0]?.id || null;
     const saved = await saveProfiles(remainingProfiles, nextActive);
@@ -432,17 +594,24 @@ deleteProfileBtn.addEventListener('click', async () => {
     showStatus('Profile deleted.', 'success');
 });
 
+function updateToggleVisual() {
+    const isLight = htmlEl.getAttribute('data-theme') === 'light';
+    if (themeToggle) themeToggle.setAttribute('data-checked', isLight ? 'true' : 'false');
+}
+
 themeToggle.addEventListener('click', () => {
     const isLight = htmlEl.getAttribute('data-theme') === 'light';
     const nextTheme = isLight ? 'dark' : 'light';
     htmlEl.setAttribute('data-theme', nextTheme);
     chrome.storage.local.set({ theme: nextTheme });
+    updateToggleVisual();
 });
 
 // ─── Init ─────────────────────────────────────────────────────────
 async function initTheme() {
     const result = await new Promise(r => chrome.storage.local.get('theme', r));
     htmlEl.setAttribute('data-theme', result.theme || 'dark');
+    updateToggleVisual();
 }
 
 document.addEventListener('DOMContentLoaded', async () => {
@@ -465,4 +634,51 @@ document.addEventListener('DOMContentLoaded', async () => {
         });
     }, { threshold: 0.1 });
     sections.forEach(sec => observer.observe(sec));
+
+    // Live email swap detection
+    const emailEl   = document.getElementById('email');
+    const collegeEl = document.getElementById('collegeEmail');
+    const swapBtn   = document.getElementById('swapEmailsBtn');
+
+    function checkEmailSwapLive() {
+        const profile = { email: emailEl?.value || '', collegeEmail: collegeEl?.value || '' };
+        const result = detectEmailSwap(profile);
+        const warning = document.getElementById('emailSwapWarning');
+        if (!warning) return;
+
+        if (result === 'swap' || result === 'personal-is-college' || result === 'college-is-personal') {
+            warning.classList.remove('hidden');
+            if (swapBtn) swapBtn.style.display = '';
+        } else {
+            warning.classList.add('hidden');
+            if (swapBtn) swapBtn.style.display = 'none';
+        }
+    }
+
+    if (emailEl)   emailEl.addEventListener('input', checkEmailSwapLive);
+    if (collegeEl) collegeEl.addEventListener('input', checkEmailSwapLive);
+
+    if (swapBtn) {
+        swapBtn.addEventListener('click', () => {
+            if (applyEmailSwapFix()) {
+                checkEmailSwapLive();
+                showStatus('✓ Emails swapped successfully.', 'success', 2400);
+            }
+        });
+    }
+
+    // Course "Other" toggle
+    const courseSelectEl = document.getElementById('course');
+    const courseOtherEl  = document.getElementById('courseOther');
+    if (courseSelectEl && courseOtherEl) {
+        courseSelectEl.addEventListener('change', () => {
+            if (courseSelectEl.value === 'other') {
+                courseOtherEl.classList.remove('hidden');
+                courseOtherEl.focus();
+            } else {
+                courseOtherEl.classList.add('hidden');
+                courseOtherEl.value = '';
+            }
+        });
+    }
 });

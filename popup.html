@@ -5,6 +5,8 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>LazyFill</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link rel="stylesheet" href="styles.css" />
 </head>
 
@@ -21,25 +23,41 @@
                 </div>
             </div>
             <div class="header-actions">
-                <button id="themeToggle" class="icon-btn" title="Toggle Theme" type="button">
-                    <svg viewBox="0 0 24 24" fill="none" class="sun-icon" stroke="currentColor" stroke-width="2"
-                        stroke-linecap="round" stroke-linejoin="round">
-                        <circle cx="12" cy="12" r="5" />
-                        <line x1="12" y1="1" x2="12" y2="3" />
-                        <line x1="12" y1="21" x2="12" y2="23" />
-                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" />
-                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78" />
-                        <line x1="1" y1="12" x2="3" y2="12" />
-                        <line x1="21" y1="12" x2="23" y2="12" />
-                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" />
-                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22" />
-                    </svg>
-                    <svg viewBox="0 0 24 24" fill="none" class="moon-icon" stroke="currentColor" stroke-width="2"
-                        stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
-                    </svg>
+                <!-- Modern toggle replaces the old icon button -->
+                <button id="themeToggle" class="theme-toggle" type="button" title="Toggle Theme"
+                    aria-label="Toggle dark/light mode">
+                    <span class="toggle-track">
+                        <span class="toggle-icon toggle-icon--sun" aria-hidden="true">
+                            <svg viewBox="0 0 16 16" fill="none" width="10" height="10">
+                                <circle cx="8" cy="8" r="3" stroke="currentColor" stroke-width="1.6" />
+                                <line x1="8" y1="1" x2="8" y2="3" stroke="currentColor" stroke-width="1.5"
+                                    stroke-linecap="round" />
+                                <line x1="8" y1="13" x2="8" y2="15" stroke="currentColor" stroke-width="1.5"
+                                    stroke-linecap="round" />
+                                <line x1="2.93" y1="2.93" x2="4.34" y2="4.34" stroke="currentColor" stroke-width="1.5"
+                                    stroke-linecap="round" />
+                                <line x1="11.66" y1="11.66" x2="13.07" y2="13.07" stroke="currentColor"
+                                    stroke-width="1.5" stroke-linecap="round" />
+                                <line x1="1" y1="8" x2="3" y2="8" stroke="currentColor" stroke-width="1.5"
+                                    stroke-linecap="round" />
+                                <line x1="13" y1="8" x2="15" y2="8" stroke="currentColor" stroke-width="1.5"
+                                    stroke-linecap="round" />
+                                <line x1="2.93" y1="13.07" x2="4.34" y2="11.66" stroke="currentColor" stroke-width="1.5"
+                                    stroke-linecap="round" />
+                                <line x1="11.66" y1="4.34" x2="13.07" y2="2.93" stroke="currentColor" stroke-width="1.5"
+                                    stroke-linecap="round" />
+                            </svg>
+                        </span>
+                        <span class="toggle-thumb"></span>
+                        <span class="toggle-icon toggle-icon--moon" aria-hidden="true">
+                            <svg viewBox="0 0 16 16" fill="none" width="10" height="10">
+                                <path d="M14 10.5A6 6 0 1 1 5.5 2a4.5 4.5 0 0 0 8.5 8.5z" stroke="currentColor"
+                                    stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                            </svg>
+                        </span>
+                    </span>
                 </button>
-                <span class="version-tag">v1.3</span>
+                <span class="version-tag">v1.4</span>
             </div>
         </header>
 
@@ -47,51 +65,17 @@
             <section class="hero-area">
                 <p class="hero-label">Fillable fields on this page</p>
                 <div id="fieldCountBadge" class="field-badge">
-                    <span id="fieldCountNum">—</span>
+                    <span id="fieldCountNum">&#8212;</span>
                     <span class="field-badge-unit">fields</span>
                 </div>
             </section>
 
             <section class="profile-panel">
-                <div class="panel-header">
-                    <div>
-                        <p class="panel-title">Active Profile</p>
-                        <p id="profileSummary" class="panel-copy">Select the profile you want to use for this page.</p>
-                    </div>
-                    <button id="newProfileBtn" class="mini-btn" type="button">
-                        <svg width="11" height="11" viewBox="0 0 12 12" fill="none">
-                            <path d="M6 1v10M1 6h10" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" />
-                        </svg>
-                        New
-                    </button>
+                <div class="profile-tiles-header">
+                    <p class="panel-title">Profiles</p>
+                    <p id="profileSummary" class="panel-copy">Tap a profile to select it as active.</p>
                 </div>
-
-                <div class="profile-picker-row">
-                    <label class="field-group">
-                        <span class="field-label">Choose Profile</span>
-                        <div class="select-wrapper">
-                            <select id="profileSelect" name="profileSelect"></select>
-                            <svg class="select-arrow" viewBox="0 0 12 12" fill="none">
-                                <path d="M3 4.5l3 3 3-3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
-                                    stroke-linejoin="round" />
-                            </svg>
-                        </div>
-                    </label>
-                </div>
-
-                <div class="profile-meta">
-                    <div class="stat-card">
-                        <span class="stat-label">Completion</span>
-                        <strong id="completionStat" class="stat-value">0%</strong>
-                        <div class="stat-bar-track">
-                            <div class="stat-bar-fill" id="completionBar"></div>
-                        </div>
-                    </div>
-                    <div class="stat-card">
-                        <span class="stat-label">Fields Ready</span>
-                        <strong id="fieldReadyStat" class="stat-value">0</strong>
-                        <span class="stat-sub">of profile</span>
-                    </div>
+                <div class="profile-tiles" id="profileTiles">
                 </div>
             </section>
 
@@ -159,7 +143,7 @@
 
             <div class="form-scroll">
 
-                <!-- Personal -->
+                <!-- ═══ Personal Information ═══ -->
                 <div class="form-section" data-section="personal">
                     <div class="section-header">
                         <svg width="13" height="13" viewBox="0 0 20 20" fill="none">
@@ -169,21 +153,18 @@
                         </svg>
                         <span class="section-label">Personal Information</span>
                     </div>
-                    <div class="field-row">
-                        <label for="fullName">Full Name <span class="required-dot" title="Recommended">●</span></label>
+                    <div class="field-group full-name-group">
+                        <label for="fullName">Full Name <span class="required-dot"
+                                title="Recommended">&#9679;</span></label>
                         <input type="text" id="fullName" name="fullName" placeholder="Enter full legal name"
                             autocomplete="name" />
                     </div>
+                    <!-- Middle name removed; only first + last -->
                     <div class="field-row">
                         <div class="field-group">
                             <label for="firstName">First Name</label>
                             <input type="text" id="firstName" name="firstName" placeholder="John"
                                 autocomplete="given-name" />
-                        </div>
-                        <div class="field-group">
-                            <label for="middleName">Middle Name</label>
-                            <input type="text" id="middleName" name="middleName" placeholder="Kumar"
-                                autocomplete="additional-name" />
                         </div>
                         <div class="field-group">
                             <label for="lastName">Last Name</label>
@@ -220,10 +201,6 @@
                             <input type="number" id="age" name="age" placeholder="22" min="1" max="100" />
                         </div>
                         <div class="field-group">
-                            <label for="nationality">Nationality</label>
-                            <input type="text" id="nationality" name="nationality" placeholder="Indian" />
-                        </div>
-                        <div class="field-group">
                             <label for="bloodGroup">Blood Group</label>
                             <div class="select-wrapper">
                                 <select id="bloodGroup" name="bloodGroup">
@@ -243,25 +220,10 @@
                                 </svg>
                             </div>
                         </div>
-                    <div class="field-group">
-                        <label for="skillLevel">Skill Level</label>
-                        <div class="select-wrapper">
-                            <select id="skillLevel" name="skillLevel">
-                                <option value="">Select skill level</option>
-                                <option value="Beginner">Beginner</option>
-                                <option value="Intermediate">Intermediate</option>
-                                <option value="Advanced">Advanced</option>
-                                <option value="Expert">Expert</option>
-                            </select>
-                            <svg class="select-arrow" viewBox="0 0 12 12" fill="none">
-                                <path d="M3 4.5l3 3 3-3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
-                                    stroke-linejoin="round" />
-                            </svg>
-                        </div>
                     </div>
                 </div>
 
-                <!-- Academic -->
+                <!-- ═══ Academic Information ═══ -->
                 <div class="form-section" data-section="academic">
                     <div class="section-header">
                         <svg width="13" height="13" viewBox="0 0 20 20" fill="none">
@@ -272,113 +234,206 @@
                         </svg>
                         <span class="section-label">Academic Information</span>
                     </div>
-                    <div class="field-row">
-                        <div class="field-group">
-                            <label for="qualification">Qualification <span class="required-dot"
-                                    title="Recommended">●</span></label>
-                            <input type="text" id="qualification" name="qualification"
-                                placeholder="B.Tech / MCA / MBA" />
-                        </div>
-                        <div class="field-group">
-                            <label for="course">Course</label>
-                            <input type="text" id="course" name="course"
-                                placeholder="B.Tech / M.Tech / BCA / BSc" />
-                        </div>
-                    </div>
-                    <div class="field-row">
-                        <div class="field-group">
-                            <label for="currentYear">Current Year</label>
-                            <input type="text" id="currentYear" name="currentYear"
-                                placeholder="3rd Year / Final Year" />
-                        </div>
-                        <div class="field-group">
-                            <label for="currentCgpa">Current CGPA</label>
-                            <input type="text" id="currentCgpa" name="currentCgpa"
-                                placeholder="8.42 / 9.1 / 3.78 on 4.0 scale" />
-                        </div>
-                    </div>
-                    <div class="field-row">
-                            <div class="field-group">
-                                <label for="currentBacklogs">Do you have any current backlogs?</label>
-                                <div class="select-wrapper">
-                                    <select id="currentBacklogs" name="currentBacklogs">
-                                        <option value="">Select an option</option>
-                                        <option value="Yes">Yes</option>
-                                        <option value="No">No</option>
-                                    </select>
-                                    <svg class="select-arrow" viewBox="0 0 12 12" fill="none">
-                                        <path d="M3 4.5l3 3 3-3" stroke="currentColor" stroke-width="1.5"
-                                            stroke-linecap="round" stroke-linejoin="round" />
-                                    </svg>
-                                </div>
-                            </div>
-                            <div class="field-group">
-                                <label for="passiveBacklogs">Do you have any past/passive backlogs?</label>
-                                <div class="select-wrapper">
-                                    <select id="passiveBacklogs" name="passiveBacklogs">
-                                        <option value="">Select an option</option>
-                                        <option value="Yes">Yes</option>
-                                        <option value="No">No</option>
-                                    </select>
-                                    <svg class="select-arrow" viewBox="0 0 12 12" fill="none">
-                                        <path d="M3 4.5l3 3 3-3" stroke="currentColor" stroke-width="1.5"
-                                            stroke-linecap="round" stroke-linejoin="round" />
-                                    </svg>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+
+                    <!-- 1. College / University -->
                     <div class="field-group">
                         <label for="collegeName">College / University <span class="required-dot"
-                                title="Recommended">●</span></label>
+                                title="Recommended">&#9679;</span></label>
                         <input type="text" id="collegeName" name="collegeName"
                             placeholder="Current or last attended institution" autocomplete="organization" />
                     </div>
+
+                    <!-- 2. Course (dropdown + other) + Branch -->
                     <div class="field-row">
                         <div class="field-group">
-                            <label for="specialization">Specialization</label>
-                            <input type="text" id="specialization" name="specialization"
-                                placeholder="Artificial Intelligence" />
+                            <label for="course">Course <span class="required-dot"
+                                    title="Recommended">&#9679;</span></label>
+                            <div class="select-wrapper">
+                                <select id="course" name="course">
+                                    <option value="">Select course</option>
+                                    <option value="B.Tech">B.Tech</option>
+                                    <option value="M.Tech">M.Tech</option>
+                                    <option value="B.E.">B.E.</option>
+                                    <option value="M.E.">M.E.</option>
+                                    <option value="BCA">BCA</option>
+                                    <option value="MCA">MCA</option>
+                                    <option value="BBA">BBA</option>
+                                    <option value="MBA">MBA</option>
+                                    <option value="B.Sc.">B.Sc.</option>
+                                    <option value="M.Sc.">M.Sc.</option>
+                                    <option value="B.Com">B.Com</option>
+                                    <option value="M.Com">M.Com</option>
+                                    <option value="B.A.">B.A.</option>
+                                    <option value="M.A.">M.A.</option>
+                                    <option value="Ph.D.">Ph.D.</option>
+                                    <option value="Diploma">Diploma</option>
+                                    <option value="other">Other (type below)</option>
+                                </select>
+                                <svg class="select-arrow" viewBox="0 0 12 12" fill="none">
+                                    <path d="M3 4.5l3 3 3-3" stroke="currentColor" stroke-width="1.5"
+                                        stroke-linecap="round" stroke-linejoin="round" />
+                                </svg>
+                            </div>
+                            <!-- Shown only when "Other" is selected -->
+                            <input type="text" id="courseOther" name="courseOther" placeholder="Type your course name"
+                                class="course-other-input hidden" />
                         </div>
                         <div class="field-group">
                             <label for="branch">Branch / Dept</label>
                             <input type="text" id="branch" name="branch" placeholder="Computer Science" />
                         </div>
                     </div>
+
+                    <!-- Specialization -->
+                    <div class="field-group">
+                        <label for="specialization">Specialization</label>
+                        <input type="text" id="specialization" name="specialization"
+                            placeholder="Cybersecurity &amp; Forensics / AI-ML / IoT" />
+                    </div>
+
+                    <!-- 3. Year + Semester + CGPA -->
+                    <div class="field-row three-col">
+                        <div class="field-group">
+                            <label for="currentYear">Current Year</label>
+                            <div class="select-wrapper">
+                                <select id="currentYear" name="currentYear">
+                                    <option value="">Select year</option>
+                                    <option value="1st Year">1st Year</option>
+                                    <option value="2nd Year">2nd Year</option>
+                                    <option value="3rd Year">3rd Year</option>
+                                    <option value="4th Year">4th Year</option>
+                                    <option value="Final Year">Final Year</option>
+                                    <option value="Lateral Entry 2nd Year">Lateral Entry 2nd Year</option>
+                                    <option value="Lateral Entry 3rd Year">Lateral Entry 3rd Year</option>
+                                    <option value="5th Year (Integrated)">5th Year (Integrated)</option>
+                                </select>
+                                <svg class="select-arrow" viewBox="0 0 12 12" fill="none">
+                                    <path d="M3 4.5l3 3 3-3" stroke="currentColor" stroke-width="1.5"
+                                        stroke-linecap="round" stroke-linejoin="round" />
+                                </svg>
+                            </div>
+                        </div>
+                        <div class="field-group">
+                            <label for="currentSemester">Semester</label>
+                            <div class="select-wrapper">
+                                <select id="currentSemester" name="currentSemester">
+                                    <option value="">Select</option>
+                                    <option value="1">Semester 1</option>
+                                    <option value="2">Semester 2</option>
+                                    <option value="3">Semester 3</option>
+                                    <option value="4">Semester 4</option>
+                                    <option value="5">Semester 5</option>
+                                    <option value="6">Semester 6</option>
+                                    <option value="7">Semester 7</option>
+                                    <option value="8">Semester 8</option>
+                                </select>
+                                <svg class="select-arrow" viewBox="0 0 12 12" fill="none">
+                                    <path d="M3 4.5l3 3 3-3" stroke="currentColor" stroke-width="1.5"
+                                        stroke-linecap="round" stroke-linejoin="round" />
+                                </svg>
+                            </div>
+                        </div>
+                        <div class="field-group">
+                            <label for="currentCgpa">CGPA</label>
+                            <input type="text" id="currentCgpa" name="currentCgpa" placeholder="8.42" />
+                        </div>
+                    </div>
+
+                    <!-- 4. Both backlog fields -->
                     <div class="field-row">
                         <div class="field-group">
-                            <label for="collegeEmail">College Email / Mail</label>
-                            <input type="email" id="collegeEmail" name="collegeEmail" placeholder="student@college.edu"
-                                autocomplete="email" />
+                            <label for="currentBacklogs">Current Backlogs?</label>
+                            <div class="select-wrapper">
+                                <select id="currentBacklogs" name="currentBacklogs">
+                                    <option value="">Select</option>
+                                    <option value="Yes">Yes</option>
+                                    <option value="No">No</option>
+                                </select>
+                                <svg class="select-arrow" viewBox="0 0 12 12" fill="none">
+                                    <path d="M3 4.5l3 3 3-3" stroke="currentColor" stroke-width="1.5"
+                                        stroke-linecap="round" stroke-linejoin="round" />
+                                </svg>
+                            </div>
+                        </div>
+                        <div class="field-group">
+                            <label for="passiveBacklogs">Past / Passive Backlogs?</label>
+                            <div class="select-wrapper">
+                                <select id="passiveBacklogs" name="passiveBacklogs">
+                                    <option value="">Select</option>
+                                    <option value="Yes">Yes</option>
+                                    <option value="No">No</option>
+                                </select>
+                                <svg class="select-arrow" viewBox="0 0 12 12" fill="none">
+                                    <path d="M3 4.5l3 3 3-3" stroke="currentColor" stroke-width="1.5"
+                                        stroke-linecap="round" stroke-linejoin="round" />
+                                </svg>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 5. Graduation Year + 10th % + 12th % -->
+                    <div class="field-row three-col">
+                        <div class="field-group">
+                            <label for="graduationYear">Graduation Year</label>
+                            <div class="select-wrapper">
+                                <select id="graduationYear" name="graduationYear">
+                                    <option value="">Select year</option>
+                                    <option value="2025">2025</option>
+                                    <option value="2026">2026</option>
+                                    <option value="2027">2027</option>
+                                    <option value="2028">2028</option>
+                                    <option value="2029">2029</option>
+                                    <option value="2030">2030</option>
+                                    <option value="2031">2031</option>
+                                    <option value="2032">2032</option>
+                                    <option value="2033">2033</option>
+                                    <option value="2034">2034</option>
+                                </select>
+                                <svg class="select-arrow" viewBox="0 0 12 12" fill="none">
+                                    <path d="M3 4.5l3 3 3-3" stroke="currentColor" stroke-width="1.5"
+                                        stroke-linecap="round" stroke-linejoin="round" />
+                                </svg>
+                            </div>
+                        </div>
+                        <div class="field-group">
+                            <label for="tenthPercent">10th %</label>
+                            <input type="text" id="tenthPercent" name="tenthPercent" placeholder="e.g. 85.4" />
+                        </div>
+                        <div class="field-group">
+                            <label for="twelfthPercent">12th %</label>
+                            <input type="text" id="twelfthPercent" name="twelfthPercent" placeholder="e.g. 78.6" />
+                        </div>
+                    </div>
+
+                    <!-- College email + SAP ID -->
+                    <div class="field-row">
+                        <div class="field-group">
+                            <label for="collegeEmail">
+                                College / Institutional Email
+                                <span class="email-type-badge badge-college">&#127891; .edu / .ac.in</span>
+                            </label>
+                            <input type="email" id="collegeEmail" name="collegeEmail" placeholder="roll@college.ac.in"
+                                autocomplete="off" data-email-type="college" />
+                            <small class="field-hint">Used on official forms, certificates &amp; university
+                                portals.</small>
                         </div>
                         <div class="field-group">
                             <label for="sapId">SAP / Roll No</label>
                             <input type="text" id="sapId" name="sapId" placeholder="500124294" />
                         </div>
                     </div>
+
+                    <!-- Merged domain of interest field -->
                     <div class="field-group">
-                        <label for="education">Education Description</label>
-                        <input type="text" id="education" name="education"
-                            placeholder="Bachelor of Technology in Computer Science" />
-                    </div>
-                    <div class="field-group">
-                        <label for="subject">Subject / Domain</label>
-                        <input type="text" id="subject" name="subject"
-                            placeholder="Machine Learning / Web Development" />
-                    </div>
-                    <div class="field-group">
-                        <label for="interestedDomain">Interested in Domain</label>
-                        <input type="text" id="interestedDomain" name="interestedDomain"
-                            placeholder="Frontend Development / Backend Development / UI-UX" />
-                    </div>
-                    <div class="field-group">
-                        <label for="researchInterestArea">Research Interest Area</label>
-                        <input type="text" id="researchInterestArea" name="researchInterestArea"
-                            placeholder="NLP / Computer Vision / Distributed Systems" />
+                        <label for="domainOfInterest">Domain of Interest</label>
+                        <input type="text" id="domainOfInterest" name="domainOfInterest"
+                            placeholder="Cybersecurity / Machine Learning / Web Development" />
+                        <small class="field-hint">Covers: domain, research area, subject/domain, interest area and
+                            related questions.</small>
                     </div>
                 </div>
 
-                <!-- Internship -->
+                <!-- ═══ Internship Details ═══ -->
                 <div class="form-section" data-section="internship">
                     <div class="section-header">
                         <svg width="13" height="13" viewBox="0 0 20 20" fill="none">
@@ -391,41 +446,76 @@
                     <div class="field-row">
                         <div class="field-group">
                             <label for="internshipProgram">Program / Role <span class="required-dot"
-                                    title="Recommended">●</span></label>
+                                    title="Recommended">&#9679;</span></label>
                             <input type="text" id="internshipProgram" name="internshipProgram"
                                 placeholder="Web Development Internship" />
                         </div>
                         <div class="field-group">
                             <label for="duration">Duration</label>
-                            <input type="text" id="duration" name="duration" placeholder="6 Weeks / 3 Months" />
+                            <div class="select-wrapper">
+                                <select id="duration" name="duration">
+                                    <option value="">Select duration</option>
+                                    <option value="2 Weeks">2 Weeks</option>
+                                    <option value="4 Weeks">4 Weeks</option>
+                                    <option value="6 Weeks">6 Weeks</option>
+                                    <option value="8 Weeks">8 Weeks</option>
+                                    <option value="1 Month">1 Month</option>
+                                    <option value="2 Months">2 Months</option>
+                                    <option value="3 Months">3 Months</option>
+                                    <option value="6 Months">6 Months</option>
+                                    <option value="1 Year">1 Year</option>
+                                    <option value="6 Weeks / 3 Months">6 Weeks / 3 Months</option>
+                                </select>
+                                <svg class="select-arrow" viewBox="0 0 12 12" fill="none">
+                                    <path d="M3 4.5l3 3 3-3" stroke="currentColor" stroke-width="1.5"
+                                        stroke-linecap="round" stroke-linejoin="round" />
+                                </svg>
+                            </div>
                         </div>
                     </div>
+
+                    <!-- Skill Level moved to internship section -->
                     <div class="field-row">
                         <div class="field-group">
-                            <label for="country">Country</label>
-                            <input type="text" id="country" name="country" placeholder="India"
-                                autocomplete="country-name" />
-                        </div>
-                        <div class="field-group">
-                            <label for="locationPreference1">Location Preference 1</label>
-                            <input type="text" id="locationPreference1" name="locationPreference1"
-                                placeholder="Bengaluru / Pune / Hyderabad" />
-                        </div>
-                    </div>
-                    <div class="field-row">
-                        <div class="field-group">
-                            <label for="locationPreference2">Location Preference 2</label>
-                            <input type="text" id="locationPreference2" name="locationPreference2"
-                                placeholder="Delhi NCR / Mumbai / Chennai" />
+                            <label for="skillLevel">Skill Level</label>
+                            <div class="select-wrapper">
+                                <select id="skillLevel" name="skillLevel">
+                                    <option value="">Select skill level</option>
+                                    <option value="Beginner">Beginner</option>
+                                    <option value="Intermediate">Intermediate</option>
+                                    <option value="Advanced">Advanced</option>
+                                    <option value="Expert">Expert</option>
+                                </select>
+                                <svg class="select-arrow" viewBox="0 0 12 12" fill="none">
+                                    <path d="M3 4.5l3 3 3-3" stroke="currentColor" stroke-width="1.5"
+                                        stroke-linecap="round" stroke-linejoin="round" />
+                                </svg>
+                            </div>
                         </div>
                         <div class="field-group">
                             <label for="experience">Experience</label>
-                            <input type="text" id="experience" name="experience"
-                                placeholder="Prior project or internship" />
+                            <div class="select-wrapper">
+                                <select id="experience" name="experience">
+                                    <option value="">Select experience</option>
+                                    <option value="Fresher">Fresher</option>
+                                    <option value="Internship Experience">Internship Experience</option>
+                                    <option value="Less than 6 months">Less than 6 months</option>
+                                    <option value="6 months">6 months</option>
+                                    <option value="6 months - 1 year">6 months &#8211; 1 year</option>
+                                    <option value="1 year">1 year</option>
+                                    <option value="1-2 years">1&#8211;2 years</option>
+                                    <option value="2-3 years">2&#8211;3 years</option>
+                                    <option value="3-5 years">3&#8211;5 years</option>
+                                    <option value="5+ years">5+ years</option>
+                                </select>
+                                <svg class="select-arrow" viewBox="0 0 12 12" fill="none">
+                                    <path d="M3 4.5l3 3 3-3" stroke="currentColor" stroke-width="1.5"
+                                        stroke-linecap="round" stroke-linejoin="round" />
+                                </svg>
+                            </div>
                         </div>
                     </div>
-                    <div class="field-group">
-                    </div>
+
                     <div class="field-group">
                         <label for="company">Company / Organization</label>
                         <input type="text" id="company" name="company" placeholder="Training or internship provider"
@@ -433,8 +523,30 @@
                     </div>
                     <div class="field-group">
                         <label for="referralSource">How did you hear about us?</label>
-                        <input type="text" id="referralSource" name="referralSource"
-                            placeholder="LinkedIn / College / Friend" />
+                        <div class="select-wrapper">
+                            <select id="referralSource" name="referralSource">
+                                <option value="">Select source</option>
+                                <option value="LinkedIn">LinkedIn</option>
+                                <option value="College / University">College / University</option>
+                                <option value="Professor / Faculty">Professor / Faculty</option>
+                                <option value="Friend / Peer">Friend / Peer</option>
+                                <option value="Instagram">Instagram</option>
+                                <option value="Twitter / X">Twitter / X</option>
+                                <option value="YouTube">YouTube</option>
+                                <option value="Internshala">Internshala</option>
+                                <option value="Naukri">Naukri</option>
+                                <option value="Indeed">Indeed</option>
+                                <option value="Google Search">Google Search</option>
+                                <option value="Campus Placement Cell">Campus Placement Cell</option>
+                                <option value="Email Newsletter">Email Newsletter</option>
+                                <option value="Job Fair / Career Event">Job Fair / Career Event</option>
+                                <option value="Other">Other</option>
+                            </select>
+                            <svg class="select-arrow" viewBox="0 0 12 12" fill="none">
+                                <path d="M3 4.5l3 3 3-3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+                                    stroke-linejoin="round" />
+                            </svg>
+                        </div>
                     </div>
                     <div class="field-group">
                         <label for="aboutMe">About Me / Cover Letter</label>
@@ -443,7 +555,7 @@
                     </div>
                 </div>
 
-                <!-- Contact -->
+                <!-- ═══ Contact Information ═══ -->
                 <div class="form-section" data-section="contact">
                     <div class="section-header">
                         <svg width="13" height="13" viewBox="0 0 20 20" fill="none">
@@ -454,32 +566,51 @@
                         </svg>
                         <span class="section-label">Contact Information</span>
                     </div>
-                    <div class="field-row">
+
+                    <!-- Improved spacing: all three contact fields stacked uniformly -->
+                    <div class="contact-fields-stack">
                         <div class="field-group">
-                            <label for="email">Primary Email / Personal Mail <span class="required-dot"
-                                    title="Recommended">●</span></label>
-                            <input type="email" id="email" name="email" placeholder="you@example.com"
-                                autocomplete="email" />
+                            <label for="email">
+                                Personal Email <span class="required-dot" title="Recommended">&#9679;</span>
+                                <span class="email-type-badge badge-personal">&#9993; Gmail / Outlook</span>
+                            </label>
+                            <input type="email" id="email" name="email" placeholder="you@gmail.com" autocomplete="off"
+                                data-email-type="personal" />
+                            <small class="field-hint">Your personal Gmail, Outlook etc. &#8212; not your college
+                                email.</small>
                         </div>
-                        <div class="field-group">
-                            <label for="phone">Phone Number / Mobile No <span class="required-dot"
-                                    title="Recommended">●</span></label>
-                            <input type="tel" id="phone" name="phone" placeholder="9876543210" inputmode="numeric"
-                                autocomplete="tel" />
-                            <small class="field-hint">10 digits for Indian numbers.</small>
+                        <div class="field-row">
+                            <div class="field-group">
+                                <label for="phone">Phone / Mobile No <span class="required-dot"
+                                        title="Recommended">&#9679;</span></label>
+                                <input type="tel" id="phone" name="phone" placeholder="9876543210" inputmode="numeric"
+                                    autocomplete="tel" />
+                                <small class="field-hint">10 digits for Indian numbers.</small>
+                            </div>
+                            <div class="field-group">
+                                <label for="whatsappNumber">WhatsApp Number</label>
+                                <input type="tel" id="whatsappNumber" name="whatsappNumber"
+                                    placeholder="Same or different" inputmode="numeric" autocomplete="tel-national" />
+                                <small class="field-hint">Leave blank if same as phone.</small>
+                            </div>
                         </div>
                     </div>
-                    <div class="field-row">
-                        <div class="field-group">
-                            <label for="whatsappNumber">WhatsApp Number</label>
-                            <input type="tel" id="whatsappNumber" name="whatsappNumber"
-                                placeholder="Same or different from phone" inputmode="numeric"
-                                autocomplete="tel-national" />
-                        </div>
+
+                    <!-- Email swap warning -->
+                    <div id="emailSwapWarning" class="email-swap-warning hidden" role="alert">
+                        <svg width="14" height="14" viewBox="0 0 20 20" fill="none">
+                            <path d="M10 2L2 17h16L10 2z" stroke="currentColor" stroke-width="1.7"
+                                stroke-linejoin="round" />
+                            <path d="M10 8v5M10 14.5v.5" stroke="currentColor" stroke-width="1.7"
+                                stroke-linecap="round" />
+                        </svg>
+                        <span>Emails look swapped &#8212; personal vs. college fields may be reversed.</span>
+                        <button id="swapEmailsBtn" class="swap-btn" type="button"
+                            title="Auto-fix: swap the two email values">&#8644; Swap</button>
                     </div>
                 </div>
 
-                <!-- Links -->
+                <!-- ═══ Links & Profiles ═══ -->
                 <div class="form-section" data-section="links">
                     <div class="section-header">
                         <svg width="13" height="13" viewBox="0 0 20 20" fill="none">
@@ -488,7 +619,7 @@
                             <path d="M12 9a4 4 0 00-6 0L4 11a4 4 0 006 5.66L11 15.5" stroke="currentColor"
                                 stroke-width="1.7" stroke-linecap="round" />
                         </svg>
-                        <span class="section-label">Links & Profiles</span>
+                        <span class="section-label">Links &amp; Profiles</span>
                     </div>
                     <div class="field-group">
                         <label for="githubLink">GitHub</label>
@@ -500,20 +631,13 @@
                         <input type="url" id="linkedinLink" name="linkedinLink"
                             placeholder="https://www.linkedin.com/in/username" />
                     </div>
-                    <div class="field-row">
-                        <div class="field-group">
-                            <label for="websiteLink">Portfolio / Website</label>
-                            <input type="url" id="websiteLink" name="websiteLink" placeholder="https://yoursite.dev" />
-                        </div>
-                        <div class="field-group">
-                            <label for="twitterLink">Twitter / X</label>
-                            <input type="url" id="twitterLink" name="twitterLink"
-                                placeholder="https://x.com/username" />
-                        </div>
+                    <div class="field-group">
+                        <label for="websiteLink">Portfolio / Website</label>
+                        <input type="url" id="websiteLink" name="websiteLink" placeholder="https://yoursite.dev" />
                     </div>
                 </div>
 
-                <!-- Address -->
+                <!-- ═══ Address ═══ -->
                 <div class="form-section" data-section="address">
                     <div class="section-header">
                         <svg width="13" height="13" viewBox="0 0 20 20" fill="none">
@@ -544,10 +668,16 @@
                             <label for="zip">ZIP / PIN Code</label>
                             <input type="text" id="zip" name="zip" placeholder="411001" autocomplete="postal-code" />
                         </div>
+                        <!-- Country moved here from Internship section -->
+                        <div class="field-group">
+                            <label for="country">Country</label>
+                            <input type="text" id="country" name="country" placeholder="India"
+                                autocomplete="country-name" />
+                        </div>
                     </div>
                 </div>
 
-            </div>
+            </div><!-- /form-scroll -->
 
             <div id="editorStatusBanner" class="status-banner hidden" role="status" aria-live="polite"></div>
 
@@ -565,7 +695,8 @@
     </div>
     <footer class="app-credit">
         <span class="app-credit-copy">Built and maintained by</span>
-        <a class="app-credit-link" href="https://github.com/hardik0670" target="_blank" rel="noopener noreferrer">Hardik Khatri</a>
+        <a class="app-credit-link" href="https://github.com/hardik0670" target="_blank" rel="noopener noreferrer">Hardik
+            Khatri</a>
     </footer>
 
     <script src="popup.js"></script>
