@@ -775,6 +775,24 @@ const NAME_ALIASES = {
 // the scored match loop — doing so creates spurious low-score candidates.
 const LEGACY_FIELD_KEYS = new Set(['interestedDomain', 'researchInterestArea']);
 
+// ── Opt #5: module-level constant — built once, not on every detectFields() call ──
+const FIELD_SELECTOR = [
+    'input:not([type="hidden"]):not([type="submit"]):not([type="button"]):not([type="reset"]):not([type="image"]):not([type="file"]):not([type="checkbox"])',
+    'input[type="radio"]',
+    'input[type="checkbox"]',
+    'textarea',
+    'select',
+    '[role="radio"]',
+    '[role="option"]',
+    '[role="textbox"]',       // MS Forms / Typeform text inputs
+    '[role="combobox"]',      // MS Forms dropdowns
+    // Google Forms circular/custom option elements
+    '.freebirdFormviewerComponentsQuestionRadioChoice',
+    '.docssharedWizToggleLabeledContainer',
+    // Typeform button-based choices
+    '[data-qa="choice"]',
+].join(',');
+
 // ─────────────────────────────────────────────────────────────────────────────
 // ABBREVIATION EXPANSION TABLE
 // Maps abbreviations to their full-form equivalents and vice-versa.
@@ -1498,25 +1516,8 @@ function isVisible(el) {
 }
 
 function detectFields() {
-    const selector = [
-        'input:not([type="hidden"]):not([type="submit"]):not([type="button"]):not([type="reset"]):not([type="image"]):not([type="file"]):not([type="checkbox"])',
-        'input[type="radio"]',
-        'input[type="checkbox"]',
-        'textarea',
-        'select',
-        '[role="radio"]',
-        '[role="option"]',
-        '[role="textbox"]',       // MS Forms / Typeform text inputs
-        '[role="combobox"]',      // MS Forms dropdowns
-        // Google Forms circular/custom option elements
-        '.freebirdFormviewerComponentsQuestionRadioChoice',
-        '.docssharedWizToggleLabeledContainer',
-        // Typeform button-based choices
-        '[data-qa="choice"]',
-    ].join(',');
-
     const seen = new Set();
-    return Array.from(document.querySelectorAll(selector))
+    return Array.from(document.querySelectorAll(FIELD_SELECTOR))
         .filter((el) => {
             if (!isVisible(el)) return false;
             if (seen.has(el)) return false;
@@ -1739,14 +1740,19 @@ function scoreMatch(meta, profileKey) {
     return score;
 }
 
+// ── Opt #8: memoized — same name attr is tested up to 3× per field (scoreMatch,
+// matchField, getLabelText); cache avoids redundant regex on each call ──
+const _generatedNameCache = new Map();
 function isGeneratedName(name) {
+    if (_generatedNameCache.has(name)) return _generatedNameCache.get(name);
     // React/Next.js generated names like "rj:-form-item", "r1:-form-item", ":r0:", etc.
     // These contain colons or are purely numeric/random — not semantic field names.
-    if (!name || name.length < 2) return true;
-    if (/[:\[\]{}]/.test(name)) return true;          // contains colon, brackets
-    if (/^\d+$/.test(name)) return true;              // purely numeric
-    if (/^[a-z]{1,2}\d+/.test(name)) return true;    // e.g. "r1", "rj3"
-    return false;
+    const result = !name || name.length < 2 ||
+        /[:\[\]{}]/.test(name) ||   // contains colon, brackets
+        /^\d+$/.test(name) ||       // purely numeric
+        /^[a-z]{1,2}\d+/.test(name); // e.g. "r1", "rj3"
+    _generatedNameCache.set(name, result);
+    return result;
 }
 
 function matchField(meta, profile) {

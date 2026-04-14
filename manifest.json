@@ -1,8 +1,8 @@
 {
     "manifest_version": 3,
-    "name": "LazyFill",
+    "name": "LazyFill – Auto Fill Forms for Students",
     "version": "1.3.0",
-    "description": "Instantly detect and fill web forms using one of your saved student or internship profiles.",
+    "description": "Auto fill forms instantly for internships, job applications, and student use. Fast, smart, and privacy-friendly.",
     "icons": {
         "16": "images/icon_16.png",
         "48": "images/icon_48.png",
@@ -35,7 +35,9 @@
                 "http://*/*",
                 "https://*/*"
             ],
-            "js": ["content.js"],
+            "js": [
+                "content.js"
+            ],
             "run_at": "document_idle"
         }
     ]

@@ -295,7 +295,8 @@ function getProfileFromForm() {
     // Build profile object directly instead of calling createEmptyProfile()
     // to avoid allocating a UUID that would immediately be overwritten.
     const profile = { id: editingProfileId || crypto.randomUUID() };
-    PROFILE_FIELDS.forEach(key => { profile[key] = ''; });
+    // ── Opt #10: no need to pre-fill keys with '' — the loop below assigns every
+    // PROFILE_FIELDS key (falling back to '' for missing DOM elements) already ──
 
     PROFILE_FIELDS.forEach((key) => {
         if (key === 'courseOther') return; // handled separately below
@@ -607,6 +608,40 @@ deleteProfileBtn.addEventListener('click', async () => {
     showView(mainView, editorView);
     showStatus('Profile deleted.', 'success');
 });
+
+// ─── Kebab (three-dot) Menu ───────────────────────────────────────
+const kebabBtn  = document.getElementById('kebabBtn');
+const kebabMenu = document.getElementById('kebabMenu');
+const kebabWrap = document.getElementById('kebabWrap');
+
+if (kebabBtn && kebabMenu) {
+    kebabBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const isOpen = kebabMenu.classList.contains('open');
+        kebabMenu.classList.toggle('open', !isOpen);
+        kebabBtn.setAttribute('aria-expanded', String(!isOpen));
+        kebabMenu.setAttribute('aria-hidden', String(isOpen));
+    });
+
+    // Close on outside click
+    document.addEventListener('click', (e) => {
+        if (!kebabWrap.contains(e.target)) {
+            kebabMenu.classList.remove('open');
+            kebabBtn.setAttribute('aria-expanded', 'false');
+            kebabMenu.setAttribute('aria-hidden', 'true');
+        }
+    });
+
+    // Close on Escape
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && kebabMenu.classList.contains('open')) {
+            kebabMenu.classList.remove('open');
+            kebabBtn.setAttribute('aria-expanded', 'false');
+            kebabMenu.setAttribute('aria-hidden', 'true');
+            kebabBtn.focus();
+        }
+    });
+}
 
 function updateToggleVisual() {
     const isLight = htmlEl.getAttribute('data-theme') === 'light';
