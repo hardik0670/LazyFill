@@ -564,23 +564,23 @@ const CHOICE_SYNONYMS = {
         phd: ['phd', 'ph.d', 'doctorate']
     },
     specialization: {
-        ccvt:          ['ccvt', 'cloud computing and virtualization technology', 'cloud computing virtualization technology', 'cloud and virtualization'],
-        csf:           ['csf', 'cybersecurityandforensics', 'cybersecurity and forensics', 'cyber security and forensics', 'cyber security & forensics', 'cybersecurity forensics', 'cyber forensics', 'cybersecurity & forensics'],
-        aiml:          ['aiml', 'ai/ml', 'ai & ml', 'artificialintelligenceandmachinelearning', 'artificial intelligence and machine learning', 'ai and ml', 'artificial intelligence & machine learning', 'ai ml', 'ai and machine learning'],
-        iot:           ['iot', 'internetofthings', 'internet of things', 'internet of thing'],
-        fullstack:     ['fullstack', 'full stack', 'full-stack', 'full stack development'],
-        bigdata:       ['bigdata', 'big data', 'big data analytics'],
-        graphicsgaming:['graphicsgaming', 'graphics & gaming', 'graphics and gaming', 'graphics gaming'],
-        datascience:   ['datascience', 'data science', 'ds'],
-        cloudcomputing:['cloudcomputing', 'cloud computing', 'cloud'],
+        ccvt: ['ccvt', 'cloud computing and virtualization technology', 'cloud computing virtualization technology', 'cloud and virtualization'],
+        csf: ['csf', 'cybersecurityandforensics', 'cybersecurity and forensics', 'cyber security and forensics', 'cyber security & forensics', 'cybersecurity forensics', 'cyber forensics', 'cybersecurity & forensics'],
+        aiml: ['aiml', 'ai/ml', 'ai & ml', 'artificialintelligenceandmachinelearning', 'artificial intelligence and machine learning', 'ai and ml', 'artificial intelligence & machine learning', 'ai ml', 'ai and machine learning'],
+        iot: ['iot', 'internetofthings', 'internet of things', 'internet of thing'],
+        fullstack: ['fullstack', 'full stack', 'full-stack', 'full stack development'],
+        bigdata: ['bigdata', 'big data', 'big data analytics'],
+        graphicsgaming: ['graphicsgaming', 'graphics & gaming', 'graphics and gaming', 'graphics gaming'],
+        datascience: ['datascience', 'data science', 'ds'],
+        cloudcomputing: ['cloudcomputing', 'cloud computing', 'cloud'],
         cybersecurity: ['cybersecurity', 'cyber security', 'information security'],
-        blockchain:    ['blockchain', 'block chain'],
-        arvr:          ['arvr', 'ar/vr', 'ar & vr', 'augmented reality', 'virtual reality', 'augmented reality and virtual reality', 'ar and vr'],
-        devops:        ['devops', 'dev ops', 'development operations'],
-        uiux:          ['uiux', 'ui/ux', 'ui ux', 'user interface user experience', 'ui and ux design'],
-        machinelearning:['machinelearning', 'machine learning', 'ml', 'deep learning'],
-        nlp:           ['nlp', 'natural language processing'],
-        computervision:['computervision', 'computer vision', 'cv'],
+        blockchain: ['blockchain', 'block chain'],
+        arvr: ['arvr', 'ar/vr', 'ar & vr', 'augmented reality', 'virtual reality', 'augmented reality and virtual reality', 'ar and vr'],
+        devops: ['devops', 'dev ops', 'development operations'],
+        uiux: ['uiux', 'ui/ux', 'ui ux', 'user interface user experience', 'ui and ux design'],
+        machinelearning: ['machinelearning', 'machine learning', 'ml', 'deep learning'],
+        nlp: ['nlp', 'natural language processing'],
+        computervision: ['computervision', 'computer vision', 'cv'],
     },
     branch: {
         cse: ['cse', 'cs', 'computer science', 'computer science and engineering', 'computer science & engineering'],
@@ -702,8 +702,8 @@ const _DOMAIN_SYNONYMS = {
     blockchain: ['blockchain', 'block chain', 'web3', 'crypto'],
     testing: ['testing', 'qa', 'quality assurance', 'software testing', 'manual testing', 'automation testing']
 };
-CHOICE_SYNONYMS.domainOfInterest  = _DOMAIN_SYNONYMS;
-CHOICE_SYNONYMS.interestedDomain   = _DOMAIN_SYNONYMS;
+CHOICE_SYNONYMS.domainOfInterest = _DOMAIN_SYNONYMS;
+CHOICE_SYNONYMS.interestedDomain = _DOMAIN_SYNONYMS;
 
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -713,61 +713,61 @@ CHOICE_SYNONYMS.interestedDomain   = _DOMAIN_SYNONYMS;
 // so there is one source of truth instead of two near-identical copies.
 // ─────────────────────────────────────────────────────────────────────────────
 const NAME_ALIASES = {
-    fullname:'fullName', full_name:'fullName', name:'fullName',
-    email:'email', emailaddress:'email', email_address:'email',
-    phone:'phone', phonenumber:'phone', phone_number:'phone',
-    mobile:'phone', mobilenumber:'phone', contactnumber:'phone',
-    contact:'phone', contactno:'phone',
-    whatsapp:'whatsappNumber', whatsappnumber:'whatsappNumber',
-    collegename:'collegeName', college:'collegeName',
-    university:'collegeName', universityname:'collegeName',
-    course:'course', program:'course', programme:'course',
-    degree:'course', qualification:'course',
-    branch:'branch', department:'branch',
-    specialization:'specialization', specialisation:'specialization',
-    currentyear:'currentYear', year:'currentYear',
-    graduationyear:'graduationYear', passingyear:'graduationYear', passoutyear:'graduationYear',
-    batchyear:'graduationYear', batch:'graduationYear', yearofgraduation:'graduationYear',
-    expectedgraduationyear:'graduationYear', graduatingyear:'graduationYear',
-    tenthpercent:'tenthPercent', tenthpercentage:'tenthPercent', tenthmarks:'tenthPercent',
-    sscpercentage:'tenthPercent', sscmarks:'tenthPercent', matricpercentage:'tenthPercent',
-    class10percentage:'tenthPercent', class10marks:'tenthPercent',
-    twelfthpercent:'twelfthPercent', twelfthpercentage:'twelfthPercent', twelfthmarks:'twelfthPercent',
-    hscpercentage:'twelfthPercent', hscmarks:'twelfthPercent', intermediatepercentage:'twelfthPercent',
-    class12percentage:'twelfthPercent', class12marks:'twelfthPercent',
-    semester:'currentSemester', currentsemester:'currentSemester',
-    cgpa:'currentCgpa', gpa:'currentCgpa', currentcgpa:'currentCgpa',
-    sapid:'sapId', rollno:'sapId', rollnumber:'sapId',
-    enrollmentno:'sapId', registrationno:'sapId',
-    collegeemail:'collegeEmail', institutionalemail:'collegeEmail',
-    studentemail:'collegeEmail',
-    firstname:'firstName', fname:'firstName', givenname:'firstName',
-    lastname:'lastName', lname:'lastName', surname:'lastName',
-    gender:'gender', dob:'dateOfBirth', dateofbirth:'dateOfBirth',
-    age:'age', bloodgroup:'bloodGroup',
-    currentbacklogs:'currentBacklogs', passivebacklogs:'passiveBacklogs',
-    backlogs:'currentBacklogs',
-    internship:'internshipProgram', internshipprogram:'internshipProgram',
-    role:'internshipProgram', position:'internshipProgram',
-    duration:'duration', skilllevel:'skillLevel', experience:'experience',
-    company:'company', organization:'company',
-    about:'aboutMe', aboutme:'aboutMe', coverletter:'aboutMe',
-    github:'githubLink', githublink:'githubLink', githuburl:'githubLink',
-    githubprofile:'githubLink', githubprofilelink:'githubLink',
-    linkedin:'linkedinLink', linkedinlink:'linkedinLink',
-    linkedinurl:'linkedinLink', linkedinprofile:'linkedinLink',
-    linkedinprofilelink:'linkedinLink',
-    website:'websiteLink', websitelink:'websiteLink', websiteurl:'websiteLink',
-    portfolio:'websiteLink', portfoliolink:'websiteLink',
-    portfoliourl:'websiteLink', portfoliowebsite:'websiteLink',
-    resumelink:'githubLink', resumeurl:'githubLink', cvlink:'githubLink',
-    anylink:'githubLink', sociallink:'linkedinLink',
-    profilelink:'linkedinLink', profileurl:'linkedinLink',
-    address:'address', city:'city', state:'state',
-    zip:'zip', pincode:'zip', postalcode:'zip', country:'country',
-    domainofinterest:'domainOfInterest', domain:'domainOfInterest',
-    researcharea:'domainOfInterest', interedomain:'domainOfInterest',
-    referralsource:'referralSource',
+    fullname: 'fullName', full_name: 'fullName', name: 'fullName',
+    email: 'email', emailaddress: 'email', email_address: 'email',
+    phone: 'phone', phonenumber: 'phone', phone_number: 'phone',
+    mobile: 'phone', mobilenumber: 'phone', contactnumber: 'phone',
+    contact: 'phone', contactno: 'phone',
+    whatsapp: 'whatsappNumber', whatsappnumber: 'whatsappNumber',
+    collegename: 'collegeName', college: 'collegeName',
+    university: 'collegeName', universityname: 'collegeName',
+    course: 'course', program: 'course', programme: 'course',
+    degree: 'course', qualification: 'course',
+    branch: 'branch', department: 'branch',
+    specialization: 'specialization', specialisation: 'specialization',
+    currentyear: 'currentYear', year: 'currentYear',
+    graduationyear: 'graduationYear', passingyear: 'graduationYear', passoutyear: 'graduationYear',
+    batchyear: 'graduationYear', batch: 'graduationYear', yearofgraduation: 'graduationYear',
+    expectedgraduationyear: 'graduationYear', graduatingyear: 'graduationYear',
+    tenthpercent: 'tenthPercent', tenthpercentage: 'tenthPercent', tenthmarks: 'tenthPercent',
+    sscpercentage: 'tenthPercent', sscmarks: 'tenthPercent', matricpercentage: 'tenthPercent',
+    class10percentage: 'tenthPercent', class10marks: 'tenthPercent',
+    twelfthpercent: 'twelfthPercent', twelfthpercentage: 'twelfthPercent', twelfthmarks: 'twelfthPercent',
+    hscpercentage: 'twelfthPercent', hscmarks: 'twelfthPercent', intermediatepercentage: 'twelfthPercent',
+    class12percentage: 'twelfthPercent', class12marks: 'twelfthPercent',
+    semester: 'currentSemester', currentsemester: 'currentSemester',
+    cgpa: 'currentCgpa', gpa: 'currentCgpa', currentcgpa: 'currentCgpa',
+    sapid: 'sapId', rollno: 'sapId', rollnumber: 'sapId',
+    enrollmentno: 'sapId', registrationno: 'sapId',
+    collegeemail: 'collegeEmail', institutionalemail: 'collegeEmail',
+    studentemail: 'collegeEmail',
+    firstname: 'firstName', fname: 'firstName', givenname: 'firstName',
+    lastname: 'lastName', lname: 'lastName', surname: 'lastName',
+    gender: 'gender', dob: 'dateOfBirth', dateofbirth: 'dateOfBirth',
+    age: 'age', bloodgroup: 'bloodGroup',
+    currentbacklogs: 'currentBacklogs', passivebacklogs: 'passiveBacklogs',
+    backlogs: 'currentBacklogs',
+    internship: 'internshipProgram', internshipprogram: 'internshipProgram',
+    role: 'internshipProgram', position: 'internshipProgram',
+    duration: 'duration', skilllevel: 'skillLevel', experience: 'experience',
+    company: 'company', organization: 'company',
+    about: 'aboutMe', aboutme: 'aboutMe', coverletter: 'aboutMe',
+    github: 'githubLink', githublink: 'githubLink', githuburl: 'githubLink',
+    githubprofile: 'githubLink', githubprofilelink: 'githubLink',
+    linkedin: 'linkedinLink', linkedinlink: 'linkedinLink',
+    linkedinurl: 'linkedinLink', linkedinprofile: 'linkedinLink',
+    linkedinprofilelink: 'linkedinLink',
+    website: 'websiteLink', websitelink: 'websiteLink', websiteurl: 'websiteLink',
+    portfolio: 'websiteLink', portfoliolink: 'websiteLink',
+    portfoliourl: 'websiteLink', portfoliowebsite: 'websiteLink',
+    resumelink: 'githubLink', resumeurl: 'githubLink', cvlink: 'githubLink',
+    anylink: 'githubLink', sociallink: 'linkedinLink',
+    profilelink: 'linkedinLink', profileurl: 'linkedinLink',
+    address: 'address', city: 'city', state: 'state',
+    zip: 'zip', pincode: 'zip', postalcode: 'zip', country: 'country',
+    domainofinterest: 'domainOfInterest', domain: 'domainOfInterest',
+    researcharea: 'domainOfInterest', interedomain: 'domainOfInterest',
+    referralsource: 'referralSource',
 };
 
 // Legacy-only keys that exist in FIELD_MAPPING purely for storage back-compat.
@@ -786,6 +786,7 @@ const FIELD_SELECTOR = [
     '[role="option"]',
     '[role="textbox"]',       // MS Forms / Typeform text inputs
     '[role="combobox"]',      // MS Forms dropdowns
+    '[role="listbox"]',       // Google Forms dropdowns
     // Google Forms circular/custom option elements
     '.freebirdFormviewerComponentsQuestionRadioChoice',
     '.docssharedWizToggleLabeledContainer',
@@ -801,66 +802,66 @@ const FIELD_SELECTOR = [
 // ─────────────────────────────────────────────────────────────────────────────
 const ABBREVIATION_MAP = {
     // Specializations
-    'csf':   ['cyber security and forensics', 'cyber security & forensics', 'cybersecurity and forensics', 'cybersecurity forensics', 'cyber forensics'],
-    'aiml':  ['artificial intelligence and machine learning', 'ai and machine learning', 'ai & machine learning', 'artificial intelligence & machine learning', 'ai ml'],
-    'ccvt':  ['cloud computing and virtualization technology', 'cloud computing virtualization technology', 'cloud and virtualization'],
-    'iot':   ['internet of things', 'internet of thing'],
-    'arvr':  ['augmented reality and virtual reality', 'ar and vr', 'ar & vr', 'augmented and virtual reality'],
-    'ds':    ['data science'],
-    'ml':    ['machine learning'],
-    'ai':    ['artificial intelligence'],
-    'dl':    ['deep learning'],
-    'nlp':   ['natural language processing'],
-    'cv':    ['computer vision'],
+    'csf': ['cyber security and forensics', 'cyber security & forensics', 'cybersecurity and forensics', 'cybersecurity forensics', 'cyber forensics'],
+    'aiml': ['artificial intelligence and machine learning', 'ai and machine learning', 'ai & machine learning', 'artificial intelligence & machine learning', 'ai ml'],
+    'ccvt': ['cloud computing and virtualization technology', 'cloud computing virtualization technology', 'cloud and virtualization'],
+    'iot': ['internet of things', 'internet of thing'],
+    'arvr': ['augmented reality and virtual reality', 'ar and vr', 'ar & vr', 'augmented and virtual reality'],
+    'ds': ['data science'],
+    'ml': ['machine learning'],
+    'ai': ['artificial intelligence'],
+    'dl': ['deep learning'],
+    'nlp': ['natural language processing'],
+    'cv': ['computer vision'],
     // Branches / Departments
-    'cse':   ['computer science and engineering', 'computer science & engineering', 'computer science engineering'],
-    'csit':  ['computer science and information technology', 'computer science & information technology'],
-    'it':    ['information technology'],
-    'ece':   ['electronics and communication engineering', 'electronics & communication engineering', 'electronics and communication'],
-    'eee':   ['electrical and electronics engineering', 'electrical & electronics engineering'],
-    'ee':    ['electrical engineering'],
-    'me':    ['mechanical engineering'],
-    'ce':    ['civil engineering'],
-    'ae':    ['aerospace engineering', 'aeronautical engineering'],
-    'che':   ['chemical engineering'],
-    'bio':   ['biotechnology', 'bioinformatics', 'biological sciences'],
-    'mba':   ['master of business administration'],
-    'bba':   ['bachelor of business administration'],
-    'bca':   ['bachelor of computer applications', 'bachelor of computer application'],
-    'mca':   ['master of computer applications', 'master of computer application'],
+    'cse': ['computer science and engineering', 'computer science & engineering', 'computer science engineering'],
+    'csit': ['computer science and information technology', 'computer science & information technology'],
+    'it': ['information technology'],
+    'ece': ['electronics and communication engineering', 'electronics & communication engineering', 'electronics and communication'],
+    'eee': ['electrical and electronics engineering', 'electrical & electronics engineering'],
+    'ee': ['electrical engineering'],
+    'me': ['mechanical engineering'],
+    'ce': ['civil engineering'],
+    'ae': ['aerospace engineering', 'aeronautical engineering'],
+    'che': ['chemical engineering'],
+    'bio': ['biotechnology', 'bioinformatics', 'biological sciences'],
+    'mba': ['master of business administration'],
+    'bba': ['bachelor of business administration'],
+    'bca': ['bachelor of computer applications', 'bachelor of computer application'],
+    'mca': ['master of computer applications', 'master of computer application'],
     'btech': ['bachelor of technology', 'bachelor of engineering'],
     'mtech': ['master of technology', 'master of engineering'],
-    'bsc':   ['bachelor of science'],
-    'msc':   ['master of science'],
-    'bcom':  ['bachelor of commerce'],
-    'mcom':  ['master of commerce'],
-    'ba':    ['bachelor of arts'],
-    'ma':    ['master of arts'],
-    'phd':   ['doctor of philosophy', 'doctorate'],
+    'bsc': ['bachelor of science'],
+    'msc': ['master of science'],
+    'bcom': ['bachelor of commerce'],
+    'mcom': ['master of commerce'],
+    'ba': ['bachelor of arts'],
+    'ma': ['master of arts'],
+    'phd': ['doctor of philosophy', 'doctorate'],
     // Common tech domains
-    'ui':    ['user interface'],
-    'ux':    ['user experience'],
-    'uiux':  ['user interface and user experience', 'user interface', 'user experience', 'ui and ux', 'ui & ux design'],
-    'qa':    ['quality assurance'],
-    'sre':   ['site reliability engineering'],
-    'fe':    ['front end', 'frontend'],
-    'be':    ['back end', 'backend'],
-    'fs':    ['full stack'],
+    'ui': ['user interface'],
+    'ux': ['user experience'],
+    'uiux': ['user interface and user experience', 'user interface', 'user experience', 'ui and ux', 'ui & ux design'],
+    'qa': ['quality assurance'],
+    'sre': ['site reliability engineering'],
+    'fe': ['front end', 'frontend'],
+    'be': ['back end', 'backend'],
+    'fs': ['full stack'],
     // Blood groups
-    'a+':   ['a positive', 'a pos'],
-    'a-':   ['a negative', 'a neg'],
-    'b+':   ['b positive', 'b pos'],
-    'b-':   ['b negative', 'b neg'],
-    'ab+':  ['ab positive', 'ab pos'],
-    'ab-':  ['ab negative', 'ab neg'],
-    'o+':   ['o positive', 'o pos'],
-    'o-':   ['o negative', 'o neg'],
+    'a+': ['a positive', 'a pos'],
+    'a-': ['a negative', 'a neg'],
+    'b+': ['b positive', 'b pos'],
+    'b-': ['b negative', 'b neg'],
+    'ab+': ['ab positive', 'ab pos'],
+    'ab-': ['ab negative', 'ab neg'],
+    'o+': ['o positive', 'o pos'],
+    'o-': ['o negative', 'o neg'],
     // Gender short forms
-    'm':    ['male'],
-    'f':    ['female'],
+    'm': ['male'],
+    'f': ['female'],
     // Yes/No
-    'y':    ['yes'],
-    'n':    ['no'],
+    'y': ['yes'],
+    'n': ['no'],
 };
 
 // Expand abbreviations: given any text, return all known equivalent forms.
@@ -932,22 +933,22 @@ function choiceMatches(profileKey, optionText, value) {
     if (!optionText || !value) return false;
 
     const optionNorm = normalize(optionText);
-    const valueNorm  = normalize(value);
+    const valueNorm = normalize(value);
 
     // 1. Exact normalized match
     if (optionNorm === valueNorm) return true;
 
     // 2. Canonical synonym match (CHOICE_SYNONYMS table)
     const optionToken = canonicalizeChoice(profileKey, optionText);
-    const valueToken  = canonicalizeChoice(profileKey, value);
+    const valueToken = canonicalizeChoice(profileKey, value);
     if (optionToken === valueToken) return true;
 
     const optionCollapsed = collapse(optionText);
-    const valueCollapsed  = collapse(value);
+    const valueCollapsed = collapse(value);
 
     // 3. Abbreviation expansion: expand both sides and cross-compare
     const optionExpansions = expandAbbreviations(optionText);
-    const valueExpansions  = expandAbbreviations(value);
+    const valueExpansions = expandAbbreviations(value);
 
     for (const oe of optionExpansions) {
         for (const ve of valueExpansions) {
@@ -971,7 +972,7 @@ function choiceMatches(profileKey, optionText, value) {
     }
 
     // 6. Word-level overlap: if majority of meaningful words in value appear in option
-    const valueWords  = valueNorm.split(' ').filter(w => w.length > 2);
+    const valueWords = valueNorm.split(' ').filter(w => w.length > 2);
     const optionWords = optionNorm.split(' ').filter(w => w.length > 2);
 
     if (valueWords.length > 0 && optionWords.length > 0) {
@@ -1538,7 +1539,7 @@ function scoreMatch(meta, profileKey) {
     // Only trust semantic names — skip React-generated ones like "rj:-form-item".
     if (meta.name && !isGeneratedName(meta.name)) {
         const nameCollapsed = collapse(meta.name);
-        const keyCollapsed  = collapse(profileKey);
+        const keyCollapsed = collapse(profileKey);
 
         // Exact name → key match
         if (nameCollapsed === keyCollapsed) return 500;
@@ -1707,17 +1708,17 @@ function scoreMatch(meta, profileKey) {
     if (profileKey === 'experience' && meta.tagName === 'textarea') score += 10;
     // URL-type input: strongly favour link fields, hard-penalise non-link fields
     if (meta.type === 'url') {
-        if (['githubLink','linkedinLink','websiteLink'].includes(profileKey)) score += 80;
-        if (['collegeName','fullName','phone','email','sapId'].includes(profileKey)) return -500;
+        if (['githubLink', 'linkedinLink', 'websiteLink'].includes(profileKey)) score += 80;
+        if (['collegeName', 'fullName', 'phone', 'email', 'sapId'].includes(profileKey)) return -500;
     }
     // tel-type input: strongly favour phone fields
     if (meta.type === 'tel') {
-        if (['collegeName','fullName','email','githubLink','linkedinLink'].includes(profileKey)) return -500;
+        if (['collegeName', 'fullName', 'email', 'githubLink', 'linkedinLink'].includes(profileKey)) return -500;
     }
     // Radio/option elements must never match link-type profile keys —
     // choice labels like "LinkedIn" would otherwise score 140+ for linkedinLink
     if (meta.type === 'radio' || meta.role === 'radio' || meta.role === 'option') {
-        if (['githubLink','linkedinLink','websiteLink','twitterLink'].includes(profileKey)) return -500;
+        if (['githubLink', 'linkedinLink', 'websiteLink', 'twitterLink'].includes(profileKey)) return -500;
     }
 
     // Social link context boosts
@@ -1993,9 +1994,9 @@ function fillSelect(el, profileKey, value) {
     const matchedOption = findSelectOption(el, profileKey, value);
     if (!matchedOption) return false;
     setNativeValue(el, matchedOption.value);
-    el.dispatchEvent(new Event('input',  { bubbles: true }));
+    el.dispatchEvent(new Event('input', { bubbles: true }));
     el.dispatchEvent(new Event('change', { bubbles: true }));
-    el.dispatchEvent(new Event('blur',   { bubbles: true }));
+    el.dispatchEvent(new Event('blur', { bubbles: true }));
     return true;
 }
 
@@ -2044,9 +2045,9 @@ function fillRadio(el, meta, profileKey, value) {
     if (target.tagName && target.tagName.toLowerCase() === 'input') {
         if (!target.checked) {
             target.checked = true;
-            target.dispatchEvent(new Event('input',  { bubbles: true }));
+            target.dispatchEvent(new Event('input', { bubbles: true }));
             target.dispatchEvent(new Event('change', { bubbles: true }));
-            target.dispatchEvent(new Event('click',  { bubbles: true }));
+            target.dispatchEvent(new Event('click', { bubbles: true }));
         }
         return true;
     }
@@ -2054,9 +2055,9 @@ function fillRadio(el, meta, profileKey, value) {
     // Typeform / custom button choices (not necessarily input/role=radio)
     if (target.tagName && ['button', 'div', 'li', 'span', 'a'].includes(target.tagName.toLowerCase())) {
         target.dispatchEvent(new MouseEvent('mousedown', { bubbles: true, cancelable: true }));
-        target.dispatchEvent(new MouseEvent('mouseup',   { bubbles: true, cancelable: true }));
+        target.dispatchEvent(new MouseEvent('mouseup', { bubbles: true, cancelable: true }));
         target.click();
-        target.dispatchEvent(new Event('input',  { bubbles: true }));
+        target.dispatchEvent(new Event('input', { bubbles: true }));
         target.dispatchEvent(new Event('change', { bubbles: true }));
         return true;
     }
@@ -2118,8 +2119,87 @@ function fillElement(el, meta, profileKey, value) {
             if (el.checked !== truthy) { el.checked = truthy; filled = true; }
         } else if (meta.type === 'date') {
             filled = fillDateInput(el, value);
-        } else if (meta.role === 'textbox' || meta.role === 'combobox') {
-            // MS Forms / Typeform contenteditable or ARIA textboxes
+        } else if ((meta.role === 'listbox' || meta.role === 'combobox' || el.hasAttribute('aria-haspopup')) && !['input', 'textarea', 'select'].includes(el.tagName.toLowerCase()) && !el.isContentEditable) {
+            // Google Forms, MUI, Ant Design and custom div-based dropdowns
+            const eventOpts = { bubbles: true, cancelable: true, view: window };
+            const ptrOpts = { ...eventOpts, pointerId: 1, pointerType: 'mouse', isPrimary: true };
+
+            try { el.dispatchEvent(new PointerEvent('pointerdown', ptrOpts)); } catch (e) { }
+            el.dispatchEvent(new MouseEvent('mousedown', eventOpts));
+            try { el.dispatchEvent(new PointerEvent('pointerup', ptrOpts)); } catch (e) { }
+            el.dispatchEvent(new MouseEvent('mouseup', eventOpts));
+            el.click();
+
+            let attempts = 0;
+            let clicksDelivered = 0;
+
+            const trySelectOption = () => {
+                const optionSelectors = '[role="option"], [role="menuitem"], li, [class*="option"], [class*="-option"], [class*="menu-item"]';
+                const options = Array.from(document.querySelectorAll(optionSelectors)).filter(o => {
+                    const rect = o.getBoundingClientRect();
+                    return o.offsetParent !== null || (rect.width > 0 && rect.height > 0);
+                });
+
+                const targetOption = options.find((opt) => {
+                    // Ignore container elements that have matches inside their deep textContent
+                    if (opt.children.length > 5) return false;
+
+                    const candidates = [
+                        opt.getAttribute('data-value'),
+                        opt.getAttribute('value'),
+                        opt.textContent?.trim(),
+                        opt.getAttribute('aria-label')
+                    ].filter(Boolean);
+
+                    return candidates.some(candidate => choiceMatches(profileKey, candidate, value));
+                });
+
+                if (targetOption) {
+                    try { targetOption.scrollIntoView({ block: 'nearest' }); } catch (e) { }
+
+                    try { targetOption.dispatchEvent(new PointerEvent('pointerdown', ptrOpts)); } catch (e) { }
+                    targetOption.dispatchEvent(new MouseEvent('mousedown', eventOpts));
+                    try { targetOption.dispatchEvent(new PointerEvent('pointerup', ptrOpts)); } catch (e) { }
+                    targetOption.dispatchEvent(new MouseEvent('mouseup', eventOpts));
+                    targetOption.click();
+
+                    // Specific to Google Forms/MUI: inner span might be the actual click target
+                    const innerElement = targetOption.firstElementChild;
+                    if (innerElement) {
+                        try { innerElement.dispatchEvent(new PointerEvent('pointerdown', ptrOpts)); } catch (e) { }
+                        innerElement.dispatchEvent(new MouseEvent('mousedown', eventOpts));
+                        try { innerElement.dispatchEvent(new PointerEvent('pointerup', ptrOpts)); } catch (e) { }
+                        innerElement.dispatchEvent(new MouseEvent('mouseup', eventOpts));
+                        innerElement.click();
+                    }
+
+                    // Dispatch change events on the dropdown container
+                    el.dispatchEvent(new Event('input', { bubbles: true }));
+                    el.dispatchEvent(new Event('change', { bubbles: true }));
+
+                    clicksDelivered++;
+                    if (clicksDelivered < 2) {
+                        // Allow exactly one retry click natively to bypass animation lock. Max 2 flickers.
+                        setTimeout(trySelectOption, 300);
+                    } else {
+                        // Max clicks delivered, try closing explicitly if still stuck
+                        setTimeout(() => document.body.click(), 100);
+                    }
+                } else {
+                    if (attempts < 15) {
+                        attempts++;
+                        setTimeout(trySelectOption, 100);
+                    } else {
+                        document.body.click(); // Close if not found
+                        el.click();
+                    }
+                }
+            };
+
+            setTimeout(trySelectOption, 200);
+            filled = true;
+        } else if ((meta.role === 'textbox' || meta.role === 'combobox') && (el.isContentEditable || ['input', 'textarea'].includes(el.tagName.toLowerCase()))) {
+            // MS Forms / Typeform contenteditable or ARIA textboxes that act like inputs
             if (el.isContentEditable) {
                 el.focus();
                 // execCommand works better with React/Vue/Angular controlled inputs
@@ -2136,11 +2216,11 @@ function fillElement(el, meta, profileKey, value) {
         }
 
         if (filled) {
-            el.dispatchEvent(new Event('input',   { bubbles: true }));
-            el.dispatchEvent(new Event('change',  { bubbles: true }));
-            el.dispatchEvent(new KeyboardEvent('keyup',   { bubbles: true }));
+            el.dispatchEvent(new Event('input', { bubbles: true }));
+            el.dispatchEvent(new Event('change', { bubbles: true }));
+            el.dispatchEvent(new KeyboardEvent('keyup', { bubbles: true }));
             el.dispatchEvent(new KeyboardEvent('keydown', { bubbles: true }));
-            el.dispatchEvent(new Event('blur',    { bubbles: true }));
+            el.dispatchEvent(new Event('blur', { bubbles: true }));
             el.classList.add('qf-field-filled');
             setTimeout(() => el.classList.remove('qf-field-filled'), 700);
         }
