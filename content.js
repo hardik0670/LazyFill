@@ -763,8 +763,12 @@ const NAME_ALIASES = {
     resumelink: 'githubLink', resumeurl: 'githubLink', cvlink: 'githubLink',
     anylink: 'githubLink', sociallink: 'linkedinLink',
     profilelink: 'linkedinLink', profileurl: 'linkedinLink',
-    address: 'address', city: 'city', state: 'state',
-    zip: 'zip', pincode: 'zip', postalcode: 'zip', country: 'country',
+    address: 'address', streetaddress: 'address', addressline1: 'address',
+    address1: 'address', city: 'city', addresscity: 'city', addresssuburb: 'city',
+    suburb: 'city', state: 'state', addressstate: 'state', addressprovince: 'state',
+    province: 'state', zip: 'zip', zipcode: 'zip', addresszip: 'zip',
+    addresspostcode: 'zip', addresspostalcode: 'zip', pincode: 'zip',
+    postalcode: 'zip', postcode: 'zip', country: 'country', addresscountry: 'country',
     domainofinterest: 'domainOfInterest', domain: 'domainOfInterest',
     researcharea: 'domainOfInterest', interedomain: 'domainOfInterest',
     referralsource: 'referralSource',
@@ -793,6 +797,28 @@ const FIELD_SELECTOR = [
     // Typeform button-based choices
     '[data-qa="choice"]',
 ].join(',');
+
+function querySelectorAllDeep(selector, root = document) {
+    const matches = [];
+    const visit = (scope) => {
+        if (!scope || typeof scope.querySelectorAll !== 'function') return;
+        matches.push(...scope.querySelectorAll(selector));
+        scope.querySelectorAll('*').forEach((node) => {
+            if (node.shadowRoot) visit(node.shadowRoot);
+        });
+    };
+    visit(root);
+    return matches;
+}
+
+function getElementByIdNear(el, id) {
+    const root = el.getRootNode ? el.getRootNode() : document;
+    if (root && typeof root.getElementById === 'function') {
+        const match = root.getElementById(id);
+        if (match) return match;
+    }
+    return document.getElementById(id);
+}
 
 // ─────────────────────────────────────────────────────────────────────────────
 // ABBREVIATION EXPANSION TABLE
@@ -1198,6 +1224,7 @@ function isGenericAriaLabel(label) {
 }
 
 function getLabelText(el) {
+    let semanticNameFallback = '';
     // ── 1. name attribute direct lookup (highest confidence) ────────────
     // React/shadcn forms set name="fullName", name="email" etc. — use it directly
     // before trying DOM traversal which can go wrong with generated IDs.
@@ -1207,21 +1234,22 @@ function getLabelText(el) {
         // e.g. "fullName" → "full name", "collegeName" → "college name"
         const spaced = el.name.replace(/([A-Z])/g, ' $1').replace(/_/g, ' ').toLowerCase().trim();
         if (spaced && spaced !== el.name.toLowerCase()) {
-            return spaced;
+            semanticNameFallback = spaced;
         }
     }
 
     // ── 2. label[for] lookup — handle React colon IDs safely ────────────
     if (el.id) {
         let label = null;
+        const root = el.getRootNode ? el.getRootNode() : document;
         try {
-            label = document.querySelector(`label[for="${CSS.escape(el.id)}"]`);
+            label = root.querySelector(`label[for="${CSS.escape(el.id)}"]`);
         } catch (_) {
             // CSS.escape may throw in some environments; fall back to attribute selector
         }
         if (!label) {
             // Fallback: iterate all labels (handles IDs with special chars like colons)
-            const allLabels = document.querySelectorAll('label[for]');
+            const allLabels = root.querySelectorAll('label[for]');
             for (const lbl of allLabels) {
                 if (lbl.getAttribute('for') === el.id) { label = lbl; break; }
             }
@@ -1241,7 +1269,7 @@ function getLabelText(el) {
         const ids = ariaLabelledBy.split(/\s+/);
         let combinedText = '';
         ids.forEach(id => {
-            const labelEl = document.getElementById(id);
+            const labelEl = getElementByIdNear(el, id);
             if (labelEl) combinedText += ' ' + labelEl.textContent.trim();
         });
         if (combinedText.trim()) return combinedText.trim();
@@ -1264,6 +1292,27 @@ function getLabelText(el) {
     // shadcn wraps: <div class="...form-item"> <label> ... </label> <input .../> </div>
     // The label is typically the immediately preceding sibling of the input wrapper,
     // or a sibling within the same [data-slot="form-item"] container.
+    // Many third-party forms put an unbound label beside the input in a small
+    // field wrapper. Trust only a wrapper that owns one control; a parent form
+    // with several controls must never donate all of its labels to this field.
+    let localContainer = el.parentElement;
+    let localLevels = 0;
+    while (localContainer && localLevels < 4) {
+        const controls = localContainer.querySelectorAll(
+            'input:not([type="hidden"]):not([type="submit"]):not([type="button"]), textarea, select, [role="textbox"], [role="combobox"]'
+        );
+        if (controls.length > 1) break;
+        const localLabel = localContainer.querySelector('label, legend, .form-label, .input-label, .label');
+        if (localLabel && !localLabel.contains(el)) {
+            const clone = localLabel.cloneNode(true);
+            clone.querySelectorAll('[aria-hidden],[class*="badge"],[class*="required"],input,textarea,select').forEach(n => n.remove());
+            const text = clone.textContent.replace(/\s*\*\s*$/, '').trim();
+            if (text && text.length < 160) return text;
+        }
+        localContainer = localContainer.parentElement;
+        localLevels++;
+    }
+
     const formItem = el.closest('[data-slot="form-item"], [class*="form-item"], [class*="FormItem"], [class*="form_item"]');
     if (formItem) {
         const labelEl = formItem.querySelector('label');
@@ -1283,7 +1332,7 @@ function getLabelText(el) {
             const ids = groupLabelledBy.split(/\s+/);
             let text = '';
             ids.forEach(id => {
-                const labelEl = document.getElementById(id);
+                const labelEl = getElementByIdNear(el, id);
                 if (labelEl) text += ' ' + labelEl.textContent.trim();
             });
             if (text.trim()) return text.trim();
@@ -1324,11 +1373,13 @@ function getLabelText(el) {
         }
     }
 
-    return '';
+    return semanticNameFallback;
 }
 
 function getNearbyText(el) {
     const texts = [];
+    const associatedLabel = getLabelText(el);
+    if (associatedLabel) texts.push(associatedLabel);
     const fieldset = el.closest('fieldset');
     if (fieldset) {
         const legend = fieldset.querySelector('legend');
@@ -1339,7 +1390,7 @@ function getNearbyText(el) {
     const ariaLabelledBy = el.getAttribute('aria-labelledby');
     if (ariaLabelledBy) {
         ariaLabelledBy.split(/\s+/).forEach(id => {
-            const labelEl = document.getElementById(id);
+            const labelEl = getElementByIdNear(el, id);
             if (labelEl) texts.push(labelEl.textContent.trim());
         });
     }
@@ -1362,7 +1413,7 @@ function getNearbyText(el) {
         const groupLabelledBy = radioGroup.getAttribute('aria-labelledby');
         if (groupLabelledBy) {
             groupLabelledBy.split(/\s+/).forEach(id => {
-                const labelEl = document.getElementById(id);
+                const labelEl = getElementByIdNear(el, id);
                 if (labelEl) texts.push(labelEl.textContent.trim());
             });
         }
@@ -1444,6 +1495,10 @@ function getNearbyText(el) {
     let current = el.parentElement;
     let levels = 0;
     while (current && levels < 4) {
+        const ownedControls = current.querySelectorAll(
+            'input:not([type="hidden"]):not([type="submit"]):not([type="button"]), textarea, select, [role="textbox"], [role="combobox"]'
+        );
+        if (!isRadioOrCheckbox && ownedControls.length > 1) break;
         // Only pick up labels and small headings — NOT h1/h2/h3 which are page/section titles
         const labels = current.querySelectorAll(
             'label, .label, .form-label, .input-label, legend, ' +
@@ -1490,6 +1545,10 @@ function extractMeta(el) {
         placeholder: el.getAttribute('placeholder') || '',
         ariaLabel: el.getAttribute('aria-label') || '',
         autoComplete: el.getAttribute('autocomplete') || '',
+        inputMode: el.getAttribute('inputmode') || '',
+        pattern: el.getAttribute('pattern') || '',
+        maxLength: typeof el.maxLength === 'number' ? el.maxLength : -1,
+        readOnly: Boolean(el.readOnly || el.getAttribute('aria-readonly') === 'true'),
         label: getLabelText(el),
         nearbyText: getNearbyText(el),
         choiceLabel: getChoiceLabel(el),
@@ -1499,7 +1558,7 @@ function extractMeta(el) {
 
 function shouldSkip(meta) {
     const combined = [meta.label, meta.placeholder, meta.name, meta.id, meta.ariaLabel].join(' ').toLowerCase();
-    return SKIP_PATTERNS.some((pattern) => combined.includes(pattern));
+    return meta.readOnly || SKIP_PATTERNS.some((pattern) => combined.includes(pattern));
 }
 
 function isVisible(el) {
@@ -1518,7 +1577,7 @@ function isVisible(el) {
 
 function detectFields() {
     const seen = new Set();
-    return Array.from(document.querySelectorAll(FIELD_SELECTOR))
+    return querySelectorAllDeep(FIELD_SELECTOR)
         .filter((el) => {
             if (!isVisible(el)) return false;
             if (seen.has(el)) return false;
@@ -1554,8 +1613,12 @@ function scoreMatch(meta, profileKey) {
     // Split sources into primary (high trust) and secondary (low trust)
     // Exclude React-generated names (e.g. "rj:-form-item") from scoring — they're noise
     const cleanName = (meta.name && !isGeneratedName(meta.name)) ? meta.name : '';
-    const primarySources = [meta.label, meta.placeholder, cleanName, meta.id, meta.ariaLabel, meta.autoComplete].filter(Boolean);
-    const secondarySources = [meta.nearbyText].filter(Boolean);
+    const primarySources = [...new Set(
+        [meta.label, meta.placeholder, cleanName, meta.id, meta.ariaLabel, meta.autoComplete]
+            .filter(Boolean)
+            .map(source => String(source).trim())
+    )];
+    const secondarySources = [...new Set([meta.nearbyText].filter(Boolean).map(source => String(source).trim()))];
 
     const aliases = FIELD_MAPPING[profileKey] || [];
     const aliasTokensNorm = aliases.map(normalize);
@@ -1577,14 +1640,15 @@ function scoreMatch(meta, profileKey) {
         if (collapsedSource === keyToken) score += 120;
         else if (collapsedSource.includes(keyToken)) score += 65;
 
+        let bestAliasScore = 0;
         for (let i = 0; i < aliasTokensColl.length; i++) {
             const aliasNorm = aliasTokensNorm[i];
             const aliasColl = aliasTokensColl[i];
 
-            if (collapsedSource === aliasColl) { score += 140; break; }
-            if (normalizedSource === aliasNorm) { score += 130; break; }
-            if (aliasColl.length > 3 && collapsedSource.includes(aliasColl)) { score += 80; }
-            if (collapsedSource.length > 3 && aliasColl.includes(collapsedSource)) { score += 60; }
+            if (collapsedSource === aliasColl) { bestAliasScore = 140; break; }
+            if (normalizedSource === aliasNorm) { bestAliasScore = Math.max(bestAliasScore, 130); continue; }
+            if (aliasColl.length > 3 && collapsedSource.includes(aliasColl)) bestAliasScore = Math.max(bestAliasScore, 80);
+            if (collapsedSource.length > 3 && aliasColl.includes(collapsedSource)) bestAliasScore = Math.max(bestAliasScore, 60);
 
             const aliasWords = aliasNorm.split(' ').filter(w => w.length > 2);
             const sourceWords = normalizedSource.split(' ').filter(w => w.length > 2);
@@ -1592,10 +1656,11 @@ function scoreMatch(meta, profileKey) {
                 const overlap = aliasWords.filter(w => sourceWords.includes(w));
                 if (overlap.length > 0) {
                     const ratio = overlap.length / Math.max(aliasWords.length, sourceWords.length);
-                    score += Math.round(ratio * 50);
+                    bestAliasScore = Math.max(bestAliasScore, Math.round(ratio * 50));
                 }
             }
         }
+        score += bestAliasScore;
     }
 
     // Score nearbyText at reduced weight (max 30% of primary contribution)
@@ -1606,15 +1671,17 @@ function scoreMatch(meta, profileKey) {
 
         // Only count if primary sources didn't already give a strong signal (avoids double-counting)
         // Use a fraction of the normal scoring — nearbyText is context, not identity
+        let bestNearbyScore = 0;
         for (let i = 0; i < aliasTokensColl.length; i++) {
             const aliasNorm = aliasTokensNorm[i];
             const aliasColl = aliasTokensColl[i];
 
-            if (collapsedSource === aliasColl) { score += 40; break; }
-            if (normalizedSource === aliasNorm) { score += 35; break; }
-            if (aliasColl.length > 3 && collapsedSource.includes(aliasColl)) { score += 20; }
-            if (collapsedSource.length > 3 && aliasColl.includes(collapsedSource)) { score += 15; }
+            if (collapsedSource === aliasColl) { bestNearbyScore = 40; break; }
+            if (normalizedSource === aliasNorm) { bestNearbyScore = Math.max(bestNearbyScore, 35); continue; }
+            if (aliasColl.length > 3 && collapsedSource.includes(aliasColl)) bestNearbyScore = Math.max(bestNearbyScore, 20);
+            if (collapsedSource.length > 3 && aliasColl.includes(collapsedSource)) bestNearbyScore = Math.max(bestNearbyScore, 15);
         }
+        score += bestNearbyScore;
     }
 
     // Context flags based on combined (for penalty/boost logic)
@@ -1749,14 +1816,116 @@ function isGeneratedName(name) {
     // React/Next.js generated names like "rj:-form-item", "r1:-form-item", ":r0:", etc.
     // These contain colons or are purely numeric/random — not semantic field names.
     const result = !name || name.length < 2 ||
-        /[:\[\]{}]/.test(name) ||   // contains colon, brackets
+        /[:{}]/.test(name) ||         // React internal IDs commonly contain colons
         /^\d+$/.test(name) ||       // purely numeric
         /^[a-z]{1,2}\d+/.test(name); // e.g. "r1", "rj3"
     _generatedNameCache.set(name, result);
     return result;
 }
 
+const IDENTIFIER_PREFIXES = new Set([
+    'candidate', 'applicant', 'application', 'user', 'person', 'profile',
+    'form', 'field', 'input', 'data', 'personal'
+]);
+const IDENTIFIER_SUFFIXES = new Set(['field', 'input', 'control', 'value']);
+
+function splitSemanticTokens(raw) {
+    return normalize(String(raw || '')
+        .replace(/([a-z0-9])([A-Z])/g, '$1 $2')
+        .replace(/[\[\]._-]+/g, ' '))
+        .split(' ')
+        .filter(Boolean);
+}
+
+// Resolve framework/vendor identifiers such as CandidateFirstName,
+// applicant[first_name], and CandidateAddressPostcode without relying on
+// fuzzy substring scoring. Exact semantic identifiers are high-confidence.
+function resolveSemanticIdentifier(raw) {
+    if (!raw || isGeneratedName(raw)) return null;
+    let tokens = splitSemanticTokens(raw);
+    if (!tokens.length) return null;
+
+    const lookup = (parts) => {
+        const collapsed = parts.join('');
+        if (NAME_ALIASES[collapsed]) return NAME_ALIASES[collapsed];
+        return Object.keys(FIELD_MAPPING).find(key => collapse(key) === collapsed) || null;
+    };
+
+    let resolved = lookup(tokens);
+    if (resolved) return resolved;
+
+    while (tokens.length > 1 && IDENTIFIER_PREFIXES.has(tokens[0])) tokens = tokens.slice(1);
+    while (tokens.length > 1 && IDENTIFIER_SUFFIXES.has(tokens[tokens.length - 1])) tokens = tokens.slice(0, -1);
+    resolved = lookup(tokens);
+    return resolved;
+}
+
+function getPrimaryContext(meta) {
+    return [meta.label, meta.placeholder, meta.name, meta.id, meta.ariaLabel, meta.autoComplete]
+        .filter(Boolean)
+        .map(value => String(value).replace(/([a-z0-9])([A-Z])/g, '$1 $2'))
+        .join(' ')
+        .toLowerCase();
+}
+
+function isUnsupportedSecondaryField(meta) {
+    const context = getPrimaryContext(meta);
+    return (
+        /\b(confirm|confirmation|verify|verification|retype|re-enter|repeat)\b/.test(context) ||
+        (/\b(secondary|alternate|alternative|other)\b/.test(context) &&
+            /\b(email|mail|phone|mobile|telephone|address)\b/.test(context)) ||
+        /\b(address\s*line\s*2|address\s*2|street\s*2|barangay)\b/.test(context)
+    );
+}
+
+function exactAliasKey(text) {
+    const normalized = normalize(text);
+    if (!normalized) return null;
+    for (const [key, aliases] of Object.entries(FIELD_MAPPING)) {
+        if (LEGACY_FIELD_KEYS.has(key)) continue;
+        if (normalize(key) === normalized || aliases.some(alias => normalize(alias) === normalized)) return key;
+    }
+    return null;
+}
+
+function inferStrongFieldKey(meta) {
+    const autoCompleteMap = {
+        name: 'fullName', 'given-name': 'firstName', 'additional-name': 'middleName',
+        'family-name': 'lastName', email: 'email', tel: 'phone', bday: 'dateOfBirth',
+        'street-address': 'address', 'address-line1': 'address', 'address-level2': 'city',
+        'address-level1': 'state', 'postal-code': 'zip', country: 'country',
+        'country-name': 'country', organization: 'company'
+    };
+    const autocomplete = String(meta.autoComplete || '').toLowerCase().split(/\s+/)
+        .find(token => Object.prototype.hasOwnProperty.call(autoCompleteMap, token));
+    if (autoCompleteMap[autocomplete]) return autoCompleteMap[autocomplete];
+
+    const context = getPrimaryContext(meta);
+    if (meta.type === 'email') {
+        return /college|university|institution|student|academic|\.edu\b/.test(context) ? 'collegeEmail' : 'email';
+    }
+    if (meta.type === 'tel') return /whatsapp/.test(context) ? 'whatsappNumber' : 'phone';
+
+    for (const identifier of [meta.name, meta.id]) {
+        const resolved = resolveSemanticIdentifier(identifier);
+        if (resolved) return resolved;
+    }
+
+    for (const text of [meta.label, meta.placeholder, meta.ariaLabel]) {
+        const resolved = exactAliasKey(text) || resolveSemanticIdentifier(text);
+        if (resolved) return resolved;
+    }
+    return null;
+}
+
 function matchField(meta, profile) {
+    if (isUnsupportedSecondaryField(meta)) return null;
+
+    const strongKey = inferStrongFieldKey(meta);
+    if (strongKey) {
+        return String(getProfileValue(profile, strongKey) || '').trim() ? strongKey : null;
+    }
+
     // ── FAST PATH: React/shadcn direct name= attribute ───────────────────
     // Only trust the name attribute if it looks like a real semantic field name.
     if (meta.name && !isGeneratedName(meta.name)) {
@@ -1917,8 +2086,8 @@ function matchField(meta, profile) {
     }
 
     // Plain email label with no institution context → personal email
-    const isPlainEmailField = /\b(email|e-mail|e mail|mail)\b/.test(emailContext) &&
-        !/college|university|institution|institute|edu\b|campus|student\s*email|student\s*mail|stu\s*email|stu\s*mail|stu\s*id|student\s*id|institutional|academic|official\s*email|official\s*mail|upes/.test(emailContext);
+    const isPlainEmailField = /\b(email|e-mail|e mail|mail)\b/.test(emailPrimaryContext) &&
+        !/college|university|institution|institute|edu\b|campus|student\s*email|student\s*mail|stu\s*email|stu\s*mail|stu\s*id|student\s*id|institutional|academic|official\s*email|official\s*mail|upes/.test(emailPrimaryContext);
     if (isPlainEmailField) {
         return String(getProfileValue(profile, 'email') || '').trim() ? 'email' : null;
     }
@@ -2097,8 +2266,53 @@ function fillDateInput(el, value) {
     return false;
 }
 
+function isValueCompatible(meta, profileKey, value) {
+    const text = String(value ?? '').trim();
+    if (!text) return false;
+
+    const strongKey = inferStrongFieldKey(meta);
+    if (strongKey && strongKey !== profileKey) return false;
+
+    const context = getPrimaryContext(meta);
+    const looksLikeEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(text);
+    const looksLikeUrl = /^(https?:\/\/|www\.)/i.test(text);
+    const digits = text.replace(/\D/g, '');
+
+    if (['email', 'collegeEmail'].includes(profileKey) && !looksLikeEmail) return false;
+    if (meta.type === 'email' && !looksLikeEmail) return false;
+    if (meta.type === 'url' && !looksLikeUrl) return false;
+
+    const phoneContext = meta.type === 'tel' || /\b(phone|mobile|telephone|whatsapp|contact\s*(number|no))\b/.test(context);
+    if (phoneContext && (looksLikeEmail || looksLikeUrl || digits.length < 6)) return false;
+
+    const nameContext = /\b(first|given|middle|last|family|full|candidate|applicant)\s+name\b/.test(context);
+    if (nameContext && (looksLikeEmail || looksLikeUrl || /^\d+$/.test(text))) return false;
+
+    const postalContext = /\b(zip|postal|post\s*code|postcode|pin\s*code|pincode)\b/.test(context);
+    if (postalContext && (looksLikeEmail || looksLikeUrl)) return false;
+
+    if ((meta.type === 'number' || /^(numeric|decimal)$/.test(meta.inputMode || '')) &&
+        !/^-?\d+(?:[.,]\d+)?$/.test(text)) return false;
+
+    if (meta.tagName !== 'select' && Number.isInteger(meta.maxLength) && meta.maxLength > 0 && text.length > meta.maxLength) {
+        return false;
+    }
+
+    if (meta.pattern && !['date', 'month', 'time'].includes(meta.type)) {
+        try {
+            if (!new RegExp(`^(?:${meta.pattern})$`).test(text)) return false;
+        } catch (_) {
+            // The browser may support a newer regexp dialect. Ignore patterns
+            // that this JavaScript engine cannot compile.
+        }
+    }
+
+    return true;
+}
+
 function fillElement(el, meta, profileKey, value) {
     if (!el || value === undefined || value === null || value === '') return false;
+    if (!isValueCompatible(meta, profileKey, value)) return false;
 
     try {
         let filled = false;
@@ -2135,7 +2349,7 @@ function fillElement(el, meta, profileKey, value) {
 
             const trySelectOption = () => {
                 const optionSelectors = '[role="option"], [role="menuitem"], li, [class*="option"], [class*="-option"], [class*="menu-item"]';
-                const options = Array.from(document.querySelectorAll(optionSelectors)).filter(o => {
+                const options = querySelectorAllDeep(optionSelectors).filter(o => {
                     const rect = o.getBoundingClientRect();
                     return o.offsetParent !== null || (rect.width > 0 && rect.height > 0);
                 });
@@ -2282,6 +2496,7 @@ function autoFill(profile) {
     return { success: true, filledCount, totalFields: fields.length };
 }
 
+if (typeof chrome !== 'undefined' && chrome.runtime && chrome.runtime.onMessage) {
 chrome.runtime.onMessage.addListener((request, _sender, sendResponse) => {
     switch (request.action) {
         case 'autoFill':
@@ -2318,3 +2533,19 @@ chrome.runtime.onMessage.addListener((request, _sender, sendResponse) => {
 
     return true;
 });
+}
+
+if (typeof module !== 'undefined' && module.exports) {
+    module.exports = {
+        FIELD_MAPPING,
+        NAME_ALIASES,
+        normalize,
+        collapse,
+        resolveSemanticIdentifier,
+        inferStrongFieldKey,
+        isUnsupportedSecondaryField,
+        scoreMatch,
+        matchField,
+        isValueCompatible
+    };
+}
